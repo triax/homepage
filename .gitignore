@@ -2,28 +2,31 @@
 # https://github.com/github/gitignore/blob/master/WordPress.gitignore
 
 # ignore everything in the root except the "wp-content" directory.
-!wp-content/
+!homepage/wp-content/
 
 # ignore everything in the "wp-content" directory, except:
 # "mu-plugins", "plugins", "themes" directory
-wp-content/*
-!wp-content/mu-plugins/
-!wp-content/plugins/
-!wp-content/themes/
+homepage/wp-content/*
+!homepage/wp-content/mu-plugins/
+!homepage/wp-content/plugins/
+!homepage/wp-content/themes/
 
 # ignore these plugins
-wp-content/plugins/hello.php
+homepage/wp-content/plugins/hello.php
 
 # ignore specific themes
-wp-content/themes/twenty*/
+homepage/wp-content/themes/twenty*/
 
 # ignore node dependency directories
-node_modules/
+homepage/node_modules/
 
 # ignore log files and databases
-*.log
-*.sql
-*.sqlite
+homepage/*.log
+homepage/*.sql
+homepage/*.sqlite
 
-# DEV
+#######
+# DEV #
+#######
 vendor
+homepage/secrets.yaml
