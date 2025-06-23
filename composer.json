@@ -1,5 +1,0 @@
-{
-    "require": {
-        "google/cloud-tools": "^0.12.0"
-    }
-}
