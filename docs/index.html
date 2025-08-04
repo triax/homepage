@@ -122,7 +122,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <a href="https://www.instagram.com/club_triax/" target="_blank" class="inline-flex items-center text-red-600 hover:text-red-700 font-medium">
+                <a href="https://www.instagram.com/clubtriax/" target="_blank" class="inline-flex items-center text-red-600 hover:text-red-700 font-medium">
                     もっと見る
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -378,7 +378,7 @@
                 extensionAttempts[googleDriveId] = [];
             }
 
-            const extensions = ['jpg', 'png', 'gif', 'webp'];
+            const extensions = ['jpg', 'png', 'gif', 'webp', 'heif', 'heic'];
             const currentSrc = img.src;
             const currentExt = currentSrc.split('.').pop();
             
@@ -402,7 +402,9 @@
                 'image/png': 'png',
                 'image/gif': 'gif',
                 'image/webp': 'webp',
-                'image/svg+xml': 'svg'
+                'image/svg+xml': 'svg',
+                'image/heif': 'heif',
+                'image/heic': 'heic'
             };
             return mimeToExt[mimeType] || 'jpg';
         }

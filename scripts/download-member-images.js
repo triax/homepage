@@ -27,7 +27,9 @@ function getExtensionFromContentType(contentType) {
         'image/png': 'png',
         'image/gif': 'gif',
         'image/webp': 'webp',
-        'image/svg+xml': 'svg'
+        'image/svg+xml': 'svg',
+        'image/heif': 'heif',
+        'image/heic': 'heic'
     };
     return mimeToExt[contentType] || 'jpg'; // デフォルトはjpg
 }
