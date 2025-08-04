@@ -1,0 +1,55 @@
+/**
+ * Overwrite Tailwind CSS styles
+ * This file is used to override the default Tailwind CSS styles.
+ * It should be imported in the main CSS file.
+**/
+:root {
+    --primary-color: #853734;
+    --secondary-color: #f1f1f1;
+    --base-color: #1e2227;
+
+    --primary-color-hover: #a74b4b;
+}
+
+.text-primary {
+    color: var(--primary-color);
+}
+.text-primary:hover {
+    color: var(--primary-color-hover);
+}
+.bg-base {
+    background-color: var(--base-color);
+}
+
+/**
+ * Global styles for Club TRIAX website
+ */
+
+*:hover {
+    transition: color 0.3s ease-in-out;
+}
+
+body {
+    font-family: 'Noto Sans JP', 'Inter', sans-serif;
+    background-color: var(--base-color);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* 画像読み込み中のスタイル */
+.member-image {
+    background-color: #e5e7eb;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%239ca3af" font-family="sans-serif" font-size="14">Loading...</text></svg>');
+    background-position: center;
+    background-repeat: no-repeat;
+}
