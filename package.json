@@ -1,0 +1,19 @@
+{
+  "name": "homepage",
+  "version": "1.0.0",
+  "description": "[![pages-build-deployment](https://github.com/triax/homepage/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/triax/homepage/actions/workflows/pages/pages-build-deployment)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "img:dl": "node scripts/download-member-images.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "otiai10",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "playwright": "^1.54.2"
+  }
+}
