@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "img:dl": "node scripts/download-member-images.js",
+    "img:dl": "node scripts/download-all-images.js",
+    "img:dl:force": "SKIP_EXISTING=false node scripts/download-all-images.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "otiai10",
