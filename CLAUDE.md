@@ -1,61 +1,62 @@
-# CLAUDE.md
+# CLAUDE.ja.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、このリポジトリで作業する際のClaude Code (claude.ai/code)へのガイダンスを提供します。
 
-## Project Overview
+## プロジェクト概要
 
-This is a static website for Club TRIAX (American football club) hosted on GitHub Pages. The project uses:
+これはGitHub Pagesでホスティングされるアメリカンフットボールクラブ「Club TRIAX」の静的ウェブサイトです。使用技術：
 - HTML5
-- Tailwind CSS (loaded via CDN)
-- jQuery 3.7.1 (loaded via CDN)
+- Tailwind CSS (CDN経由)
+- jQuery 3.7.1 (CDN経由)
 
-## Common Development Tasks
+## 一般的な開発タスク
 
-### Local Development
+### ローカル開発
 
-Since this is a static HTML site, you can open `index.html` directly in a browser or use a simple HTTP server:
+これは静的HTMLサイトなので、`index.html`を直接ブラウザで開くか、シンプルなHTTPサーバーを使用できます：
 
 ```bash
 npx http-server
 ```
 
-### Deployment
-The site is automatically deployed to GitHub Pages when changes are pushed to the main branch.
+### デプロイメント
+mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロイされます。
 
-## Project Structure
+## プロジェクト構造
 
 ```
 /
-├── index.html        # Main homepage file
-├── README.md         # Contains GitHub Pages deployment badge
+├── index.html        # メインホームページファイル
+├── README.md         # GitHub Pagesデプロイメントバッジを含む
 ├── assets/          
-│   ├── headers/     # Header images for each section
-│   └── ogp/         # Open Graph Protocol images
-└── specs/           # Design specifications and requirements
-    ├── pages/       # Individual page specifications
-    └── *.md         # Various specification documents
+│   ├── headers/     # 各セクション用ヘッダー画像
+│   └── ogp/         # Open Graph Protocol画像
+└── specs/           # デザイン仕様と要件
+    ├── pages/       # 個別ページ仕様
+    └── *.md         # 各種仕様書
 ```
 
-## Development Guidelines
+## 開発ガイドライン
 
-1. **Mobile-First Design**: The site is designed with smartphone users as the primary audience. Use responsive design with mobile-first approach.
+1. **モバイルファーストデザイン**: スマートフォンユーザーを主要対象としています。モバイルファーストアプローチでレスポンシブデザインを使用してください。
 
-2. **Single Page Architecture**: The homepage uses a vertical scroll single-page design with navigation to detailed pages as needed.
+2. **シングルページアーキテクチャ**: ホームページは縦スクロール型の1ページ構成で、必要に応じて詳細ページへ遷移します。
 
-3. **Navigation**: Implement hamburger menu navigation for mobile-friendly interface.
+3. **ナビゲーション**: モバイルフレンドリーなインターフェースのため、ハンバーガーメニューナビゲーションを実装します。
 
-4. **Styling**: Use Tailwind CSS utility classes for styling. The CDN version is already included in index.html.
+4. **スタイリング**: Tailwind CSSユーティリティクラスを使用します。CDN版は既にindex.htmlに含まれています。
 
-5. **JavaScript**: jQuery is available for DOM manipulation and event handling.
+5. **JavaScript**: DOM操作とイベント処理にjQueryが利用可能です。
 
-6. **Assets**: Header images are stored in `assets/headers/` with specific names (TOP.jpg, MEMBERS.jpg, NEWS.jpg, etc.)
+6. **アセット**: ヘッダー画像は`assets/headers/`に特定の名前で保存されています（TOP.jpg、MEMBERS.jpg、NEWS.jpgなど）
 
-7. **Version Control**: The main branch is used for deployment. Always commit changes before they go live on GitHub Pages.
+7. **バージョン管理**: mainブランチがデプロイに使用されます。GitHub Pagesで公開される前に必ず変更をコミットしてください。
+   - **コミットメッセージ**: 日本語でコミットメッセージを作成してください。明確で簡潔な説明を心がけてください。
 
-## Key Design Specifications
+## 主要なデザイン仕様
 
-The project follows specific design requirements outlined in the specs/ directory:
-- Mobile-first responsive design
-- Focus on team member stories and individuality
-- Integration with social media (Instagram)
-- Support for multilingual content considerations
+プロジェクトはspecs/ディレクトリに記載された特定のデザイン要件に従います：
+- モバイルファーストのレスポンシブデザイン
+- チームメンバーの物語と個性に焦点を当てる
+- ソーシャルメディア（Instagram）との連携
+- 多言語コンテンツの考慮のサポート
