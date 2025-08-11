@@ -293,7 +293,7 @@ Club TRIAX 不要画像クリーンアップツール
 }
 
 // 直接実行された場合
-if (import.meta.url === `file://${__filename}`) {
+if (process.argv[1] === __filename) {
   if (process.argv.includes('--help')) {
     showHelp();
   } else {

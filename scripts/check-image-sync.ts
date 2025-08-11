@@ -342,7 +342,7 @@ async function main(): Promise<void> {
   }
 }
 
-// 直接実行された場合
-if (import.meta.url === `file://${__filename}`) {
+// 直接実行された場合（他のスクリプトからimportされた場合は実行しない）
+if (process.argv[1] === __filename) {
   main();
 }
