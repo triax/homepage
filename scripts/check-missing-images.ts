@@ -13,7 +13,7 @@
  * - メンバーカードの画像読み込み状態を確認
  * - 画像が正しく表示されているかチェック（naturalWidth/Height）
  * - 表示されていない画像のリストアップ
- * - Roster APIとの比較
+ * - ローカルのroster.jsonとの比較
  * - 背番号なしメンバーの確認
  *
  * 【前提条件】
@@ -47,7 +47,7 @@
  *   - メンバー名
  *   - ポジション
  *   - 画像のsrc属性
- * - Roster APIとの比較結果
+ * - ローカルのroster.jsonとの比較結果
  * - 背番号なしメンバーのリスト
  *
  * 【注意事項】
@@ -62,10 +62,22 @@
  * 【返り値】
  * - missingImages: 表示されていない画像の配列
  * - loadedImages: 正常に表示された画像の配列
- * - apiData: Roster APIのデータ
+ * - apiData: ローカルのroster.jsonのデータ
  */
 
 import { chromium, Browser, BrowserContext, Page, ElementHandle } from 'playwright';
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+// TypeScript用の__dirname代替
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// 設定
+const CONFIG = {
+  ROSTER_JSON_PATH: path.join(__dirname, '..', 'docs', 'assets', 'roster.json'),
+};
 
 // 型定義
 interface ImageInfo {
@@ -166,14 +178,15 @@ async function checkMissingImages(): Promise<CheckResult> {
     });
   }
 
-  // APIデータと比較
-  console.log('\nFetching roster data from API...');
-  const apiResponse = await fetch(
-    'https://raw.githubusercontent.com/triax/roster-api/refs/heads/main/data/roster.json'
-  );
-  const apiData: ApiData = await apiResponse.json();
+  // ローカルのroster.jsonと比較
+  console.log('\nLoading roster data from local file...');
+  if (!fs.existsSync(CONFIG.ROSTER_JSON_PATH)) {
+    throw new Error(`roster.json not found at ${CONFIG.ROSTER_JSON_PATH}. Run 'npm run roster:download' first.`);
+  }
+  const rosterContent = fs.readFileSync(CONFIG.ROSTER_JSON_PATH, 'utf-8');
+  const apiData: ApiData = JSON.parse(rosterContent);
 
-  console.log(`Total members in API: ${apiData.members.length}`);
+  console.log(`Total members in roster.json: ${apiData.members.length}`);
 
   // 背番号のないメンバーを確認
   const membersWithoutJersey = apiData.members.filter((m: Member) => !m.jersey);

@@ -1,0 +1,1831 @@
+{
+  "version": "1.0",
+  "updated_at": "2025-08-11T03:10:16.068Z",
+  "members": [
+    {
+      "timestamp": "2025-08-01T09:38:53.000Z",
+      "name": {
+        "default": "恩地　遼",
+        "hiragana": "おんち　りょう",
+        "alphabet": "Ryo Onchi"
+      },
+      "position": "QB",
+      "jersey": 1,
+      "next_introduction": "7月から復帰してきたエースRB！秋シーズンは暴れてくれるでしょう！",
+      "role": "QBパートリーダー",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1RkyEPOq0CELzOCIICoanFWrFYnWD_bZ5&export=view",
+          "mime_type": "image/png"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1peoJ3_pSss3ydbSI3Kh0Env0AwuL4FEC&export=view",
+            "mime_type": "image/png"
+          }
+        ]
+      },
+      "university": "横浜国立大学",
+      "enthusiasm": "チームに貢献できるよう頑張ります！",
+      "watchme": "ホルダー",
+      "hobbies": "野球観戦",
+      "favorite": "松尾 汐恩(横浜DeNAベイスターズ)",
+      "gifts": "なんでも嬉しいです！",
+      "what_i_like_about_triax": "おじさんでも優しく受け入れてくれるところ"
+    },
+    {
+      "timestamp": "2025-07-28T18:13:55.000Z",
+      "name": {
+        "default": "伊藤隆貴",
+        "hiragana": "いとうりゅうき",
+        "alphabet": "RYUKI ITO"
+      },
+      "position": "RB",
+      "jersey": 2,
+      "next_introduction": "めちゃ渋ダンディDB",
+      "role": "いじられおにいさん",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1tozXwLC0jBdPNgFt7KbSqh215WVvyZfm&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1hzhblYFeJ8wHnyTgFME0X75h7aonslt7&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京経済大学",
+      "enthusiasm": "必ず5勝",
+      "watchme": "一線抜けるまでのスピード",
+      "hobbies": "ピックルボールとゴルフ",
+      "favorite": "嫁ちゃん",
+      "gifts": "グミ",
+      "what_i_like_about_triax": "おじさんにも優しいところ"
+    },
+    {
+      "timestamp": "2025-08-01T22:11:09.000Z",
+      "name": {
+        "default": "藤井淳",
+        "hiragana": "ふじいじゅん",
+        "alphabet": "FUJII JUN"
+      },
+      "position": "DB",
+      "jersey": 3,
+      "next_introduction": "WRの＃４岩佐友広選手は、投げられたボールに向かって、指先の届くキワキワまでダイブし、地面に落ちるスレスレまで果敢に攻める、私がＱＢなら一番投げたいレシーバーです。肘や膝小僧にすり傷を作りながらもパスをキャッチした時はもちろん、そうでない時にこそ気持ちを大爆発させる静かに熱い男 岩佐友広 です。試合前のアップの時からぜひ注目してください！",
+      "role": "そこにいれば皆が安心のTriax 15年目の50才",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=17XixuAmYQHQiAzH87tTiUcTyC-T7VTc-&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1EdfJr-Pu9onBcv8hqmBOb8X41ns-Vesj&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "松山大学",
+      "enthusiasm": "チームの目標はシーズン5勝、私はそれに向けて故障せず全試合でサインをしっかり送ります",
+      "watchme": "年齢の割には元気に動けていること",
+      "hobbies": "月に一度は献血をして体調管理をしています",
+      "favorite": "中学生のときから長渕剛を聞いています",
+      "gifts": "たい焼き、あんぱん、おはぎ",
+      "what_i_like_about_triax": "目標を高く設定して毎年進化をしているところ。また私なんかを受け入れてくれるみんなの優しさあふれるところ。"
+    },
+    {
+      "timestamp": "2025-07-31T17:00:14.000Z",
+      "name": {
+        "default": "岩佐　友広",
+        "hiragana": "いわさ　ともひろ",
+        "alphabet": "TOMOHIRO IWASA"
+      },
+      "position": "WR",
+      "jersey": 4,
+      "next_introduction": "筋トレ番長",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1GBD2ENZ_KBiQ09JEtZRC9fFJW9pwmb2e&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1cFDl0nAuG9NtbysjN0Y0PXpVZx6dRo3X&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "日本大学",
+      "enthusiasm": "安全第一",
+      "watchme": "チリチリパーマ",
+      "hobbies": "床屋",
+      "favorite": "近所のケバブ屋",
+      "gifts": "ファンでいてくれるだけで嬉しいです",
+      "what_i_like_about_triax": "知的なところ"
+    },
+    {
+      "timestamp": "2025-08-01T19:19:56.000Z",
+      "name": {
+        "default": "阪本平",
+        "hiragana": "さかもとたいら",
+        "alphabet": "Sakamoto Taira"
+      },
+      "position": "RB",
+      "jersey": 6,
+      "next_introduction": "Discipline",
+      "role": "RBパートリーダー",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1viVREsisKS5ly8WbL2HsSyivsCB4S7vx&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1ZBHjzbqGFOcTseaQbX-nfIO22Uw00SB4&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "関係者各位を楽しませます！！",
+      "watchme": "思い切りの良さ",
+      "hobbies": "ラジオ・漫画",
+      "favorite": "キングダム",
+      "gifts": "ファンクラブ",
+      "what_i_like_about_triax": "朝練"
+    },
+    {
+      "timestamp": "2025-07-28T16:43:57.000Z",
+      "name": {
+        "default": "金本祐磨",
+        "hiragana": "かねもとゆうま",
+        "alphabet": "YUMA KANEMOTO"
+      },
+      "position": "DB",
+      "jersey": 7,
+      "next_introduction": "台湾帰りの無礼者。対戦相手に礼儀を叩き込んでもらいたい。",
+      "role": "恫喝屋",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1J6qU5N62psFwL7Nrnrm8J0avsJkDW3Qb&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1lxKh2U1Ov0eQgMoNHSRJDFqH_2dgsddE&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "無病息災",
+      "watchme": "ベンチでキレ散らかしている様子。",
+      "hobbies": "家族サービス",
+      "favorite": "NORMのプロテイン",
+      "gifts": "げんなま",
+      "what_i_like_about_triax": "練習、試合に子どもを連れていったら遊んでくれる素敵な女性陣"
+    },
+    {
+      "timestamp": "2025-08-01T20:36:52.000Z",
+      "name": {
+        "default": "滝藤雅貴",
+        "hiragana": "たきとうまさき",
+        "alphabet": "Takito Masaki"
+      },
+      "position": "QB",
+      "jersey": 9,
+      "next_introduction": "僕のボールいっぱい取ってくれる最高のWRです",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1FvSF1TpxqIwxmJ8VyBGDbe2GEYzWc7nL&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1huh_BZNZnKV-5EWTb3AtpSH5jiJ-GOUr&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1jOma2DWCqmXkw7WVMYLzSCJqy9wp2wn7&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "チームの勝利に貢献できるよう頑張ります",
+      "watchme": "走らないので、定点にいます",
+      "hobbies": "アメフト観戦、飲酒",
+      "favorite": "推しQB: C.J.ストラウド",
+      "gifts": "お肉かお寿司",
+      "what_i_like_about_triax": "みんなやる気があってワイワイしてるところ"
+    },
+    {
+      "timestamp": "2025-08-01T22:33:02.000Z",
+      "name": {
+        "default": "木俣　達郎",
+        "hiragana": "きまた　たつろう",
+        "alphabet": "Tatsuro Kimata"
+      },
+      "position": "WR",
+      "jersey": 10,
+      "next_introduction": "パスユニットを引っ張る我らがリーダー。何かとハードモードな毎日だが、常に前向きハッピーボーイ。",
+      "role": "ベテランっぽくないベテラン",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1DpSingSH3SyxqIKs7lYhAmcH1U_3wk1n&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1RM_vXvvPD_73VqSb7RhBTGpiXgU0LDzG&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "上智大学",
+      "enthusiasm": "身体にムチを打って、若手に負けず走ります！",
+      "watchme": "勝負どころのキャッチ！",
+      "hobbies": "映画",
+      "favorite": "スムージー作り",
+      "gifts": "頑張って！の一言。",
+      "what_i_like_about_triax": "フットボールに限らず色んな分野で成長できるところ"
+    },
+    {
+      "timestamp": "2025-07-31T00:13:11.000Z",
+      "name": {
+        "default": "佐藤颯立",
+        "hiragana": "さとうそうた",
+        "alphabet": "Sota Sato"
+      },
+      "position": "QB",
+      "jersey": 12,
+      "next_introduction": "はじめまして…（今週末話しかけにいくんで間に合えば追記します。）",
+      "role": "趣味:焼肉、特技:焼肉（皆さん一緒に行きましょう）",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1LmE-rYuxSH9tf8W1g6Qh_q86nBV--YM4&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1PxCL-t84w50c7KimFCN3iOpc1daaHGCO&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "上智大学",
+      "enthusiasm": "1mmでも勝利に貢献出来るように頑張ります！",
+      "watchme": "ビビらず突っ込む気持ち",
+      "hobbies": "町焼肉巡り",
+      "favorite": "最近の推し焼肉屋「龍苑・川崎」",
+      "gifts": "黒烏龍茶",
+      "what_i_like_about_triax": "朝早いところ"
+    },
+    {
+      "timestamp": "2025-07-30T22:12:08.000Z",
+      "name": {
+        "default": "山田貴紀",
+        "hiragana": "やまだたかき",
+        "alphabet": "yamada takaki"
+      },
+      "position": "QB",
+      "jersey": 14,
+      "next_introduction": "決して捕まらない怪人",
+      "role": "研修医(≠チームドクター)",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1LhgiRUkYeX0JNEZxxJbzbQh88Mr5HZvY&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1RH7XhAabh2hyOD0NWbqkry71GdGmy-Ns&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "チームの力になる",
+      "watchme": "粘り強さ",
+      "hobbies": "音楽と漫画好きです",
+      "favorite": "自分の最近の推し曲=｢空洞です｣",
+      "gifts": "大量のカレーが食べたいです。",
+      "what_i_like_about_triax": "スローガン"
+    },
+    {
+      "timestamp": "2025-07-30T18:21:13.000Z",
+      "name": {
+        "default": "杉山侃",
+        "hiragana": "すぎやまただと",
+        "alphabet": "Sugiyama Tadato"
+      },
+      "position": "QB",
+      "jersey": 15,
+      "next_introduction": "チームのために頑張ります！",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1EDv69WfXFMXp-7fJCiG5_OaIg5ANKNcc&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1zbs3A9tHgQ2LBNyjAPKKCT0pLAGAL4_x&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "芝浦工業大学",
+      "enthusiasm": "今シーズンは怪我で出場できませんが、チームをサポートします！",
+      "watchme": "声だし頑張ります！",
+      "hobbies": "ドライブ",
+      "favorite": "自分の家の猫",
+      "gifts": "声援",
+      "what_i_like_about_triax": "みんなやる気があるところ"
+    },
+    {
+      "timestamp": "2025-07-28T22:06:32.000Z",
+      "name": {
+        "default": "沖塩将弘",
+        "hiragana": "おきしおまさひろ",
+        "alphabet": "Masahiro Okishio"
+      },
+      "position": "WR",
+      "jersey": 17,
+      "next_introduction": "TRIAXのインフラ男。このチームはおれがリクルートで強くした。",
+      "role": "パパぁ",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1gDZPlMU_bZM6tb90g0PXr71ENEYsKiWu&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=16A3kQDuRK6uUeOveBnYvG20Fiov7SonU&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1t8v26geZsC1y4dBDDUCUoSmBxSF5JGic&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "慶應義塾大学",
+      "enthusiasm": "息子がアメフトに興味を持ってもらうために活躍します",
+      "watchme": "プリプリなお・し・り・🤍",
+      "hobbies": "朝5時、息子に起こされる散歩",
+      "favorite": "主将馬渡健裕の惚気顔",
+      "gifts": "株",
+      "what_i_like_about_triax": "若い、チーム全員がチームのために考えて行動しているところ"
+    },
+    {
+      "timestamp": "2025-07-28T18:39:23.000Z",
+      "name": {
+        "default": "鈴木優太",
+        "hiragana": "すずきゆうた",
+        "alphabet": "suzuki yuta"
+      },
+      "position": "RB",
+      "jersey": 20,
+      "next_introduction": "体通り力強いランをします。",
+      "role": "もじゃもじゃパーマ",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1Rmi0J3d-eZI5F8rn36BZCdoUCajCuqqr&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1DKfEJL00-dnhwjgl7ZM9MzLkopjrgC8t&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "北海道大学",
+      "enthusiasm": "チームに貢献するプレーを沢山する",
+      "watchme": "腕の血管",
+      "hobbies": "読書",
+      "favorite": "コンビニスイーツ",
+      "gifts": "甘いもの！",
+      "what_i_like_about_triax": "高身長高学歴高収入"
+    },
+    {
+      "timestamp": "2025-08-02T08:30:42.000Z",
+      "name": {
+        "default": "岩佐 康平",
+        "hiragana": "いわさ こうへい",
+        "alphabet": "IWASA KOHEI"
+      },
+      "position": "RB",
+      "jersey": 21,
+      "next_introduction": "遠藤 丈（えんどう じょう） キッカーもこなすマルチタレント！ 鋭い読みと爆発力あるタックルでチームを鼓舞する、オールラウンダー！！",
+      "role": "副将",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1SCQzHrNThSJq8bKHhyKnK_a7IXCijZEj&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1WXB_DCI7KXhFGOv7rt2w8l9dPmktxlCk&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "芝浦工業大学",
+      "enthusiasm": "5勝！岩佐、魅せます。",
+      "watchme": "倒れないフィジカル！！",
+      "hobbies": "アウトドア系の趣味諸々",
+      "favorite": "自分の最近の推し：葬送のフリーレン",
+      "gifts": "エナジードリンク",
+      "what_i_like_about_triax": "オモシロ先輩方、同期の繋がり"
+    },
+    {
+      "timestamp": "2025-07-28T23:41:58.000Z",
+      "name": {
+        "default": "吉田光輝",
+        "hiragana": "よしだこうき",
+        "alphabet": "KOKI YOSHIDA"
+      },
+      "position": "RB",
+      "jersey": 23,
+      "next_introduction": "え？",
+      "role": "RBパートのスパイス",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=14l9fenboDallr_ikBCFE5e-nRCDn5xTO&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1txQ_vxfgx8IcjmdYxPA0JCf0AX2X9bAC&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "龍谷大学",
+      "enthusiasm": "原点である「バックはノリと縦上がり！」をモットーに頑張ります！",
+      "watchme": "30オーバーの星になる⭐︎",
+      "hobbies": "爆食い、生物系Youtuber、海外旅行",
+      "favorite": "おろちんゆーというYoutuber",
+      "gifts": "肉！ハンバーガー!! Zore Cola!!!",
+      "what_i_like_about_triax": "オープンマインド!若い‼︎練習週1なの神!!!!!!"
+    },
+    {
+      "timestamp": "2025-07-28T14:28:57.000Z",
+      "name": {
+        "default": "馬渡健裕",
+        "hiragana": "まわたり　たけひろ",
+        "alphabet": "MAwatari Tanekhiro"
+      },
+      "position": "WR",
+      "jersey": 24,
+      "next_introduction": "顔が非常に小さく、手足は長いです。",
+      "role": "主将",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=14VA9w3VTQSD4Mudzf91SJo0opWHoGO3E&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1qW8bqQ9aZx48eTARKcRjW2F_Ie0e9eB7&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "リーディングレシーバー獲得！",
+      "watchme": "キャッチ",
+      "hobbies": "パター",
+      "favorite": "B'z",
+      "gifts": "話しかけてください！",
+      "what_i_like_about_triax": "TRIAXファミリー"
+    },
+    {
+      "timestamp": "2025-08-01T23:51:24.000Z",
+      "name": {
+        "default": "和泉　智也",
+        "hiragana": "いずみ　ともや",
+        "alphabet": "Tomoya Izumi"
+      },
+      "position": "DB",
+      "jersey": 25,
+      "next_introduction": "サンフランシスコと日本の二拠点で仕事とアメフトに奮闘する大ベテラン。チームがピンチの時にはサンフランシスコから駆けつけ、チームを救う。",
+      "role": "副将",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1p8tBww67JtLyirsRU6qN7a0xFl4Q5db8&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1iulTyIKBhOFk07ZxNrrKX79MaJSt5t3-&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "関西学院大学",
+      "enthusiasm": "観ている人が楽しんでくれるような試合にします！",
+      "watchme": "パスは通させません。",
+      "hobbies": "ゴルフ",
+      "favorite": "推しうどん:丸香",
+      "gifts": "黄色い声援が嬉しいです",
+      "what_i_like_about_triax": "プライベートも仲良いところ"
+    },
+    {
+      "timestamp": "2025-07-31T23:56:43.000Z",
+      "name": {
+        "default": "横田 孝",
+        "hiragana": "よこた たかし",
+        "alphabet": "Takashi Yokota"
+      },
+      "position": "DB",
+      "jersey": 26,
+      "next_introduction": "クイックネス溢れる実直なコンサル系DB",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1QIb1J2aaiyJgWirZzuboasa4DALwvdsM&export=view",
+          "mime_type": "image/png"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1C1gOdy6vIvjE-K1cotsxULrxFOA2YuLc&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "慶應義塾大学",
+      "enthusiasm": "ラストイヤー!?",
+      "watchme": "Showa spirit",
+      "hobbies": "",
+      "favorite": "トム・ブレイディの解説",
+      "gifts": "",
+      "what_i_like_about_triax": "チーム理念"
+    },
+    {
+      "timestamp": "2025-08-01T13:50:08.000Z",
+      "name": {
+        "default": "吉村徳之",
+        "hiragana": "よしむらのりゆき",
+        "alphabet": "Yoshimura Noriyuki"
+      },
+      "position": "DB",
+      "jersey": 28,
+      "next_introduction": "いつもクールな宮崎さん、いつも何を考えておられますか！？",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1uTt66YE3xo310Vngx-X7-25fYlm1C_hJ&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=16XMB9nyTJfA-O5bMeStIweNCYx-k-tOO&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "チームの勝利に貢献します",
+      "watchme": "低いタックルと球際",
+      "hobbies": "料理, 読書, バイク",
+      "favorite": "紺というカラー",
+      "gifts": "芍薬甘草湯",
+      "what_i_like_about_triax": "Commitというスローガンのもとで一致団結しているところ"
+    },
+    {
+      "timestamp": "2025-07-29T00:29:19.000Z",
+      "name": {
+        "default": "窪田光",
+        "hiragana": "くぼたひかる",
+        "alphabet": "Hikaru Kubota"
+      },
+      "position": "RB",
+      "jersey": 31,
+      "next_introduction": "琉球魂ここに降臨！",
+      "role": "平社員",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1rEToj3Arc0lVYoNyReFtsi8J6CmvrJpH&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1Rhq5XXmxMxUGoZpjpxC5c1ZVP9kywOfh&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "関西学院大学",
+      "enthusiasm": "TD量産します！",
+      "watchme": "垂れ目",
+      "hobbies": "旅行、ゴルフ、フェス",
+      "favorite": "環二屋という家系ラーメン屋",
+      "gifts": "ウイダーインゼリー",
+      "what_i_like_about_triax": "メリハリ"
+    },
+    {
+      "timestamp": "2025-08-01T23:18:42.000Z",
+      "name": {
+        "default": "大類　有基",
+        "hiragana": "おおるい　ゆうき",
+        "alphabet": "Yuki Orui"
+      },
+      "position": "DB",
+      "jersey": 33,
+      "next_introduction": "笑顔で毒を吐く期待の新人",
+      "role": "セーフティー",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1YlAnqbX7DK5-DhHF7YKot8lnc9OdOBMZ&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1xNICFlKu8SAbaJViz-QXj2Y1JgJ8d-k6&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "横浜国立大学",
+      "enthusiasm": "ハードにプレーします！",
+      "watchme": "タックル",
+      "hobbies": "ドライプ",
+      "favorite": "ヤジマリー",
+      "gifts": "あん団子",
+      "what_i_like_about_triax": "LIFE・WORK・PLAY"
+    },
+    {
+      "timestamp": "2025-08-10T09:31:45.000Z",
+      "name": {
+        "default": "栗山　尚也",
+        "hiragana": "くりやま　なおや",
+        "alphabet": "Kuriyama Naoya"
+      },
+      "position": "DB",
+      "jersey": 37,
+      "next_introduction": "頑張りましょう！",
+      "role": "気持ちはフレッシュマン",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=19wTxfrlQNHCeDTs6V2vm51pLZbYdQ7oT&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1_lsFVbg4Cfp3kJCk4xmDzP5JjbwtJ8B1&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "中央大学",
+      "enthusiasm": "目指せTD",
+      "watchme": "勝負どころでのインターセプト",
+      "hobbies": "Switch2・クロスフィット・旅行",
+      "favorite": "TWICE",
+      "gifts": "任天堂のプリペイドカード",
+      "what_i_like_about_triax": "メリハリ"
+    },
+    {
+      "timestamp": "2025-07-29T11:43:05.000Z",
+      "name": {
+        "default": "伊佐治　蓮",
+        "hiragana": "いさじ　れん",
+        "alphabet": "ISAJI REN"
+      },
+      "position": "RB",
+      "jersey": 42,
+      "next_introduction": "チームの勝利に貢献します",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1Z8ekwhfbVZp-kz0fgl8Hhn11oGslYPNn&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1Gq_PuFfFnCgQKWy0bLvAggL7014alM4k&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "TD取ります！",
+      "watchme": "激しいヒットに注目してください！",
+      "hobbies": "",
+      "favorite": "ケントゥリアという漫画",
+      "gifts": "",
+      "what_i_like_about_triax": "雰囲気"
+    },
+    {
+      "timestamp": "2025-07-31T00:27:51.000Z",
+      "name": {
+        "default": "上原　浩士朗",
+        "hiragana": "うえはら　こうしろう",
+        "alphabet": "Uehara Koshiro"
+      },
+      "position": "DL",
+      "jersey": 43,
+      "next_introduction": "同期の中で最も会話できてないです。今度サシ飲みで。",
+      "role": "巨人顔枠担当",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1T8BSP_uFjdsneZVS6WoXdUAKrnWTgmFF&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1s7Fr51DVkjD3z23yfrHj55MO7N0mONYR&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "神戸大学",
+      "enthusiasm": "ハードヒット",
+      "watchme": "KCバスター",
+      "hobbies": "ゴルフかネトフリの海外ドラマ",
+      "favorite": "すき家鶏そぼろ丼卵セット",
+      "gifts": "ジュース",
+      "what_i_like_about_triax": "オンオフしっかりしてる人が多いところ"
+    },
+    {
+      "timestamp": "2025-08-01T22:55:45.000Z",
+      "name": {
+        "default": "野村淳之介",
+        "hiragana": "のむらじゅんのすけ",
+        "alphabet": "NOMURA JUNNOSUKE"
+      },
+      "position": "TE",
+      "jersey": 44,
+      "next_introduction": "頭のネジが外れたヒットにご注目下さい！",
+      "role": "遠藤さんの舎弟",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1TF613hnaNX5HtlRnsUNBtkdpbhYN0zyn&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1dOMacD1qsmbIfS_aMuetaRtrxhIcNoY4&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "拓殖大学",
+      "enthusiasm": "相手を圧倒します！",
+      "watchme": "ヒット、体幹の強さ！",
+      "hobbies": "",
+      "favorite": "TWICE サナ",
+      "gifts": "",
+      "what_i_like_about_triax": "互いに高め合っているところ！"
+    },
+    {
+      "timestamp": "2025-07-29T23:48:19.000Z",
+      "name": {
+        "default": "湯上弘章",
+        "hiragana": "ゆかみひろあき",
+        "alphabet": "HIROAKI YUKAMI"
+      },
+      "position": "LB",
+      "jersey": 49,
+      "next_introduction": "突如現れた超新星",
+      "role": "LBパートリーダー",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=19N8JXv0NNeRzjulxzfG-hTI4os1GNsOD&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1q3o5u8vGGPdVCbrqat9iomjofm3q8bBx&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "龍谷大学",
+      "enthusiasm": "リーグNo.1LBになります！！",
+      "watchme": "やる時はやる所",
+      "hobbies": "ディズニーリゾートに遊びに行く！",
+      "favorite": "ハシビロコウ",
+      "gifts": "プリン",
+      "what_i_like_about_triax": "全部愛してます。"
+    },
+    {
+      "timestamp": "2025-07-31T23:03:03.000Z",
+      "name": {
+        "default": "阿部光佑",
+        "hiragana": "あべこうすけ",
+        "alphabet": "abe kosuke"
+      },
+      "position": "DL",
+      "jersey": 51,
+      "next_introduction": "「吉山さんはいい人よ」byDBの人",
+      "role": "脱寝坊",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1EGb09KUFQuAgC1u-Kt47I1tDuYse5Ue1&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1x-mIWkp-qo_oadIoef-LxkLfhO8h6aWW&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "めっちゃ楽しむ",
+      "watchme": "足の長さ",
+      "hobbies": "アメフトですね。",
+      "favorite": "「左利きのエレン」という漫画",
+      "gifts": "チョコが好きです",
+      "what_i_like_about_triax": "いろんな社会人の方がいて勉強になる"
+    },
+    {
+      "timestamp": "2025-08-01T16:45:33.000Z",
+      "name": {
+        "default": "吉山大空",
+        "hiragana": "よしやまひろたか",
+        "alphabet": "Hirotaka Yoshiyama"
+      },
+      "position": "LB",
+      "jersey": 52,
+      "next_introduction": "あふれる若さを活かして活躍してくれるはずです！！！",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1-pKwpyVJQfTgezQp-Ax3JIvws2_0ErKy&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=15aWONbyEcy6ZoQwafYmRLAzt6E7OKeVf&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "ICU",
+      "enthusiasm": "5勝！！！",
+      "watchme": "老獪なプレーと言いたいところですが、とにかくアグレッシブに頑張ります！",
+      "hobbies": "",
+      "favorite": "EAA／プロテイン",
+      "gifts": "",
+      "what_i_like_about_triax": "Life, Wok, Play"
+    },
+    {
+      "timestamp": "2025-07-31T21:10:21.000Z",
+      "name": {
+        "default": "阿部光葵",
+        "hiragana": "あべこうき",
+        "alphabet": "ABE KOKI"
+      },
+      "position": "OL",
+      "jersey": 58,
+      "next_introduction": "かわいい声からは想像ができない重たいヒットでOLを制圧する。プレーヤーとしては全くかわいくない。",
+      "role": "OLパートリーダー",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1lo-yyHQTuHncDFNVE5aQAgi0ZheKNuf3&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1xN4pmAL0LphvpJ--OskgcWYBXgl9brdu&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "関西学院大学",
+      "enthusiasm": "週3以上の朝トレ継続して勝ちます",
+      "watchme": "絶対に負けないんだという強い気持ち",
+      "hobbies": "サウナ、野球観戦",
+      "favorite": "坂本勇人という神",
+      "gifts": "声援をくれる、それだけで充分です",
+      "what_i_like_about_triax": "LIFE.WORK.PLAY全てが潤うところ"
+    },
+    {
+      "timestamp": "2025-07-29T07:28:56.000Z",
+      "name": {
+        "default": "森田　真裕",
+        "hiragana": "もりた　まさひろ",
+        "alphabet": "Morita Masahiro"
+      },
+      "position": "DL",
+      "jersey": 59,
+      "next_introduction": "とにかく最後までやり切ります",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1HgV0OAmCKpXJU_oHFqrEP856jOZ6KLDT&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1nHqLVdRBprI8QSo-U_dONrBcQd3m-TiK&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "慶應義塾大学",
+      "enthusiasm": "去年は怪我で大変でしたが、今年は怪我を乗り越えたところを見せれるようにします",
+      "watchme": "ダブルチーム処理",
+      "hobbies": "サウナ",
+      "favorite": "プライベートサウナ",
+      "gifts": "プロテインです！",
+      "what_i_like_about_triax": "Life Work Playの考え方です。仕事とアメフト、趣味を両立するのではなくそれぞれが相互に影響していい影響を与える、というチームの考え方が好きです。"
+    },
+    {
+      "timestamp": "2025-07-31T23:07:42.000Z",
+      "name": {
+        "default": "青井　勇磨",
+        "hiragana": "あおい　ゆうま",
+        "alphabet": "Aoi Yuma"
+      },
+      "position": "DL",
+      "jersey": 64,
+      "next_introduction": "OLとしてギャンブルではなく手堅いブロックで勝利に貢献してくれます！",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1rzLKsqk4WRy3qgFacR1L5eaZ8iB9lGc8&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=15kPaI2x1IXMuKujx9QOLkPnhnjPCz8tB&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "新人らしくフレッシュに暴れます",
+      "watchme": "ランストップ",
+      "hobbies": "ライブ、飲み会、寝るら",
+      "favorite": "ベリーグッドマン",
+      "gifts": "",
+      "what_i_like_about_triax": "大学時代の先輩が多くいること"
+    },
+    {
+      "timestamp": "2025-07-30T10:34:07.000Z",
+      "name": {
+        "default": "三谷京平(ミタニキョウヘイ)",
+        "hiragana": "みたにきょうへい",
+        "alphabet": "Kyohei Mitani"
+      },
+      "position": "OL",
+      "jersey": 68,
+      "next_introduction": "彼女募集中です！！",
+      "role": "SNS担当",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=14ytdwVSNjGe53DTfPGecXZIGqacjBIWS&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1ijMY2nY6_TgG_jm4YUdnJL6SQ5fw5gpV&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "日本大学",
+      "enthusiasm": "若手に負けず頑張ります！",
+      "watchme": "スピードを活かしたブロック",
+      "hobbies": "ポーカー、嫁さんとデート",
+      "favorite": "ラフ×ラフというアイドル",
+      "gifts": "いいブロックしたら褒めてください！！",
+      "what_i_like_about_triax": "様々なバックグラウンドを持った人がいるところ"
+    },
+    {
+      "timestamp": "2025-08-01T18:14:20.000Z",
+      "name": {
+        "default": "田中琢己",
+        "hiragana": "たなかたくみ",
+        "alphabet": "TANAKA TAKUMI"
+      },
+      "position": "OL",
+      "jersey": 69,
+      "next_introduction": "東大卒エリートOL。外回りで鍛えた脚力でスピードあるプレーを魅せます。",
+      "role": "#68三谷さんの舎弟",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1SWIgJ5FI23li16MgTKODL6umccWVmdMz&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1ZoWjnR1EZsiVgV9kDk7pL7-e3N_htiG0&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "関西学院大学",
+      "enthusiasm": "フィニッシュします！",
+      "watchme": "光る汗",
+      "hobbies": "飲むか寝るか",
+      "favorite": "牛乳",
+      "gifts": "黄色い声援",
+      "what_i_like_about_triax": "みんなアクティブ"
+    },
+    {
+      "timestamp": "2025-07-31T21:27:38.000Z",
+      "name": {
+        "default": "星野俊樹",
+        "hiragana": "ほしのとしき",
+        "alphabet": "HOSHINO TOSHIKI"
+      },
+      "position": "OL",
+      "jersey": 73,
+      "next_introduction": "OLの秘密兵器。おっきいです。とってもおっきい。",
+      "role": "OL/FGリーダー",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1av8CA5sNLcbkQ2BE64pUWI4ZRKUahCCk&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1W9JMEtUlACCpBtLbCYe1W8xNIL4rTyS8&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "OLで勝ちます。",
+      "watchme": "屈託のない笑顔",
+      "hobbies": "麻雀、ポーカー",
+      "favorite": "うさぎやのどら焼き",
+      "gifts": "美味しいもの。",
+      "what_i_like_about_triax": "練習が朝早いところ以外全部"
+    },
+    {
+      "timestamp": "2025-07-30T10:40:44.000Z",
+      "name": {
+        "default": "中谷優太",
+        "hiragana": "なかたにゆうた",
+        "alphabet": "YUTA NAKATANI"
+      },
+      "position": "OL",
+      "jersey": 74,
+      "next_introduction": "我がチームの元気印！いつも笑顔で元気をくれます！",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1WQ_Wb5DzDO9y5d706Rgt0z_isGMbQ8v1&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1Wa0mJ_wCmgAORoQYs5bYldau-8c6Nbpa&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "立命館大学",
+      "enthusiasm": "圧倒",
+      "watchme": "大きな体を生かした豪快なブロック",
+      "hobbies": "",
+      "favorite": "最近の推し食べ物　そうめん",
+      "gifts": "",
+      "what_i_like_about_triax": "若手が多くフレンドリーなところ"
+    },
+    {
+      "timestamp": "2025-07-30T21:10:38.000Z",
+      "name": {
+        "default": "祝陽大",
+        "hiragana": "いわいあきひろ",
+        "alphabet": "Iwaiakihiro"
+      },
+      "position": "DL",
+      "jersey": 75,
+      "next_introduction": "32 DBの超新星",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1Sk0fXoS2pGbhbsDMD-K2kcOqaa-DVKUN&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1UtOkkXXd0stj8sGAdq77XmP5svla91RB&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "甲南大学",
+      "enthusiasm": "精一杯頑張ります。",
+      "watchme": "笑顔",
+      "hobbies": "",
+      "favorite": "笑顔",
+      "gifts": "",
+      "what_i_like_about_triax": "みんな優しい"
+    },
+    {
+      "timestamp": "2025-08-01T10:05:16.000Z",
+      "name": {
+        "default": "二木　佑介",
+        "hiragana": "ふたき　ゆうすけ",
+        "alphabet": "Yusuke Futaki"
+      },
+      "position": "OL",
+      "jersey": 76,
+      "next_introduction": "TRIAXのビッグダディ（物理）、上野のAmerican Diner ANDRAへ是非",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1MZg2fAWBuA7VbnJLarVw83ddcAHcFL7r&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1L65OKz8u11d72JMffV4ITgVeg-nj7SU2&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "関西学院大学",
+      "enthusiasm": "脱Xリーグ最軽量OL",
+      "watchme": "フィニッシュ",
+      "hobbies": "バンドのライブ、ラーメン",
+      "favorite": "バンド/SiM",
+      "gifts": "現ナマ",
+      "what_i_like_about_triax": "仲の良さ"
+    },
+    {
+      "timestamp": "2025-08-01T01:19:31.000Z",
+      "name": {
+        "default": "塩田龍太郎",
+        "hiragana": "しおだりゅうたろう",
+        "alphabet": "Shioda Ryutaro"
+      },
+      "position": "OL",
+      "jersey": 77,
+      "next_introduction": "可愛い可愛い永福君顔に似合わずクレバーでダーティーなプレーに注目です！",
+      "role": "若い選手に影で財布って言われてるらしいです",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=18UMRMJkRh_ZcuLj0gnw8voQPMOhBkuq0&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1rlBce4n1pEeRZvADWQOYPP0LjlTr8TOw&export=view",
+            "mime_type": "image/png"
+          }
+        ]
+      },
+      "university": "近畿大学",
+      "enthusiasm": "若い子には負けません",
+      "watchme": "太もも80cm",
+      "hobbies": "若い子達にたくさんご飯食べさせる事",
+      "favorite": "二木にご飯を与える事",
+      "gifts": "二木のご飯",
+      "what_i_like_about_triax": "Life work Play"
+    },
+    {
+      "timestamp": "2025-07-29T00:49:14.000Z",
+      "name": {
+        "default": "永福　大悟",
+        "hiragana": "ながふく　だいご",
+        "alphabet": "NAGAFUKU DAIGO"
+      },
+      "position": "OL",
+      "jersey": 78,
+      "next_introduction": "TRIAXが誇る超級大砲パンター。",
+      "role": "オフェンスリーダー",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1hmP5Mhm8PXUL5L5Xeb7dtyKo_J-fPYU5&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1smiU6M4DitpE2hyka3bHwRyU-fG89sAK&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "立命館大学",
+      "enthusiasm": "怪我をせず、楽しく、勝つ。",
+      "watchme": "安定感",
+      "hobbies": "",
+      "favorite": "TRIAXメンバーは阪本平です。",
+      "gifts": "試合前の糖質",
+      "what_i_like_about_triax": "みんな結局真面目なところ"
+    },
+    {
+      "timestamp": "2025-08-04T17:58:41.000Z",
+      "name": {
+        "default": "吉澤僚馬",
+        "hiragana": "よしざわりょうま",
+        "alphabet": "Ryoma Yoshizawa"
+      },
+      "position": "Sp",
+      "jersey": 81,
+      "next_introduction": "彼スナッパーもできます。しかも上手い。優秀。",
+      "role": "全国の抹茶スイーツ",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1DRv1RvRpk1AfIt7Z98v4JjdxAA8ZYsz6&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1Te_eUEcY4ZlTM2yXCkMcApC33uwu_BnB&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1aXxA3bONpeH8-omVV0jfoeLbf0NnbwBU&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1CwjykJhvH6PexQZ2MlcsU-zYvZEt9VtM&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "早稲田大学",
+      "enthusiasm": "TD1本",
+      "watchme": "バッキバキのももとおしり、脚力",
+      "hobbies": "たくさん寝るたくさん食べる自然と戯れる",
+      "favorite": "推しP：Marquette King、pat mcafee",
+      "gifts": "抹茶カステラ、千葉ロッテ観戦チケット、（私のスポンサーになってくださる人や企業のご紹介）",
+      "what_i_like_about_triax": "練習場所全て人工芝、家からまだ近い"
+    },
+    {
+      "timestamp": "2025-07-31T21:16:22.000Z",
+      "name": {
+        "default": "木村龍太郎",
+        "hiragana": "きむらりゅうたろう",
+        "alphabet": "Kimura Ryutaro"
+      },
+      "position": "WR",
+      "jersey": 85,
+      "next_introduction": "パリピ系大型TE",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1yARmzFKEI9r2DF9mQtMieEdeVSFSw5WN&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1ftTpWXfCMaxCGraoFI1Tecoy_gtbSouv&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "一橋大学",
+      "enthusiasm": "一年目らしくフレッシュに頑張ります！",
+      "watchme": "スピード",
+      "hobbies": "旅行、Netflix",
+      "favorite": "油そば",
+      "gifts": "ファンクラブの加入！",
+      "what_i_like_about_triax": "活気があっていい人が多いところ！"
+    },
+    {
+      "timestamp": "2025-07-30T22:05:02.000Z",
+      "name": {
+        "default": "中原幸志郎",
+        "hiragana": "なかはらこうしろう",
+        "alphabet": "Koshiro Nakahara"
+      },
+      "position": "DL",
+      "jersey": 88,
+      "next_introduction": "頼れる我らがDLパートリーダーです！",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1MerHVPrdiQur32NycIE3T5H9-Z4qoWbS&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=14lQSmiwY9LENbVVgf-rTlIXW7kzF6fZf&export=view",
+            "mime_type": "image/heif"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "勝ちます！！",
+      "watchme": "フィニッシュ",
+      "hobbies": "スポーツ観戦、サウナ",
+      "favorite": "推しNFLチーム：Washington Commanders",
+      "gifts": "ウィダーinゼリー",
+      "what_i_like_about_triax": "雰囲気"
+    },
+    {
+      "timestamp": "2025-07-30T12:52:36.000Z",
+      "name": {
+        "default": "河西光",
+        "hiragana": "かわにしひかる",
+        "alphabet": "KAWANISHI HIKARU"
+      },
+      "position": "DL",
+      "jersey": 91,
+      "next_introduction": "DLパートの兄貴分。時に厳しく、時に優しく、常に冗談を言っている良い先輩。",
+      "role": "DLパートリーダー",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1MMPQIe6g9Tra3yr8xncWibHEaGCJN1Pg&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1R6QHn4UYrqe-ToVLWzfZAZJXcvs_gbqv&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1Iyhy9TvSqCNefxlOxtpCyL1_RqrUgqVl&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=12m7FA_pIg561jey0q-OFPPxWT3U5bAuL&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "芝浦工業大学",
+      "enthusiasm": "1試合1サック！",
+      "watchme": "上腕三頭筋！",
+      "hobbies": "BBQ、海、旅行、飲み",
+      "favorite": "推し恋愛番組の人物は、シャッフルアイランドのみれいちゃん",
+      "gifts": "プロテイン",
+      "what_i_like_about_triax": "同期は仲良く、先輩も優しい"
+    },
+    {
+      "timestamp": "2025-07-31T19:20:23.000Z",
+      "name": {
+        "default": "梅川修一",
+        "hiragana": "うめかわしゅういち",
+        "alphabet": "UMEKAWA SHUICHI"
+      },
+      "position": "DL",
+      "jersey": 91,
+      "next_introduction": "わかりません。すみません。",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1Yuyoa6B4-Co7W2fD8Ad4LCelBUMo69IB&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1aVMR4GstLWjkplzGLPDt4-wCAzk__t4N&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "がんばります！",
+      "watchme": "パスラッシュ",
+      "hobbies": "昼寝",
+      "favorite": "アーティスト、清水翔太",
+      "gifts": "冷たいお茶",
+      "what_i_like_about_triax": "アサイメントが深いところ"
+    },
+    {
+      "timestamp": "2025-08-04T22:08:54.000Z",
+      "name": {
+        "default": "梅川修一",
+        "hiragana": "うめかわしゅういち",
+        "alphabet": "umekawa shuichi"
+      },
+      "position": "DL",
+      "jersey": 91,
+      "next_introduction": "よろしくお願いします。",
+      "role": "なし",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1WAMlkiQ9SgUlm3zeadiwCrHGmzwUw4nD&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1nG-CImDKuRUnWeHbVW0QYdfAYbg0fW2H&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "頑張ります。",
+      "watchme": "パスラッシュ",
+      "hobbies": "いろいろ",
+      "favorite": "推しアーティスト、清水翔太",
+      "gifts": "冷たいお茶",
+      "what_i_like_about_triax": "みんな真剣なところ"
+    },
+    {
+      "timestamp": "2025-07-29T19:51:57.000Z",
+      "name": {
+        "default": "原田 隼輔",
+        "hiragana": "はらだ じゅんすけ",
+        "alphabet": "JUNSUKE HARADA"
+      },
+      "position": "DL",
+      "jersey": 92,
+      "next_introduction": "あまりよく知らないですが良いやつそう",
+      "role": "声の大きなおじさん",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1q4ikV2Brhlx_4LOYZ008MJhgXOIC5G1N&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1NqfloQGW1G0izPKZzhzVxcEEfHyTkw8q&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "老人ですが頑張ります",
+      "watchme": "サイドラインにいる時の大きな声",
+      "hobbies": "ゴルフ筋トレサウナ映画",
+      "favorite": "サウナ→福岡のサウナヨーガン、福岡来る時はぜひ",
+      "gifts": "見に来てくれるだけでいいんですよ、、、",
+      "what_i_like_about_triax": "民度の高さ"
+    },
+    {
+      "timestamp": "2025-08-03T19:26:39.000Z",
+      "name": {
+        "default": "山本祥生",
+        "hiragana": "やまもとしょう",
+        "alphabet": "Sho Yamamoto"
+      },
+      "position": "WR",
+      "jersey": 95,
+      "next_introduction": "チームに貢献できるように頑張ります",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1aPavAiFXvq5MuttHd3-wXxgmJUtuWFA8&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=140rPmwLx531MmI2dQGycpfNLdz23knta&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "このチームで勝ちたいです！",
+      "watchme": "シュアなプレイでチームに貢献します",
+      "hobbies": "最近一眼レフを買ったので、写真を趣味にしたいです！",
+      "favorite": "「けーさんとたろー」というYouTubeチャンネル",
+      "gifts": "ファンクラブ",
+      "what_i_like_about_triax": "楽しみながらアメフトするときは真剣にやるところ"
+    },
+    {
+      "timestamp": "2025-08-02T13:06:07.000Z",
+      "name": {
+        "default": "側島眞太郎",
+        "hiragana": "そばしましんたろう",
+        "alphabet": "Shintaro Sobashima"
+      },
+      "position": "DL",
+      "jersey": 98,
+      "next_introduction": "いや実際、まだまだ若いですね",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1SUaGy4KSDjUZephCZjurXQHaIMPySj6n&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1qqwnL14l7P6TgmRDi3D5aIcffEfvkKRk&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "土曜日の朝頑張っておきます",
+      "watchme": "怪我しない",
+      "hobbies": "",
+      "favorite": "飯、虎ノ門ヒルズのカオマンガイ",
+      "gifts": "",
+      "what_i_like_about_triax": "みんな頑張ってるとこ"
+    },
+    {
+      "timestamp": "2025-07-31T14:08:29.000Z",
+      "name": {
+        "default": "岡崎恭直",
+        "hiragana": "おかざきやすなお",
+        "alphabet": "Yasunao Okazaki"
+      },
+      "position": "DL",
+      "jersey": 99,
+      "next_introduction": "老体をおしてWRへのパス供給し続ける独身貴族。 可処分所得を武器に日々整体に通い、コンディションを整える。 ワイドをまとめる頭脳に秋シーズンも期待。",
+      "role": "今年はDefense Coordinator, DL/LB, RBの三刀流に挑戦。Life, Work, Playを体現していく",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1VrMH2yRAWD7uVdi9tJMeouUBv-qSFPV-&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=12eE2_5t2qk5sjzVLKOgLB3dwDNN1xYVq&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "東京大学",
+      "enthusiasm": "個人としてだけでなくチームを勝たせる取組に邁進します",
+      "watchme": "計算しつくされた暴虐的なプレー",
+      "hobbies": "睡眠、資格の勉強",
+      "favorite": "二郎",
+      "gifts": "美味しいご飯",
+      "what_i_like_about_triax": "三刀流という無謀な挑戦ができる環境"
+    },
+    {
+      "timestamp": "2025-07-30T14:45:42.000Z",
+      "name": {
+        "default": "落合 展",
+        "hiragana": "おちあい ひろむ",
+        "alphabet": "Hiromu Ochiai"
+      },
+      "position": "Staff",
+      "next_introduction": "",
+      "role": "HC,Tech",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1FkqhwFOnU2JUdWVLSG2M5LIz9gbGYdP-&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=16iRHVVQX4cfKWXmY-jQS8kK25jy0BX1k&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1PYtnr9eZcBfelEgLAevJf9sG5UrnsvlJ&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1DuzjXlrZaIrTIFYncKCN3eKBD-4UwLjj&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1yELaAVtMNIfHEaR38XWcsupLnkCuwOtx&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "京都大学",
+      "enthusiasm": "みんなで「良いチーム」にして勝ちたいです！",
+      "watchme": "低くてデカくて通る声",
+      "hobbies": "プログラミング",
+      "favorite": "Claude Code というAI",
+      "gifts": "名指しの黄色い声援",
+      "what_i_like_about_triax": "みんな前向きで工夫に溢れ、ポジティブなところ"
+    },
+    {
+      "timestamp": "2025-07-30T18:25:18.000Z",
+      "name": {
+        "default": "村山英和",
+        "hiragana": "むらやまひでかず",
+        "alphabet": "Hidekazu Murayama"
+      },
+      "position": "Coach",
+      "next_introduction": "",
+      "role": "キックコーディネーター＆試合練習での総務系",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1tCdaoPmPdmQj3vPydVJpQYbM47gcBGZK&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1JXRsPF0CuLc6WGLBYKstEtZxcufzuWNV&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "九州大学",
+      "enthusiasm": "キックで勝利に貢献",
+      "watchme": "ふくらはぎ",
+      "hobbies": "ラグビー観戦、コメダで朝食、朝の筋トレ",
+      "favorite": "マーカス・フリーマン",
+      "gifts": "",
+      "what_i_like_about_triax": "真面目さ"
+    },
+    {
+      "timestamp": "2025-07-30T18:48:52.000Z",
+      "name": {
+        "default": "加洲大輔",
+        "hiragana": "かしゅうだいすけ",
+        "alphabet": "Kashu Daisuke"
+      },
+      "position": "Coach",
+      "next_introduction": "",
+      "role": "ディフェンスコーディネーター補佐",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1vmUxCgRcKc4xUaztva8OxKweUsZHhI2o&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1byb1WeG01uz7UmaACWhOob0p7r8v05uU&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "立命館大学",
+      "enthusiasm": "5勝しましょう！",
+      "watchme": "プレーコール",
+      "hobbies": "ゴルフ",
+      "favorite": "逃げ上手の若君",
+      "gifts": "",
+      "what_i_like_about_triax": "LIFE WORK PLAY"
+    },
+    {
+      "timestamp": "2025-07-30T20:10:35.000Z",
+      "name": {
+        "default": "島谷　隆也",
+        "hiragana": "しまたに　りゅうや",
+        "alphabet": "SHIMATANI RYUYA"
+      },
+      "position": "Coach",
+      "next_introduction": "",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1N_f114bml7WcN9NR8O_cYvGycJIx_0z7&export=view",
+          "mime_type": "image/png"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=122SsuB_an2Thqp4QCXJWyX3f6B2g_9lp&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "関西学院大学",
+      "enthusiasm": "頑張ります",
+      "watchme": "鋭い眼差し",
+      "hobbies": "サウナ",
+      "favorite": "aespa",
+      "gifts": "ボディーソープ",
+      "what_i_like_about_triax": "みんな真面目なところ"
+    },
+    {
+      "timestamp": "2025-07-30T23:05:16.000Z",
+      "name": {
+        "default": "小石 拓哉",
+        "hiragana": "こいし たくや",
+        "alphabet": "KOISHI TAKUYA"
+      },
+      "position": "Staff",
+      "next_introduction": "",
+      "role": "撮影班",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1vh7GsVcHJZxzlLjQxsLc_L6U1wGLo5Xq&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1bjT-CKc4BXnsOVXJZX_4VAXm_LTTtvyg&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "日本大学",
+      "enthusiasm": "練習のクオリティを上げて、試合で勝たせます",
+      "watchme": "試合ビデオの音声に正確な反則名称を使う",
+      "hobbies": "ニンジャ、ヤクルト、ダイビング",
+      "favorite": "ももいろクローバーZ",
+      "gifts": "",
+      "what_i_like_about_triax": "チーム活動での経験が仕事に活かせるところ"
+    },
+    {
+      "timestamp": "2025-08-01T19:25:30.000Z",
+      "name": {
+        "default": "岩田　瑞季",
+        "hiragana": "いわた　みずき",
+        "alphabet": "IWATA MIZUKI"
+      },
+      "position": "Staff",
+      "next_introduction": "",
+      "role": "スタッフ、SNS担当",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1gFyrIpRE_-Z0hd273nowYi0t15KptGwD&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1W5WdHFNmCEILqGZnA2p68gDgik67eyIm&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "埼玉栄高校　（個人情報なので非公開でお願いします🙇‍♀️）",
+      "enthusiasm": "TRIAXの魅力が伝わる投稿を目指して頑張ります📷",
+      "watchme": "インスタの投稿、工夫してます！",
+      "hobbies": "旅行、パン作り",
+      "favorite": "旅先のカフェ",
+      "gifts": "",
+      "what_i_like_about_triax": "熱いところ🔥"
+    },
+    {
+      "timestamp": "2025-08-01T20:39:02.000Z",
+      "name": {
+        "default": "谷　優菜",
+        "hiragana": "たに　ゆうな",
+        "alphabet": "YUNA TANI"
+      },
+      "position": "Staff",
+      "next_introduction": "",
+      "role": "裏方",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1Q-dFIKJc5BDZzo6hr7nVOSDHVKFVUnG6&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1sQafnnXVvU83NIi0v7lKUXDoz4ZwzmRA&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "青山学院大学",
+      "enthusiasm": "皆さんのお力になれるよう頑張ります",
+      "watchme": "仕事ぶり",
+      "hobbies": "カメラを持って散歩をする事",
+      "favorite": "アーティスト:wave to earth",
+      "gifts": "",
+      "what_i_like_about_triax": "暖かい雰囲気"
+    },
+    {
+      "timestamp": "2025-08-04T23:14:54.000Z",
+      "name": {
+        "default": "尹 嫣",
+        "hiragana": "いん えん",
+        "alphabet": "YIN YAN"
+      },
+      "position": "Staff",
+      "next_introduction": "",
+      "role": "グラウンド予約係",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1gUyzW5ehMe0WEeV041gIOEW_T6aKzSok&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=12P2q8LtDsD74LJ9iNDLLG5C6Rogh9rR0&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "早稲田大学",
+      "enthusiasm": "落合HCを応援しています！",
+      "watchme": "落合HCへの熱い想い",
+      "hobbies": "だらだら、ごろごろ",
+      "favorite": "ハイエナ",
+      "gifts": "塩分チャージ、プロテイン",
+      "what_i_like_about_triax": "偏差値が高そうなところ"
+    },
+    {
+      "timestamp": "2025-08-06T12:10:58.000Z",
+      "name": {
+        "default": "久保　今日子",
+        "hiragana": "くぼ　きょうこ",
+        "alphabet": "KYOKO"
+      },
+      "position": "Staff",
+      "next_introduction": "",
+      "role": "ファンクラブ・集客担当",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1__NZCjvdCVHAz4havfQfnSzZ2NiUBe_J&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1gu-t-b4Na18xOI468GmSM2UBbUAHO_sK&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "愛知学院大学",
+      "enthusiasm": "選手たちが主役になって沢山のファンの方に応援してもらえるようなコンテンツやファンクラブを作ります。",
+      "watchme": "身長です。",
+      "hobbies": "スポーツ観戦・美術鑑賞・音楽・おいしいものを食べる・旅行",
+      "favorite": "伝統工芸を広げる活動や職人さんの話を聞く事",
+      "gifts": "ファンクラブ入会　推し選手を作ってくれた嬉しいです。推しSTAFFも作ってくれたら嬉しいです。",
+      "what_i_like_about_triax": "みんないいキャラクターをもっていて、真剣に楽しんでアメフトをしているところが好きです。"
+    }
+  ]
+}

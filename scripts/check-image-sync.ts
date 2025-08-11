@@ -4,11 +4,11 @@
  * Club TRIAX 画像同期チェックスクリプト
  *
  * 【概要】
- * Roster API と docs/assets/members/ ディレクトリ内の画像ファイルを比較し、
+ * ローカルの roster.json と docs/assets/members/ ディレクトリ内の画像ファイルを比較し、
  * 同期状態を確認します。不足している画像と余分な画像を特定して報告します。
  *
  * 【主な機能】
- * - Roster APIから期待される画像リストを取得
+ * - ローカルのroster.jsonから期待される画像リストを取得
  * - 実際のファイルシステム上の画像と比較
  * - 不足している画像の詳細表示（メンバー名、画像タイプ）
  * - 余分な画像の詳細表示（ファイル名、サイズ）
@@ -46,13 +46,12 @@
  *
  * 【エクスポート関数】
  * 他のスクリプトから以下の関数を利用可能：
- * - fetchRosterData(): Roster APIからデータを取得
+ * - fetchRosterData(): ローカルのroster.jsonからデータを取得
  * - collectExpectedIds(roster): 期待される画像IDを収集
  * - collectActualIds(): 実際のファイルからIDを収集
  * - analyzeDifferences(): 差分を分析
  */
 
-import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
@@ -63,7 +62,7 @@ const __dirname = path.dirname(__filename);
 
 const CONFIG = {
   IMAGES_DIR: path.join(__dirname, '..', 'docs', 'assets', 'members'),
-  API_URL: 'https://raw.githubusercontent.com/triax/roster-api/refs/heads/main/data/roster.json',
+  ROSTER_JSON_PATH: path.join(__dirname, '..', 'docs', 'assets', 'roster.json'), // ローカルのroster.json
 };
 
 // 型定義
@@ -111,21 +110,19 @@ function extractGoogleDriveId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-// APIデータを取得
+// ローカルのroster.jsonからデータを取得
 export function fetchRosterData(): Promise<Roster> {
   return new Promise((resolve, reject) => {
-    https.get(CONFIG.API_URL, (res) => {
-      let data = '';
-      res.on('data', (chunk) => (data += chunk));
-      res.on('end', () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch (error) {
-          reject(error);
-        }
-      });
-      res.on('error', reject);
-    });
+    try {
+      if (!fs.existsSync(CONFIG.ROSTER_JSON_PATH)) {
+        reject(new Error(`roster.json not found at ${CONFIG.ROSTER_JSON_PATH}. Run 'npm run roster:download' first.`));
+        return;
+      }
+      const data = fs.readFileSync(CONFIG.ROSTER_JSON_PATH, 'utf-8');
+      resolve(JSON.parse(data));
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
@@ -267,14 +264,14 @@ async function main(): Promise<void> {
   try {
     console.log('=== Club TRIAX 画像同期チェック ===\n');
 
-    // APIデータを取得
-    console.log('Roster APIからデータを取得中...');
+    // ローカルのroster.jsonからデータを取得
+    console.log('ローカルのroster.jsonからデータを取得中...');
     const roster = await fetchRosterData();
     console.log(`✓ ${roster.members.length}名のメンバー情報を取得\n`);
 
     // 期待される画像IDを収集
     const { expectedIds, memberImageMap } = collectExpectedIds(roster);
-    console.log(`APIから期待される画像数: ${expectedIds.size}`);
+    console.log(`roster.jsonから期待される画像数: ${expectedIds.size}`);
 
     // 実際のファイルからIDを収集
     const { actualIds, fileMap } = collectActualIds();

@@ -4,12 +4,12 @@
  * Club TRIAX メンバー画像ダウンロードスクリプト
  *
  * 【概要】
- * Roster API (https://github.com/triax/roster-api) から
+ * ローカルの roster.json ファイルから
  * メンバーの画像をダウンロードして docs/assets/members/ に保存します。
  * Google Drive の画像IDをファイル名として使用し、適切な拡張子を付与します。
  *
  * 【主な機能】
- * - Roster APIからすべてのメンバー画像（serious/casual）をダウンロード
+ * - ローカルのroster.jsonからすべてのメンバー画像（serious/casual）をダウンロード
  * - 並列処理による高速ダウンロード（デフォルト5並列）
  * - リトライ機能（デフォルト3回）
  * - プログレスバー表示
@@ -67,7 +67,7 @@ const __dirname = path.dirname(__filename);
 // 設定
 const CONFIG = {
   IMAGES_DIR: path.join(__dirname, '..', 'docs', 'assets', 'members'),
-  API_URL: 'https://raw.githubusercontent.com/triax/roster-api/refs/heads/main/data/roster.json',
+  ROSTER_JSON_PATH: path.join(__dirname, '..', 'docs', 'assets', 'roster.json'), // ローカルのroster.json
   CONCURRENT_DOWNLOADS: 5, // 同時ダウンロード数
   RETRY_COUNT: 3, // リトライ回数
   RETRY_DELAY: 1000, // リトライ間隔（ミリ秒）
@@ -416,7 +416,7 @@ function formatBytes(bytes: number): string {
 async function main(): Promise<void> {
   try {
     console.log('=== Club TRIAX Image Downloader ===');
-    console.log(`API URL: ${CONFIG.API_URL}`);
+    console.log(`Roster JSON: ${CONFIG.ROSTER_JSON_PATH}`);
     console.log(`Output directory: ${CONFIG.IMAGES_DIR}`);
     console.log(`Skip existing files: ${CONFIG.SKIP_EXISTING}`);
     console.log(`Concurrent downloads: ${CONFIG.CONCURRENT_DOWNLOADS}`);
@@ -425,13 +425,13 @@ async function main(): Promise<void> {
     }
     console.log('');
 
-    // Roster APIからデータを取得
-    console.log('Fetching roster data...');
-    const response = await fetch(CONFIG.API_URL);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch API: ${response.statusText}`);
+    // ローカルのroster.jsonからデータを読み込み
+    console.log('Loading roster data from local file...');
+    if (!fs.existsSync(CONFIG.ROSTER_JSON_PATH)) {
+      throw new Error(`roster.json not found at ${CONFIG.ROSTER_JSON_PATH}. Run 'npm run roster:download' first.`);
     }
-    const data: RosterData = await response.json();
+    const rosterContent = fs.readFileSync(CONFIG.ROSTER_JSON_PATH, 'utf-8');
+    const data: RosterData = JSON.parse(rosterContent);
     console.log(`Found ${data.members.length} members in roster`);
 
     // ダウンロードタスクを作成

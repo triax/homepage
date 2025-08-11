@@ -4,12 +4,12 @@
  * Club TRIAX 不要画像クリーンアップスクリプト
  *
  * 【概要】
- * Roster API に存在しない画像ファイルを docs/assets/members/ から削除します。
+ * ローカルの roster.json に存在しない画像ファイルを docs/assets/members/ から削除します。
  * メンバーが退団したり、画像が更新された際に残る不要なファイルをクリーンアップします。
  * デフォルトでは dry-run モードで動作し、実際の削除は行いません。
  *
  * 【主な機能】
- * - Roster APIと実際のファイルを比較
+ * - ローカルのroster.jsonと実際のファイルを比較
  * - APIに存在しない画像を特定
  * - Dry-runモード（デフォルト）で削除対象を確認
  * - 実際の削除（--forceオプション使用時）
@@ -181,8 +181,8 @@ async function main(): Promise<void> {
       console.log('⚠️  削除モード: ファイルが実際に削除されます\n');
     }
 
-    // APIデータを取得
-    console.log('Roster APIからデータを取得中...');
+    // ローカルのroster.jsonからデータを取得
+    console.log('ローカルのroster.jsonからデータを取得中...');
     const roster = await fetchRosterData();
     console.log(`✓ ${roster.members.length}名のメンバー情報を取得\n`);
 
@@ -198,7 +198,7 @@ async function main(): Promise<void> {
     // 削除対象がない場合
     if (extraInFiles.length === 0) {
       console.log('✅ 削除対象のファイルはありません。');
-      console.log('   すべての画像はRoster APIと同期されています。');
+      console.log('   すべての画像はroster.jsonと同期されています。');
       return;
     }
 
