@@ -181,7 +181,8 @@ async function checkMissingImages(): Promise<CheckResult> {
   // ローカルのroster.jsonと比較
   console.log('\nLoading roster data from local file...');
   if (!fs.existsSync(CONFIG.ROSTER_JSON_PATH)) {
-    throw new Error(`roster.json not found at ${CONFIG.ROSTER_JSON_PATH}. Run 'npm run roster:download' first.`);
+    const errorMsg = `roster.json not found at ${CONFIG.ROSTER_JSON_PATH}.`;
+    throw new Error(`${errorMsg} Run 'npm run roster:download' first.`);
   }
   const rosterContent = fs.readFileSync(CONFIG.ROSTER_JSON_PATH, 'utf-8');
   const apiData: ApiData = JSON.parse(rosterContent);

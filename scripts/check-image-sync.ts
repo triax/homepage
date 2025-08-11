@@ -115,7 +115,8 @@ export function fetchRosterData(): Promise<Roster> {
   return new Promise((resolve, reject) => {
     try {
       if (!fs.existsSync(CONFIG.ROSTER_JSON_PATH)) {
-        reject(new Error(`roster.json not found at ${CONFIG.ROSTER_JSON_PATH}. Run 'npm run roster:download' first.`));
+        const errorMsg = `roster.json not found at ${CONFIG.ROSTER_JSON_PATH}.`;
+        reject(new Error(`${errorMsg} Run 'npm run roster:download' first.`));
         return;
       }
       const data = fs.readFileSync(CONFIG.ROSTER_JSON_PATH, 'utf-8');
