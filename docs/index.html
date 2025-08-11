@@ -533,18 +533,64 @@
         // メンバー詳細モーダル表示
         function showMemberDetail(member) {
             const modalContent = document.getElementById('modal-content');
-            // member.photos.seriousは既に文字列に変換されている
-            const seriousPhotoUrl = member.photos.serious;
-            const googleDriveId = extractGoogleDriveId(seriousPhotoUrl);
             
+            // すべての画像を統合（serious + casual）
+            let allPhotos = [];
+            if (member.photos.serious) {
+                allPhotos.push(member.photos.serious);
+            }
+            if (member.photos.casual && Array.isArray(member.photos.casual)) {
+                allPhotos = allPhotos.concat(member.photos.casual);
+            }
+            
+            // カルーセル用の変数
+            let currentPhotoIndex = 0;
+            const hasMultiplePhotos = allPhotos.length > 1;
+            
+            // HTMLを生成
             modalContent.innerHTML = `
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <img src="${member.photos.serious}" 
-                             data-google-drive-id="${googleDriveId || ''}"
-                             alt="${member.name.default}" 
-                             class="w-full rounded-lg" 
-                             onerror="handleImageError(this)">
+                        <!-- カルーセルコンテナ -->
+                        <div class="relative" id="carousel-container">
+                            <!-- 画像表示エリア -->
+                            <div class="relative overflow-hidden rounded-lg bg-gray-200">
+                                <img id="carousel-image" 
+                                     src="${allPhotos[0]}" 
+                                     data-google-drive-id="${extractGoogleDriveId(allPhotos[0]) || ''}"
+                                     alt="${member.name.default}" 
+                                     class="w-full h-full object-cover transition-opacity duration-300" 
+                                     onerror="handleImageError(this)">
+                                
+                                ${hasMultiplePhotos ? `
+                                    <!-- ナビゲーションボタン -->
+                                    <button id="carousel-prev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <button id="carousel-next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+                                    
+                                    <!-- インジケーター -->
+                                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                                        ${allPhotos.map((_, index) => `
+                                            <button class="carousel-indicator w-2 h-2 rounded-full transition-all ${index === 0 ? 'bg-white w-6' : 'bg-white/50'}" data-index="${index}"></button>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            ${hasMultiplePhotos ? `
+                                <!-- 画像カウンター -->
+                                <div class="text-center mt-2 text-sm text-gray-600">
+                                    <span id="carousel-counter">1 / ${allPhotos.length}</span>
+                                </div>
+                            ` : ''}
+                        </div>
                     </div>
                     <div>
                         <h3 class="text-2xl font-bold mb-2">${member.name.default}</h3>
@@ -598,6 +644,129 @@
                     </div>
                 </div>
             `;
+            
+            // カルーセル機能を初期化（複数画像がある場合のみ）
+            if (hasMultiplePhotos) {
+                // 画像切り替え関数
+                function updateCarouselImage(index) {
+                    currentPhotoIndex = index;
+                    const image = document.getElementById('carousel-image');
+                    const counter = document.getElementById('carousel-counter');
+                    const indicators = document.querySelectorAll('.carousel-indicator');
+                    
+                    // 画像を更新
+                    image.style.opacity = '0';
+                    setTimeout(() => {
+                        image.src = allPhotos[index];
+                        image.dataset.googleDriveId = extractGoogleDriveId(allPhotos[index]) || '';
+                        image.style.opacity = '1';
+                    }, 150);
+                    
+                    // カウンターを更新
+                    if (counter) {
+                        counter.textContent = `${index + 1} / ${allPhotos.length}`;
+                    }
+                    
+                    // インジケーターを更新
+                    indicators.forEach((indicator, i) => {
+                        if (i === index) {
+                            indicator.classList.add('bg-white', 'w-6');
+                            indicator.classList.remove('bg-white/50');
+                        } else {
+                            indicator.classList.remove('bg-white', 'w-6');
+                            indicator.classList.add('bg-white/50');
+                        }
+                    });
+                }
+                
+                // イベントリスナーを設定（少し遅延させて確実にDOMが生成されてから）
+                setTimeout(() => {
+                    // 前へボタン
+                    const prevBtn = document.getElementById('carousel-prev');
+                    if (prevBtn) {
+                        prevBtn.addEventListener('click', () => {
+                            const newIndex = currentPhotoIndex === 0 ? allPhotos.length - 1 : currentPhotoIndex - 1;
+                            updateCarouselImage(newIndex);
+                        });
+                    }
+                    
+                    // 次へボタン
+                    const nextBtn = document.getElementById('carousel-next');
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', () => {
+                            const newIndex = currentPhotoIndex === allPhotos.length - 1 ? 0 : currentPhotoIndex + 1;
+                            updateCarouselImage(newIndex);
+                        });
+                    }
+                    
+                    // インジケーター
+                    document.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                        indicator.addEventListener('click', () => {
+                            updateCarouselImage(index);
+                        });
+                    });
+                    
+                    // タッチ/スワイプ対応
+                    const container = document.getElementById('carousel-container');
+                    let touchStartX = 0;
+                    let touchEndX = 0;
+                    
+                    container.addEventListener('touchstart', (e) => {
+                        touchStartX = e.changedTouches[0].screenX;
+                    });
+                    
+                    container.addEventListener('touchend', (e) => {
+                        touchEndX = e.changedTouches[0].screenX;
+                        handleSwipe();
+                    });
+                    
+                    function handleSwipe() {
+                        const swipeThreshold = 50;
+                        const diff = touchStartX - touchEndX;
+                        
+                        if (Math.abs(diff) > swipeThreshold) {
+                            if (diff > 0) {
+                                // 左スワイプ → 次の画像
+                                const newIndex = currentPhotoIndex === allPhotos.length - 1 ? 0 : currentPhotoIndex + 1;
+                                updateCarouselImage(newIndex);
+                            } else {
+                                // 右スワイプ → 前の画像
+                                const newIndex = currentPhotoIndex === 0 ? allPhotos.length - 1 : currentPhotoIndex - 1;
+                                updateCarouselImage(newIndex);
+                            }
+                        }
+                    }
+                    
+                    // キーボードナビゲーション（モーダルが開いている時のみ）
+                    function handleKeyPress(e) {
+                        if (!document.getElementById('member-modal').classList.contains('hidden')) {
+                            if (e.key === 'ArrowLeft') {
+                                const newIndex = currentPhotoIndex === 0 ? allPhotos.length - 1 : currentPhotoIndex - 1;
+                                updateCarouselImage(newIndex);
+                            } else if (e.key === 'ArrowRight') {
+                                const newIndex = currentPhotoIndex === allPhotos.length - 1 ? 0 : currentPhotoIndex + 1;
+                                updateCarouselImage(newIndex);
+                            }
+                        }
+                    }
+                    
+                    document.addEventListener('keydown', handleKeyPress);
+                    
+                    // モーダルが閉じられたときにイベントリスナーを削除
+                    const modal = document.getElementById('member-modal');
+                    const closeModalBtn = document.getElementById('close-modal');
+                    const removeKeyListener = () => {
+                        document.removeEventListener('keydown', handleKeyPress);
+                    };
+                    
+                    closeModalBtn.addEventListener('click', removeKeyListener, { once: true });
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            removeKeyListener();
+                        }
+                    }, { once: true });
+                }, 0);
+            }
             
             document.getElementById('member-modal').classList.remove('hidden');
         }
