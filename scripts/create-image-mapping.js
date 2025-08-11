@@ -1,5 +1,51 @@
 #!/usr/bin/env node
 
+/**
+ * Club TRIAX 画像マッピング作成スクリプト
+ * 
+ * 【概要】
+ * docs/assets/members/ ディレクトリ内の画像ファイルをスキャンし、
+ * Google Drive ID とファイル名のマッピングを JSON ファイルとして出力します。
+ * このマッピングは、画像のロードやデバッグ時に役立ちます。
+ * 
+ * 【主な機能】
+ * - 画像ディレクトリ内のすべてのファイルをスキャン
+ * - Google Drive ID（ファイル名から拡張子を除いた部分）を抽出
+ * - ID とファイル名のマッピングをJSON形式で保存
+ * - マッピングのサンプルをコンソールに表示
+ * 
+ * 【使い方】
+ * ```bash
+ * # マッピングファイルを作成
+ * node scripts/create-image-mapping.js
+ * ```
+ * 
+ * 【出力ファイル】
+ * docs/image-mapping.json に以下の形式で保存：
+ * ```json
+ * {
+ *   "1RkyEPOq0CELzOCIICoanFWrFYnWD_bZ5": "1RkyEPOq0CELzOCIICoanFWrFYnWD_bZ5.jpg",
+ *   "1peoJ3_pSss3ydbSI3Kh0Env0AwuL4FEC": "1peoJ3_pSss3ydbSI3Kh0Env0AwuL4FEC.png",
+ *   ...
+ * }
+ * ```
+ * 
+ * 【用途】
+ * - フロントエンドでGoogle Drive IDから実際のファイル名を取得
+ * - 画像ファイルの拡張子を動的に判定
+ * - デバッグ時の画像ファイル確認
+ * - 画像リソースの管理
+ * 
+ * 【注意事項】
+ * - .tmpファイルは除外される
+ * - ファイル名の最初のドット(.)より前をIDとして使用
+ * - 画像が追加/削除された後は再実行が必要
+ * 
+ * 【関連ファイル】
+ * - docs/assets/members/: 画像ファイルの格納ディレクトリ
+ * - docs/image-mapping.json: 出力されるマッピングファイル
+ */
+
 const fs = require('fs');
 const path = require('path');
 

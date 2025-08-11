@@ -1,3 +1,70 @@
+#!/usr/bin/env node
+
+/**
+ * Club TRIAX 画像表示チェックスクリプト（Playwright版）
+ * 
+ * 【概要】
+ * Playwright を使用して実際のWebページをブラウザで開き、
+ * メンバーカードの画像が正しく表示されているかをチェックします。
+ * ローカルサーバーが起動していることが前提です。
+ * 
+ * 【主な機能】
+ * - ローカルサーバー（http://localhost:8080）にアクセス
+ * - メンバーカードの画像読み込み状態を確認
+ * - 画像が正しく表示されているかチェック（naturalWidth/Height）
+ * - 表示されていない画像のリストアップ
+ * - Roster APIとの比較
+ * - 背番号なしメンバーの確認
+ * 
+ * 【前提条件】
+ * - ローカルサーバーが起動していること
+ *   ```bash
+ *   npx http-server
+ *   # または
+ *   python3 -m http.server 8080
+ *   ```
+ * - Playwrightがインストールされていること
+ *   ```bash
+ *   npm install --save-dev playwright
+ *   ```
+ * 
+ * 【使い方】
+ * ```bash
+ * # ローカルサーバーを起動してから実行
+ * node scripts/check-missing-images.js
+ * ```
+ * 
+ * 【チェック内容】
+ * 1. メンバーカードの総数
+ * 2. 各カードの画像要素の存在
+ * 3. 画像の読み込み状態（naturalWidth/Height）
+ * 4. "No Image"画像の検出
+ * 5. メンバー名とポジション情報
+ * 
+ * 【出力内容】
+ * - 正常に読み込まれた画像の数
+ * - 読み込みに失敗した画像のリスト
+ *   - メンバー名
+ *   - ポジション
+ *   - 画像のsrc属性
+ * - Roster APIとの比較結果
+ * - 背番号なしメンバーのリスト
+ * 
+ * 【注意事項】
+ * - ローカルサーバーが起動していないとエラーになる
+ * - ページの構造（#members-container、.member-card）に依存
+ * - 遅延読み込み対応のため、スクロールとウェイトを実行
+ * 
+ * 【関連スクリプト】
+ * - download-all-images.js: 画像のダウンロード
+ * - check-image-sync.js: ファイルシステムレベルでの同期チェック
+ * 
+ * 【返り値】
+ * - missingImages: 表示されていない画像の配列
+ * - loadedImages: 正常に表示された画像の配列
+ * - apiData: Roster APIのデータ
+ */
+
 const { chromium } = require('playwright');
 
 async function checkMissingImages() {

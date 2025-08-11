@@ -9,6 +9,13 @@
   "scripts": {
     "img:dl": "node scripts/download-all-images.js",
     "img:dl:force": "SKIP_EXISTING=false node scripts/download-all-images.js",
+    "img:sync": "node scripts/download-all-images.js --sync",
+    "img:sync:dry": "node scripts/download-all-images.js --sync --dry-run",
+    "img:check": "node scripts/check-image-sync.js",
+    "img:cleanup": "node scripts/cleanup-unused-images.js",
+    "img:cleanup:dry": "node scripts/cleanup-unused-images.js",
+    "img:cleanup:force": "node scripts/cleanup-unused-images.js --force",
+    "img:cleanup:interactive": "node scripts/cleanup-unused-images.js --force --interactive",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "otiai10",
