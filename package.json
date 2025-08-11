@@ -21,7 +21,9 @@
     "img:check:browser": "npx tsx scripts/check-missing-images.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint scripts/**/*.ts",
-    "lint:fix": "eslint scripts/**/*.ts --fix"
+    "lint:fix": "eslint scripts/**/*.ts --fix",
+    "format": "sed -i '' 's/[[:space:]]*$//' docs/index.html docs/index.css",
+    "format:check": "grep -n ' $' docs/index.html docs/index.css || echo 'No trailing spaces found'"
   },
   "author": "otiai10",
   "license": "MIT",
