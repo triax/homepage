@@ -39,7 +39,7 @@ npx http-server
 npm run img:check
 
 # 画像をダウンロード
-npm run img:dl
+npm run img:download
 
 # 不要な画像をクリーンアップ
 npm run img:cleanup        # dry-run（確認のみ）
@@ -54,8 +54,8 @@ npm run img:sync
 | スクリプト | 説明 |
 |-----------|------|
 | `img:check` | APIと実際のファイルの同期状態を確認 |
-| `img:dl` | 不足している画像をダウンロード |
-| `img:dl:force` | すべての画像を再ダウンロード |
+| `img:download` | 不足している画像をダウンロード |
+| `img:download:force` | すべての画像を再ダウンロード |
 | `img:sync` | ダウンロードと不要ファイル削除を実行 |
 | `img:sync:dry` | 同期のシミュレーション |
 | `img:cleanup` | 削除対象を確認（dry-run） |

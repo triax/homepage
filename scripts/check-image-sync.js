@@ -253,7 +253,7 @@ async function main() {
                 console.log(`  • ${item.member} (${item.type})`);
                 console.log(`    ID: ${item.id}`);
             });
-            console.log('\n💡 ヒント: npm run img:dl を実行して不足画像をダウンロードできます');
+            console.log('\n💡 ヒント: npm run img:download を実行して不足画像をダウンロードできます');
         }
         
         // 余分な画像の詳細

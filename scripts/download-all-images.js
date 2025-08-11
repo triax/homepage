@@ -19,11 +19,11 @@
  * 【使い方】
  * ```bash
  * # 基本的な使用（既存ファイルはスキップ）
- * npm run img:dl
+ * npm run img:download
  * node scripts/download-all-images.js
  * 
  * # すべての画像を再ダウンロード
- * npm run img:dl:force
+ * npm run img:download:force
  * SKIP_EXISTING=false node scripts/download-all-images.js
  * 
  * # 同期モード（ダウンロード＋不要ファイル削除）

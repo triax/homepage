@@ -7,8 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "img:dl": "node scripts/download-all-images.js",
-    "img:dl:force": "SKIP_EXISTING=false node scripts/download-all-images.js",
+    "img:download": "node scripts/download-all-images.js",
+    "img:download:force": "SKIP_EXISTING=false node scripts/download-all-images.js",
     "img:sync": "node scripts/download-all-images.js --sync",
     "img:sync:dry": "node scripts/download-all-images.js --sync --dry-run",
     "img:check": "node scripts/check-image-sync.js",

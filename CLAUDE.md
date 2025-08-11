@@ -74,7 +74,7 @@ mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロ�
 npm run img:check
 
 # 不足している画像をダウンロード
-npm run img:dl
+npm run img:download
 
 # 不要な画像を削除（確認モード）
 npm run img:cleanup
