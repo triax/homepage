@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env npx tsx
 
 /**
  * Club TRIAX 画像表示チェックスクリプト（Playwright版）
@@ -31,7 +31,7 @@
  * 【使い方】
  * ```bash
  * # ローカルサーバーを起動してから実行
- * node scripts/check-missing-images.js
+ * npx tsx scripts/check-missing-images.ts
  * ```
  * 
  * 【チェック内容】
@@ -56,8 +56,8 @@
  * - 遅延読み込み対応のため、スクロールとウェイトを実行
  * 
  * 【関連スクリプト】
- * - download-all-images.js: 画像のダウンロード
- * - check-image-sync.js: ファイルシステムレベルでの同期チェック
+ * - download-all-images.ts: 画像のダウンロード
+ * - check-image-sync.ts: ファイルシステムレベルでの同期チェック
  * 
  * 【返り値】
  * - missingImages: 表示されていない画像の配列
@@ -65,12 +65,38 @@
  * - apiData: Roster APIのデータ
  */
 
-const { chromium } = require('playwright');
+import { chromium, Browser, BrowserContext, Page, ElementHandle } from 'playwright';
 
-async function checkMissingImages() {
-    const browser = await chromium.launch({ headless: true });
-    const context = await browser.newContext();
-    const page = await context.newPage();
+// 型定義
+interface ImageInfo {
+    name: string;
+    position: string;
+    src: string;
+    index?: number;
+}
+
+interface Member {
+    name: {
+        default: string;
+    };
+    position?: string;
+    jersey?: number;
+}
+
+interface ApiData {
+    members: Member[];
+}
+
+interface CheckResult {
+    missingImages: ImageInfo[];
+    loadedImages: ImageInfo[];
+    apiData: ApiData;
+}
+
+async function checkMissingImages(): Promise<CheckResult> {
+    const browser: Browser = await chromium.launch({ headless: true });
+    const context: BrowserContext = await browser.newContext();
+    const page: Page = await context.newPage();
     
     // ローカルサーバーにアクセス
     await page.goto('http://localhost:8080');
@@ -87,26 +113,26 @@ async function checkMissingImages() {
     await page.waitForTimeout(3000);
     
     // すべてのメンバーカードを取得
-    const memberCards = await page.$$('.member-card');
+    const memberCards: ElementHandle[] = await page.$$('.member-card');
     console.log(`Total member cards found: ${memberCards.length}`);
     
-    const missingImages = [];
-    const loadedImages = [];
+    const missingImages: ImageInfo[] = [];
+    const loadedImages: ImageInfo[] = [];
     
     // 各メンバーカードの画像をチェック
     for (let i = 0; i < memberCards.length; i++) {
         const card = memberCards[i];
         
         // メンバー名を取得
-        const memberName = await card.$eval('h3', el => el.textContent).catch(() => 'Unknown');
-        const position = await card.$eval('.text-red-600', el => el.textContent).catch(() => 'Unknown');
+        const memberName = await card.$eval('h3', (el: Element) => el.textContent || 'Unknown').catch(() => 'Unknown');
+        const position = await card.$eval('.text-red-600', (el: Element) => el.textContent || 'Unknown').catch(() => 'Unknown');
         
         // 画像要素を取得
         const img = await card.$('img');
         if (img) {
-            const src = await img.getAttribute('src');
-            const naturalWidth = await img.evaluate(el => el.naturalWidth);
-            const naturalHeight = await img.evaluate(el => el.naturalHeight);
+            const src = await img.getAttribute('src') || '';
+            const naturalWidth = await img.evaluate((el: HTMLImageElement) => el.naturalWidth);
+            const naturalHeight = await img.evaluate((el: HTMLImageElement) => el.naturalHeight);
             
             // 画像が正しく読み込まれているかチェック
             if (naturalWidth === 0 || naturalHeight === 0 || src.includes('No Image')) {
@@ -139,14 +165,14 @@ async function checkMissingImages() {
     // APIデータと比較
     console.log('\nFetching roster data from API...');
     const apiResponse = await fetch('https://raw.githubusercontent.com/triax/roster-api/refs/heads/main/data/roster.json');
-    const apiData = await apiResponse.json();
+    const apiData: ApiData = await apiResponse.json();
     
     console.log(`Total members in API: ${apiData.members.length}`);
     
     // 背番号のないメンバーを確認
-    const membersWithoutJersey = apiData.members.filter(m => !m.jersey);
+    const membersWithoutJersey = apiData.members.filter((m: Member) => !m.jersey);
     console.log(`\nMembers without jersey numbers: ${membersWithoutJersey.length}`);
-    membersWithoutJersey.forEach(member => {
+    membersWithoutJersey.forEach((member: Member) => {
         console.log(`  - ${member.name.default} (${member.position || 'No position'})`);
     });
     
@@ -156,4 +182,6 @@ async function checkMissingImages() {
 }
 
 // 実行
-checkMissingImages().catch(console.error);
+if (import.meta.url === `file://${process.argv[1]}`) {
+    checkMissingImages().catch(console.error);
+}

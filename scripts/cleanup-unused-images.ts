@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env npx tsx
 
 /**
  * Club TRIAX 不要画像クリーンアップスクリプト
@@ -21,21 +21,21 @@
  * # Dry-runモード（削除対象を確認するだけ）
  * npm run img:cleanup
  * npm run img:cleanup:dry
- * node scripts/cleanup-unused-images.js
+ * npx tsx scripts/cleanup-unused-images.ts
  * 
  * # 実際に削除（確認なし）
  * npm run img:cleanup:force
- * node scripts/cleanup-unused-images.js --force
+ * npx tsx scripts/cleanup-unused-images.ts --force
  * 
  * # 実際に削除（確認あり）
  * npm run img:cleanup:interactive
- * node scripts/cleanup-unused-images.js --force --interactive
+ * npx tsx scripts/cleanup-unused-images.ts --force --interactive
  * 
  * # 詳細ログ付きで実行
- * node scripts/cleanup-unused-images.js --force --verbose
+ * npx tsx scripts/cleanup-unused-images.ts --force --verbose
  * 
  * # ヘルプを表示
- * node scripts/cleanup-unused-images.js --help
+ * npx tsx scripts/cleanup-unused-images.ts --help
  * ```
  * 
  * 【コマンドラインオプション】
@@ -56,24 +56,29 @@
  * - 実行結果（成功/失敗）
  * 
  * 【関連スクリプト】
- * - check-image-sync.js: 同期状態の確認
- * - download-all-images.js --sync: ダウンロードと同時にクリーンアップ
+ * - check-image-sync.ts: 同期状態の確認
+ * - download-all-images.ts --sync: ダウンロードと同時にクリーンアップ
  * 
  * 【依存関係】
- * check-image-sync.js の関数を利用して同期状態を分析
+ * check-image-sync.ts の関数を利用して同期状態を分析
  */
 
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as readline from 'readline';
+import { fileURLToPath } from 'url';
 
 // 同期チェックスクリプトの関数を使用
-const {
+import {
     fetchRosterData,
     collectExpectedIds,
     collectActualIds,
     analyzeDifferences
-} = require('./check-image-sync');
+} from './check-image-sync.js';
+
+// TypeScript用の__dirname代替
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const CONFIG = {
     IMAGES_DIR: path.join(__dirname, '..', 'docs', 'assets', 'members'),
@@ -82,8 +87,21 @@ const CONFIG = {
     VERBOSE: process.argv.includes('--verbose')
 };
 
+// 型定義
+interface ExtraFile {
+    id: string;
+    filename: string;
+    fullPath: string;
+}
+
+interface DeleteResult {
+    deleted: ExtraFile[];
+    failed: Array<ExtraFile & { error: string }>;
+    totalSize: number;
+}
+
 // バイト数を人間が読みやすい形式に変換
-function formatBytes(bytes) {
+function formatBytes(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
     
     const k = 1024;
@@ -94,7 +112,7 @@ function formatBytes(bytes) {
 }
 
 // ユーザーに確認を求める
-function askQuestion(question) {
+function askQuestion(question: string): Promise<string> {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
@@ -109,8 +127,8 @@ function askQuestion(question) {
 }
 
 // 削除処理
-async function deleteFiles(files) {
-    const results = {
+async function deleteFiles(files: ExtraFile[]): Promise<DeleteResult> {
+    const results: DeleteResult = {
         deleted: [],
         failed: [],
         totalSize: 0
@@ -139,10 +157,10 @@ async function deleteFiles(files) {
         } catch (error) {
             results.failed.push({
                 ...file,
-                error: error.message
+                error: (error as Error).message
             });
             if (CONFIG.VERBOSE) {
-                console.log(`  ✗ Failed to delete ${file.filename}: ${error.message}`);
+                console.log(`  ✗ Failed to delete ${file.filename}: ${(error as Error).message}`);
             }
         }
     }
@@ -151,7 +169,7 @@ async function deleteFiles(files) {
 }
 
 // メイン処理
-async function main() {
+async function main(): Promise<void> {
     try {
         console.log('=== Club TRIAX 不要画像クリーンアップ ===\n');
         
@@ -225,7 +243,7 @@ async function main() {
                 console.log('\n実際に削除するには以下のコマンドを実行してください:');
                 console.log('  npm run img:cleanup:force');
                 console.log('または');
-                console.log('  node scripts/cleanup-unused-images.js --force');
+                console.log('  npx tsx scripts/cleanup-unused-images.ts --force');
             }
         } else {
             console.log(`✅ 削除成功: ${results.deleted.length}個のファイル`);
@@ -249,18 +267,18 @@ async function main() {
         }
         
     } catch (error) {
-        console.error('❌ エラー:', error.message);
+        console.error('❌ エラー:', (error as Error).message);
         process.exit(1);
     }
 }
 
 // ヘルプメッセージ
-function showHelp() {
+function showHelp(): void {
     console.log(`
 Club TRIAX 不要画像クリーンアップツール
 
 使用方法:
-  node scripts/cleanup-unused-images.js [オプション]
+  npx tsx scripts/cleanup-unused-images.ts [オプション]
 
 オプション:
   --force        実際にファイルを削除します（デフォルトはdry-run）
@@ -270,18 +288,18 @@ Club TRIAX 不要画像クリーンアップツール
 
 例:
   # Dry-runモードで削除対象を確認
-  node scripts/cleanup-unused-images.js
+  npx tsx scripts/cleanup-unused-images.ts
 
   # 実際に削除（確認あり）
-  node scripts/cleanup-unused-images.js --force --interactive
+  npx tsx scripts/cleanup-unused-images.ts --force --interactive
 
   # 実際に削除（確認なし、詳細ログ付き）
-  node scripts/cleanup-unused-images.js --force --verbose
+  npx tsx scripts/cleanup-unused-images.ts --force --verbose
 `);
 }
 
 // 直接実行された場合
-if (require.main === module) {
+if (import.meta.url === `file://${__filename}`) {
     if (process.argv.includes('--help')) {
         showHelp();
     } else {

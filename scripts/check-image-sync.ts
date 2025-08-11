@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env npx tsx
 
 /**
  * Club TRIAX 画像同期チェックスクリプト
@@ -18,7 +18,7 @@
  * ```bash
  * # 同期状態をチェック
  * npm run img:check
- * node scripts/check-image-sync.js
+ * npx tsx scripts/check-image-sync.ts
  * ```
  * 
  * 【出力内容】
@@ -41,8 +41,8 @@
  * - 1: 同期が必要（不足または余分な画像がある）
  * 
  * 【関連スクリプト】
- * - download-all-images.js: 不足している画像をダウンロード
- * - cleanup-unused-images.js: 余分な画像を削除
+ * - download-all-images.ts: 不足している画像をダウンロード
+ * - cleanup-unused-images.ts: 余分な画像を削除
  * 
  * 【エクスポート関数】
  * 他のスクリプトから以下の関数を利用可能：
@@ -52,23 +52,67 @@
  * - analyzeDifferences(): 差分を分析
  */
 
-const https = require('https');
-const fs = require('fs');
-const path = require('path');
+import * as https from 'https';
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+// TypeScript用の__dirname代替
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const CONFIG = {
     IMAGES_DIR: path.join(__dirname, '..', 'docs', 'assets', 'members'),
     API_URL: 'https://raw.githubusercontent.com/triax/roster-api/refs/heads/main/data/roster.json'
 };
 
+// 型定義
+interface Photo {
+    url?: string;
+    caption?: string;
+}
+
+interface Member {
+    name: {
+        default: string;
+        [key: string]: string;
+    };
+    jersey?: number;
+    photos?: {
+        serious?: Photo | string;
+        casual?: (Photo | string)[];
+    };
+}
+
+interface Roster {
+    members: Member[];
+}
+
+interface MemberImageInfo {
+    member: string;
+    type: string;
+}
+
+interface MissingFile {
+    id: string;
+    member: string;
+    type: string;
+}
+
+interface ExtraFile {
+    id: string;
+    filename: string;
+    fullPath: string;
+}
+
 // Google Drive URLからIDを抽出
-function extractGoogleDriveId(url) {
+function extractGoogleDriveId(url: string): string | null {
     const match = url.match(/id=([^&]+)/);
     return match ? match[1] : null;
 }
 
 // APIデータを取得
-function fetchRosterData() {
+export function fetchRosterData(): Promise<Roster> {
     return new Promise((resolve, reject) => {
         https.get(CONFIG.API_URL, (res) => {
             let data = '';
@@ -86,9 +130,9 @@ function fetchRosterData() {
 }
 
 // APIから期待される画像IDを収集
-function collectExpectedIds(roster) {
-    const expectedIds = new Set();
-    const memberImageMap = {}; // IDとメンバー情報のマッピング
+export function collectExpectedIds(roster: Roster): { expectedIds: Set<string>; memberImageMap: Record<string, MemberImageInfo> } {
+    const expectedIds = new Set<string>();
+    const memberImageMap: Record<string, MemberImageInfo> = {};
     
     roster.members.forEach(member => {
         if (!member.photos) return;
@@ -97,28 +141,33 @@ function collectExpectedIds(roster) {
         
         // serious画像
         if (member.photos.serious) {
-            const url = member.photos.serious.url || member.photos.serious;
-            const id = extractGoogleDriveId(url);
-            if (id) {
-                expectedIds.add(id);
-                memberImageMap[id] = {
-                    member: memberInfo,
-                    type: 'serious'
-                };
+            const photo = member.photos.serious;
+            const url = typeof photo === 'string' ? photo : photo.url;
+            if (url) {
+                const id = extractGoogleDriveId(url);
+                if (id) {
+                    expectedIds.add(id);
+                    memberImageMap[id] = {
+                        member: memberInfo,
+                        type: 'serious'
+                    };
+                }
             }
         }
         
         // casual画像
         if (member.photos.casual && Array.isArray(member.photos.casual)) {
             member.photos.casual.forEach((casual, index) => {
-                const url = casual.url || casual;
-                const id = extractGoogleDriveId(url);
-                if (id) {
-                    expectedIds.add(id);
-                    memberImageMap[id] = {
-                        member: memberInfo,
-                        type: `casual-${index + 1}`
-                    };
+                const url = typeof casual === 'string' ? casual : casual.url;
+                if (url) {
+                    const id = extractGoogleDriveId(url);
+                    if (id) {
+                        expectedIds.add(id);
+                        memberImageMap[id] = {
+                            member: memberInfo,
+                            type: `casual-${index + 1}`
+                        };
+                    }
                 }
             });
         }
@@ -128,9 +177,9 @@ function collectExpectedIds(roster) {
 }
 
 // 実際のファイルからIDを収集
-function collectActualIds() {
-    const actualIds = new Set();
-    const fileMap = {}; // IDとファイル名のマッピング
+export function collectActualIds(): { actualIds: Set<string>; fileMap: Record<string, string> } {
+    const actualIds = new Set<string>();
+    const fileMap: Record<string, string> = {};
     
     if (!fs.existsSync(CONFIG.IMAGES_DIR)) {
         console.error(`ディレクトリが存在しません: ${CONFIG.IMAGES_DIR}`);
@@ -152,9 +201,14 @@ function collectActualIds() {
 }
 
 // 差分を分析
-function analyzeDifferences(expectedIds, actualIds, memberImageMap, fileMap) {
-    const missingInFiles = [];
-    const extraInFiles = [];
+export function analyzeDifferences(
+    expectedIds: Set<string>,
+    actualIds: Set<string>,
+    memberImageMap: Record<string, MemberImageInfo>,
+    fileMap: Record<string, string>
+): { missingInFiles: MissingFile[]; extraInFiles: ExtraFile[] } {
+    const missingInFiles: MissingFile[] = [];
+    const extraInFiles: ExtraFile[] = [];
     
     // 不足している画像を特定
     expectedIds.forEach(id => {
@@ -181,7 +235,7 @@ function analyzeDifferences(expectedIds, actualIds, memberImageMap, fileMap) {
 }
 
 // ファイルサイズの合計を計算
-function calculateTotalSize(files) {
+function calculateTotalSize(files: ExtraFile[]): number {
     let totalSize = 0;
     
     files.forEach(file => {
@@ -195,7 +249,7 @@ function calculateTotalSize(files) {
 }
 
 // バイト数を人間が読みやすい形式に変換
-function formatBytes(bytes) {
+function formatBytes(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
     
     const k = 1024;
@@ -206,7 +260,7 @@ function formatBytes(bytes) {
 }
 
 // メイン処理
-async function main() {
+async function main(): Promise<void> {
     try {
         console.log('=== Club TRIAX 画像同期チェック ===\n');
         
@@ -284,20 +338,12 @@ async function main() {
         }
         
     } catch (error) {
-        console.error('❌ エラー:', error.message);
+        console.error('❌ エラー:', (error as Error).message);
         process.exit(1);
     }
 }
 
-// エクスポート（他のスクリプトから使用可能）
-module.exports = {
-    fetchRosterData,
-    collectExpectedIds,
-    collectActualIds,
-    analyzeDifferences
-};
-
 // 直接実行された場合
-if (require.main === module) {
+if (import.meta.url === `file://${__filename}`) {
     main();
 }

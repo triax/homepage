@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env npx tsx
 
 /**
  * Club TRIAX メンバー画像ダウンロードスクリプト
@@ -20,19 +20,19 @@
  * ```bash
  * # 基本的な使用（既存ファイルはスキップ）
  * npm run img:download
- * node scripts/download-all-images.js
+ * npx tsx scripts/download-all-images.ts
  * 
  * # すべての画像を再ダウンロード
  * npm run img:download:force
- * SKIP_EXISTING=false node scripts/download-all-images.js
+ * SKIP_EXISTING=false npx tsx scripts/download-all-images.ts
  * 
  * # 同期モード（ダウンロード＋不要ファイル削除）
  * npm run img:sync
- * node scripts/download-all-images.js --sync
+ * npx tsx scripts/download-all-images.ts --sync
  * 
  * # 同期モードのテスト実行（削除はしない）
  * npm run img:sync:dry
- * node scripts/download-all-images.js --sync --dry-run
+ * npx tsx scripts/download-all-images.ts --sync --dry-run
  * ```
  * 
  * 【環境変数】
@@ -54,10 +54,15 @@
  * - 1つでも失敗があれば終了コード1で終了
  */
 
-const https = require('https');
-const fs = require('fs');
-const path = require('path');
-const { promisify } = require('util');
+import * as https from 'https';
+import * as fs from 'fs';
+import * as path from 'path';
+import { promisify } from 'util';
+import { fileURLToPath } from 'url';
+
+// TypeScript用の__dirname代替
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 設定
 const CONFIG = {
@@ -72,6 +77,48 @@ const CONFIG = {
     DRY_RUN: process.argv.includes('--dry-run')  // Dry-runモード
 };
 
+// 型定義
+interface Photo {
+    url?: string;
+    mime_type?: string;
+    caption?: string;
+}
+
+interface Member {
+    name: {
+        default: string;
+    };
+    jersey?: number;
+    photos?: {
+        serious?: Photo | string;
+        casual?: (Photo | string)[];
+    };
+}
+
+interface RosterData {
+    members: Member[];
+}
+
+interface DownloadTask {
+    url: string;
+    mimeType?: string;
+    memberName: string;
+    photoType: string;
+    googleDriveId: string;
+}
+
+interface DownloadResult {
+    status: 'success' | 'failed' | 'skipped';
+    filename?: string;
+    googleDriveId: string;
+    error?: string;
+}
+
+interface CleanupResult {
+    deleted: number;
+    totalSize: number;
+}
+
 // ディレクトリが存在しない場合は作成
 if (!fs.existsSync(CONFIG.IMAGES_DIR)) {
     fs.mkdirSync(CONFIG.IMAGES_DIR, { recursive: true });
@@ -82,14 +129,14 @@ if (!fs.existsSync(CONFIG.IMAGES_DIR)) {
 const sleep = promisify(setTimeout);
 
 // Google Drive URLからIDを抽出
-function extractGoogleDriveId(url) {
+function extractGoogleDriveId(url: string): string | null {
     const match = url.match(/id=([^&]+)/);
     return match ? match[1] : null;
 }
 
 // Content-Typeから拡張子を取得
-function getExtensionFromContentType(contentType) {
-    const mimeToExt = {
+function getExtensionFromContentType(contentType: string): string {
+    const mimeToExt: Record<string, string> = {
         'image/jpeg': 'jpg',
         'image/jpg': 'jpg',
         'image/png': 'png',
@@ -104,20 +151,23 @@ function getExtensionFromContentType(contentType) {
 
 // プログレス表示
 class ProgressTracker {
-    constructor(total) {
+    private total: number;
+    private completed: number = 0;
+    private failed: number = 0;
+    private skipped: number = 0;
+    private startTime: number;
+
+    constructor(total: number) {
         this.total = total;
-        this.completed = 0;
-        this.failed = 0;
-        this.skipped = 0;
         this.startTime = Date.now();
     }
 
-    update(type = 'completed') {
+    update(type: 'completed' | 'failed' | 'skipped' = 'completed'): void {
         this[type]++;
         this.display();
     }
 
-    display() {
+    display(): void {
         const progress = this.completed + this.failed + this.skipped;
         const percentage = Math.round((progress / this.total) * 100);
         const elapsed = Math.round((Date.now() - this.startTime) / 1000);
@@ -149,14 +199,14 @@ class ProgressTracker {
         }
     }
     
-    getProgressBar(percentage) {
+    private getProgressBar(percentage: number): string {
         const width = 20;
         const filled = Math.round(width * percentage / 100);
         const empty = width - filled;
         return '[' + '█'.repeat(filled) + '░'.repeat(empty) + ']';
     }
 
-    finish() {
+    finish(): void {
         if (!CONFIG.GITHUB_ACTIONS) {
             process.stdout.write('\n');
         }
@@ -170,7 +220,7 @@ class ProgressTracker {
 }
 
 // 画像ダウンロード（リトライ機能付き）
-async function downloadImageWithRetry(url, googleDriveId, retryCount = CONFIG.RETRY_COUNT) {
+async function downloadImageWithRetry(url: string, googleDriveId: string, retryCount: number = CONFIG.RETRY_COUNT): Promise<string> {
     for (let attempt = 1; attempt <= retryCount; attempt++) {
         try {
             return await downloadImage(url, googleDriveId);
@@ -184,15 +234,16 @@ async function downloadImageWithRetry(url, googleDriveId, retryCount = CONFIG.RE
             await sleep(CONFIG.RETRY_DELAY * attempt);
         }
     }
+    throw new Error('Download failed after retries');
 }
 
 // Google Drive URLから画像をダウンロード
-function downloadImage(url, googleDriveId) {
+function downloadImage(url: string, googleDriveId: string): Promise<string> {
     return new Promise((resolve, reject) => {
         const tempFilePath = path.join(CONFIG.IMAGES_DIR, `${googleDriveId}.tmp`);
         const file = fs.createWriteStream(tempFilePath);
 
-        const handleResponse = (response) => {
+        const handleResponse = (response: any) => {
             const contentType = response.headers['content-type'];
             const extension = getExtensionFromContentType(contentType);
             const finalFilename = `${googleDriveId}.${extension}`;
@@ -207,7 +258,7 @@ function downloadImage(url, googleDriveId) {
                 resolve(finalFilename);
             });
 
-            file.on('error', (err) => {
+            file.on('error', (err: Error) => {
                 fs.unlink(tempFilePath, () => {});
                 reject(err);
             });
@@ -216,10 +267,15 @@ function downloadImage(url, googleDriveId) {
         https.get(url, (response) => {
             // リダイレクトを処理
             if (response.statusCode === 302 || response.statusCode === 301) {
-                https.get(response.headers.location, handleResponse).on('error', (err) => {
-                    fs.unlink(tempFilePath, () => {});
-                    reject(err);
-                });
+                const location = response.headers.location;
+                if (location) {
+                    https.get(location, handleResponse).on('error', (err: Error) => {
+                        fs.unlink(tempFilePath, () => {});
+                        reject(err);
+                    });
+                } else {
+                    reject(new Error('Redirect location not found'));
+                }
             } else if (response.statusCode === 200) {
                 handleResponse(response);
             } else {
@@ -227,7 +283,7 @@ function downloadImage(url, googleDriveId) {
                 fs.unlink(tempFilePath, () => {});
                 reject(new Error(`HTTP ${response.statusCode}`));
             }
-        }).on('error', (err) => {
+        }).on('error', (err: Error) => {
             fs.unlink(tempFilePath, () => {});
             reject(err);
         });
@@ -235,8 +291,8 @@ function downloadImage(url, googleDriveId) {
 }
 
 // 画像ダウンロードタスク
-async function createDownloadTask(imageInfo, progress) {
-    const { url, mimeType, memberName, photoType, googleDriveId } = imageInfo;
+async function createDownloadTask(imageInfo: DownloadTask, progress: ProgressTracker): Promise<DownloadResult> {
+    const { url, memberName, photoType, googleDriveId } = imageInfo;
     
     try {
         // 既存ファイルをチェック
@@ -254,15 +310,15 @@ async function createDownloadTask(imageInfo, progress) {
     } catch (error) {
         progress.update('failed');
         if (CONFIG.GITHUB_ACTIONS) {
-            console.log(`::error::Failed to download ${memberName} ${photoType}: ${error.message}`);
+            console.log(`::error::Failed to download ${memberName} ${photoType}: ${(error as Error).message}`);
         }
-        return { status: 'failed', error: error.message, googleDriveId };
+        return { status: 'failed', error: (error as Error).message, googleDriveId };
     }
 }
 
 // 並列ダウンロード実行
-async function downloadImagesInParallel(downloadTasks, progress) {
-    const results = [];
+async function downloadImagesInParallel(downloadTasks: DownloadTask[], progress: ProgressTracker): Promise<DownloadResult[]> {
+    const results: DownloadResult[] = [];
     
     for (let i = 0; i < downloadTasks.length; i += CONFIG.CONCURRENT_DOWNLOADS) {
         const batch = downloadTasks.slice(i, i + CONFIG.CONCURRENT_DOWNLOADS);
@@ -276,10 +332,10 @@ async function downloadImagesInParallel(downloadTasks, progress) {
 }
 
 // 同期モード：不要なファイルを削除
-async function syncCleanup(expectedIds) {
+async function syncCleanup(expectedIds: Set<string>): Promise<CleanupResult> {
     const files = fs.readdirSync(CONFIG.IMAGES_DIR);
-    const actualIds = new Set();
-    const filesToDelete = [];
+    const actualIds = new Set<string>();
+    const filesToDelete: Array<{ filename: string; path: string }> = [];
     
     // 実際のファイルのIDを収集
     files.forEach(file => {
@@ -323,7 +379,7 @@ async function syncCleanup(expectedIds) {
             totalSize += size;
             deletedCount++;
         } catch (error) {
-            console.log(`  ✗ Failed to delete ${file.filename}: ${error.message}`);
+            console.log(`  ✗ Failed to delete ${file.filename}: ${(error as Error).message}`);
         }
     }
     
@@ -333,7 +389,7 @@ async function syncCleanup(expectedIds) {
 }
 
 // バイト数を人間が読みやすい形式に変換
-function formatBytes(bytes) {
+function formatBytes(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -342,7 +398,7 @@ function formatBytes(bytes) {
 }
 
 // メインの処理
-async function main() {
+async function main(): Promise<void> {
     try {
         console.log('=== Club TRIAX Image Downloader ===');
         console.log(`API URL: ${CONFIG.API_URL}`);
@@ -360,47 +416,52 @@ async function main() {
         if (!response.ok) {
             throw new Error(`Failed to fetch API: ${response.statusText}`);
         }
-        const data = await response.json();
+        const data: RosterData = await response.json();
         console.log(`Found ${data.members.length} members in roster`);
 
         // ダウンロードタスクを作成
-        const downloadTasks = [];
+        const downloadTasks: DownloadTask[] = [];
         
         for (const member of data.members) {
             const memberInfo = `${member.name.default}${member.jersey ? ` (#${member.jersey})` : ''}`;
             
             // serious画像
-            if (member.photos && member.photos.serious) {
-                const seriousUrl = member.photos.serious.url || member.photos.serious;
-                const seriousMimeType = member.photos.serious.mime_type;
-                const googleDriveId = extractGoogleDriveId(seriousUrl);
+            if (member.photos?.serious) {
+                const photo = member.photos.serious;
+                const seriousUrl = typeof photo === 'string' ? photo : photo.url;
+                const seriousMimeType = typeof photo === 'object' ? photo.mime_type : undefined;
                 
-                if (googleDriveId) {
-                    downloadTasks.push({
-                        url: seriousUrl,
-                        mimeType: seriousMimeType,
-                        memberName: memberInfo,
-                        photoType: 'serious',
-                        googleDriveId
-                    });
+                if (seriousUrl) {
+                    const googleDriveId = extractGoogleDriveId(seriousUrl);
+                    if (googleDriveId) {
+                        downloadTasks.push({
+                            url: seriousUrl,
+                            mimeType: seriousMimeType,
+                            memberName: memberInfo,
+                            photoType: 'serious',
+                            googleDriveId
+                        });
+                    }
                 }
             }
             
             // casual画像
-            if (member.photos && member.photos.casual && Array.isArray(member.photos.casual)) {
+            if (member.photos?.casual && Array.isArray(member.photos.casual)) {
                 member.photos.casual.forEach((casual, index) => {
-                    const casualUrl = casual.url || casual;
-                    const casualMimeType = casual.mime_type;
-                    const googleDriveId = extractGoogleDriveId(casualUrl);
+                    const casualUrl = typeof casual === 'string' ? casual : casual.url;
+                    const casualMimeType = typeof casual === 'object' ? casual.mime_type : undefined;
                     
-                    if (googleDriveId) {
-                        downloadTasks.push({
-                            url: casualUrl,
-                            mimeType: casualMimeType,
-                            memberName: memberInfo,
-                            photoType: `casual-${index + 1}`,
-                            googleDriveId
-                        });
+                    if (casualUrl) {
+                        const googleDriveId = extractGoogleDriveId(casualUrl);
+                        if (googleDriveId) {
+                            downloadTasks.push({
+                                url: casualUrl,
+                                mimeType: casualMimeType,
+                                memberName: memberInfo,
+                                photoType: `casual-${index + 1}`,
+                                googleDriveId
+                            });
+                        }
                     }
                 });
             }
@@ -458,15 +519,15 @@ async function main() {
         console.log('\n✅ All downloads completed successfully!');
 
     } catch (error) {
-        console.error('\n❌ Error:', error.message);
+        console.error('\n❌ Error:', (error as Error).message);
         if (CONFIG.GITHUB_ACTIONS) {
-            console.log(`::error::${error.message}`);
+            console.log(`::error::${(error as Error).message}`);
         }
         process.exit(1);
     }
 }
 
 // スクリプトを実行
-if (require.main === module) {
+if (import.meta.url === `file://${__filename}`) {
     main();
 }
