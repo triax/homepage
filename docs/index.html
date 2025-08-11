@@ -449,13 +449,15 @@
             const card = document.createElement('div');
             const hasCasualPhotos = member.photos.casual && member.photos.casual.length > 0;
             card.className = `member-card bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow fade-in ${hasCasualPhotos ? 'flip-card' : ''}`;
-            const seriousPhotoUrl = member.photos.serious.url || member.photos.serious;
+            // member.photos.seriousは既に文字列に変換されている
+            const seriousPhotoUrl = member.photos.serious;
             const googleDriveId = extractGoogleDriveId(seriousPhotoUrl);
             
             if (hasCasualPhotos) {
                 // casual写真がある場合はflip対応カード（写真部分のみflip）
                 const casualPhoto = member.photos.casual[Math.floor(Math.random() * member.photos.casual.length)];
-                const casualPhotoUrl = typeof casualPhoto === 'string' ? casualPhoto : casualPhoto.url || casualPhoto;
+                // casualPhotoは既に文字列に変換されている
+                const casualPhotoUrl = casualPhoto;
                 const casualGoogleDriveId = extractGoogleDriveId(casualPhotoUrl);
                 
                 card.innerHTML = `
@@ -531,7 +533,8 @@
         // メンバー詳細モーダル表示
         function showMemberDetail(member) {
             const modalContent = document.getElementById('modal-content');
-            const seriousPhotoUrl = typeof member.photos.serious === 'string' ? member.photos.serious : member.photos.serious.url;
+            // member.photos.seriousは既に文字列に変換されている
+            const seriousPhotoUrl = member.photos.serious;
             const googleDriveId = extractGoogleDriveId(seriousPhotoUrl);
             
             modalContent.innerHTML = `
