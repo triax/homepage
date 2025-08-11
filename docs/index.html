@@ -621,17 +621,21 @@
         function displayMembers() {
             const container = document.getElementById('members-container');
             container.innerHTML = '';
-            
             const filteredMembers = currentPosition === 'ALL' 
                 ? allMembers 
                 : allMembers.filter(m => m.position === currentPosition);
-            
             filteredMembers.forEach(member => {
-                container.appendChild(createMemberCard(member));
+                const card = createMemberCard(member);
+                // フィルター時にもvisibleクラスを追加して表示されるようにする
+                card.classList.add('visible');
+                container.appendChild(card);
             });
             
             // 遅延読み込みを再初期化
             initLazyLoad();
+            
+            // flip機能を再初期化（既存のintervalはクリアされる）
+            startRandomFlips();
         }
 
         // 遅延読み込み
@@ -673,15 +677,22 @@
             elements.forEach(el => observer.observe(el));
         }
 
+        // flip用のinterval IDを保存
+        let flipIntervals = [];
+        
         // ランダムflipアニメーション（写真部分のみ）
         function startRandomFlips() {
+            // 既存のintervalをクリア
+            flipIntervals.forEach(intervalId => clearInterval(intervalId));
+            flipIntervals = [];
+            
             const flipContainers = document.querySelectorAll('.flip-container');
             
             flipContainers.forEach(container => {
                 // 各写真にランダムな間隔でflip
                 const randomDelay = Math.random() * 6000 + 6000; // 6-12秒のランダム間隔
 
-                setInterval(() => {
+                const intervalId = setInterval(() => {
                     // 30%の確率でflip
                     if (Math.random() > 0.7) {
                         container.classList.toggle('flipped');
@@ -692,6 +703,9 @@
                         }, 2500);
                     }
                 }, randomDelay);
+                
+                // interval IDを保存
+                flipIntervals.push(intervalId);
             });
         }
 
