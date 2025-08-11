@@ -15,9 +15,11 @@
 
 これは静的HTMLサイトなので、`index.html`を直接ブラウザで開くか、シンプルなHTTPサーバーを使用できます：
 
-```bash
-npx http-server
-```
+基本的に、HTTPサーバは以下のURLで立っています。
+
+`http://127.0.0.1:3000/docs/index.html`
+
+playwright mcp などを利用して、上記のHTTPサーバに訪問し、デザインなどをdebugしてください。
 
 ### デプロイメント
 mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロイされます。
