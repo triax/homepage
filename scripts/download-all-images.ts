@@ -13,7 +13,6 @@
  * - 並列処理による高速ダウンロード（デフォルト5並列）
  * - リトライ機能（デフォルト3回）
  * - プログレスバー表示
- * - 同期モード：不要な画像の自動削除
  * - GitHub Actions対応
  *
  * 【使い方】
@@ -23,25 +22,12 @@
  * npx tsx scripts/download-all-images.ts
  *
  * # すべての画像を再ダウンロード
- * npm run img:download:force
  * SKIP_EXISTING=false npx tsx scripts/download-all-images.ts
- *
- * # 同期モード（ダウンロード＋不要ファイル削除）
- * npm run img:sync
- * npx tsx scripts/download-all-images.ts --sync
- *
- * # 同期モードのテスト実行（削除はしない）
- * npm run img:sync:dry
- * npx tsx scripts/download-all-images.ts --sync --dry-run
  * ```
  *
  * 【環境変数】
  * - SKIP_EXISTING: 'false' に設定すると既存ファイルも再ダウンロード（デフォルト: true）
  * - GITHUB_ACTIONS: 'true' の場合、GitHub Actions用の出力形式を使用
- *
- * 【コマンドラインオプション】
- * - --sync: 同期モードを有効化（不要な画像を削除）
- * - --dry-run: 削除処理をシミュレート（実際には削除しない）
  *
  * 【出力ファイル】
  * docs/assets/members/ ディレクトリに以下の形式で保存：
@@ -73,8 +59,6 @@ const CONFIG = {
   RETRY_DELAY: 1000, // リトライ間隔（ミリ秒）
   SKIP_EXISTING: process.env.SKIP_EXISTING !== 'false', // 既存ファイルをスキップするか
   GITHUB_ACTIONS: process.env.GITHUB_ACTIONS === 'true', // GitHub Actionsで実行中か
-  SYNC_MODE: process.argv.includes('--sync'), // 同期モード（不要なファイルを削除）
-  DRY_RUN: process.argv.includes('--dry-run'), // Dry-runモード
 };
 
 // 型定義
@@ -114,10 +98,6 @@ interface DownloadResult {
   error?: string;
 }
 
-interface CleanupResult {
-  deleted: number;
-  totalSize: number;
-}
 
 // ディレクトリが存在しない場合は作成
 if (!fs.existsSync(CONFIG.IMAGES_DIR)) {
@@ -344,73 +324,6 @@ async function downloadImagesInParallel(
   return results;
 }
 
-// 同期モード：不要なファイルを削除
-async function syncCleanup(expectedIds: Set<string>): Promise<CleanupResult> {
-  const files = fs.readdirSync(CONFIG.IMAGES_DIR);
-  const actualIds = new Set<string>();
-  const filesToDelete: Array<{ filename: string; path: string }> = [];
-
-  // 実際のファイルのIDを収集
-  files.forEach((file) => {
-    if (/\.(jpg|png|gif|webp|svg|heif|heic)$/i.test(file)) {
-      const id = file.replace(/\.(jpg|png|gif|webp|svg|heif|heic)$/i, '');
-      actualIds.add(id);
-
-      // APIに存在しないIDのファイルを削除対象に追加
-      if (!expectedIds.has(id)) {
-        filesToDelete.push({
-          filename: file,
-          path: path.join(CONFIG.IMAGES_DIR, file),
-        });
-      }
-    }
-  });
-
-  if (filesToDelete.length === 0) {
-    console.log('✅ No unused files to clean up');
-    return { deleted: 0, totalSize: 0 };
-  }
-
-  console.log('\n=== Sync Cleanup ===');
-  console.log(`Found ${filesToDelete.length} unused files`);
-
-  let totalSize = 0;
-  let deletedCount = 0;
-
-  for (const file of filesToDelete) {
-    try {
-      const stats = fs.statSync(file.path);
-      const size = stats.size;
-
-      if (CONFIG.DRY_RUN) {
-        console.log(`  [DRY-RUN] Would delete: ${file.filename} (${formatBytes(size)})`);
-      } else {
-        fs.unlinkSync(file.path);
-        console.log(`  ✓ Deleted: ${file.filename} (${formatBytes(size)})`);
-      }
-
-      totalSize += size;
-      deletedCount++;
-    } catch (error) {
-      console.log(`  ✗ Failed to delete ${file.filename}: ${(error as Error).message}`);
-    }
-  }
-
-  console.log(
-    `${CONFIG.DRY_RUN ? 'Would delete' : 'Deleted'} ${deletedCount} files (${formatBytes(totalSize)})`
-  );
-
-  return { deleted: deletedCount, totalSize };
-}
-
-// バイト数を人間が読みやすい形式に変換
-function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
 
 // メインの処理
 async function main(): Promise<void> {
@@ -420,9 +333,6 @@ async function main(): Promise<void> {
     console.log(`Output directory: ${CONFIG.IMAGES_DIR}`);
     console.log(`Skip existing files: ${CONFIG.SKIP_EXISTING}`);
     console.log(`Concurrent downloads: ${CONFIG.CONCURRENT_DOWNLOADS}`);
-    if (CONFIG.SYNC_MODE) {
-      console.log(`Sync mode: ${CONFIG.SYNC_MODE} ${CONFIG.DRY_RUN ? '(dry-run)' : ''}`);
-    }
     console.log('');
 
     // ローカルのroster.jsonからデータを読み込み
@@ -486,9 +396,6 @@ async function main(): Promise<void> {
     console.log(`Total images to process: ${downloadTasks.length}`);
     console.log('');
 
-    // 期待されるIDのセットを作成（同期モード用）
-    const expectedIds = new Set(downloadTasks.map((task) => task.googleDriveId));
-
     // プログレストラッカーを初期化
     const progress = new ProgressTracker(downloadTasks.length);
 
@@ -498,14 +405,6 @@ async function main(): Promise<void> {
 
     // 完了
     progress.finish();
-
-    // 同期モード：不要なファイルを削除
-    if (CONFIG.SYNC_MODE) {
-      const cleanupResult = await syncCleanup(expectedIds);
-      if (cleanupResult.deleted > 0 && !CONFIG.DRY_RUN) {
-        console.log(`\n✅ Sync complete: ${cleanupResult.deleted} unused files removed`);
-      }
-    }
 
     // ファイル統計
     const files = fs.readdirSync(CONFIG.IMAGES_DIR);
