@@ -14,53 +14,56 @@ on:
         type: string
         default: ''
 
+  repository_dispatch:
+    types: [roster-updated]
+
 jobs:
   sync:
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: write  # リポジトリへの書き込み権限
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Download roster data
         run: |
           echo "📋 Downloading roster data..."
           npm run roster:download
-      
+
       - name: Sync member images
         run: |
           echo "🖼️ Syncing member images..."
           npm run img:sync
-      
+
       - name: Check for changes
         id: check
         run: |
           # 変更されたファイルをカウント
           git add -A
           CHANGES=$(git diff --cached --numstat | wc -l)
-          
+
           if [ "$CHANGES" -gt 0 ]; then
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "Found $CHANGES file changes"
-            
+
             # 変更内容のサマリーを作成
             echo "## 変更サマリー" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            
+
             # roster.jsonの変更
             if ! git diff --cached --quiet docs/assets/roster.json; then
               echo "### 📋 Roster更新" >> $GITHUB_STEP_SUMMARY
@@ -68,11 +71,11 @@ jobs:
               echo "- メンバー数: $MEMBER_COUNT" >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
             fi
-            
+
             # 画像ファイルの変更
             ADDED_IMAGES=$(git diff --cached --name-only --diff-filter=A | grep -c "docs/assets/members/.*\.\(jpg\|png\|gif\|webp\)" || echo 0)
             DELETED_IMAGES=$(git diff --cached --name-only --diff-filter=D | grep -c "docs/assets/members/.*\.\(jpg\|png\|gif\|webp\)" || echo 0)
-            
+
             if [ "$ADDED_IMAGES" -gt 0 ] || [ "$DELETED_IMAGES" -gt 0 ]; then
               echo "### 🖼️ 画像更新" >> $GITHUB_STEP_SUMMARY
               [ "$ADDED_IMAGES" -gt 0 ] && echo "- 追加: $ADDED_IMAGES 枚" >> $GITHUB_STEP_SUMMARY
@@ -83,29 +86,43 @@ jobs:
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "No changes to commit"
           fi
-      
+
       - name: Configure Git
-        if: steps.check.outputs.has_changes == 'true' && inputs.auto_commit
+        if: steps.check.outputs.has_changes == 'true' && (github.event_name == 'repository_dispatch' || inputs.auto_commit)
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-      
+
       - name: Commit changes
-        if: steps.check.outputs.has_changes == 'true' && inputs.auto_commit
+        if: steps.check.outputs.has_changes == 'true' && (github.event_name == 'repository_dispatch' || inputs.auto_commit)
         run: |
           # 日付を取得（日本時間）
           DATE=$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')
-          
+
           # コミットメッセージを決定
-          if [ -n "${{ inputs.commit_message }}" ]; then
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            # repository_dispatchからのカスタムメッセージがあれば使用
+            if [ -n "${{ github.event.client_payload.message }}" ]; then
+              COMMIT_MSG="${{ github.event.client_payload.message }}"
+            else
+              COMMIT_MSG="roster-apiからの自動同期 ($DATE)"
+            fi
+          elif [ -n "${{ inputs.commit_message }}" ]; then
             COMMIT_MSG="${{ inputs.commit_message }}"
           else
             COMMIT_MSG="メンバー情報と画像を同期 ($DATE)"
           fi
-          
+
           # 実行情報を追加
-          TRIGGER_INFO="Manual sync by @${{ github.actor }}"
-          
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            TRIGGER_INFO="Triggered by roster-api"
+            if [ -n "${{ github.event.client_payload.triggered_by }}" ]; then
+              TRIGGER_INFO="$TRIGGER_INFO (by @${{ github.event.client_payload.triggered_by }})"
+            fi
+          else
+            TRIGGER_INFO="Manual sync by @${{ github.actor }}"
+          fi
+
           git commit -m "$COMMIT_MSG" \
                      -m "" \
                      -m "$TRIGGER_INFO" \
@@ -113,17 +130,17 @@ jobs:
                      -m "- メンバー画像の同期" \
                      -m "" \
                      -m "Workflow: .github/workflows/sync-roster.yml"
-          
+
           echo "✅ Changes committed successfully" >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Push changes
-        if: steps.check.outputs.has_changes == 'true' && inputs.auto_commit
+        if: steps.check.outputs.has_changes == 'true' && (github.event_name == 'repository_dispatch' || inputs.auto_commit)
         run: |
           git push origin main
           echo "✅ Changes pushed to main branch" >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Show manual commit instructions
-        if: steps.check.outputs.has_changes == 'true' && !inputs.auto_commit
+        if: steps.check.outputs.has_changes == 'true' && github.event_name != 'repository_dispatch' && !inputs.auto_commit
         run: |
           echo "## 📝 手動コミットが必要です" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -136,14 +153,14 @@ jobs:
           echo "git commit -m \"メンバー情報を更新\"" >> $GITHUB_STEP_SUMMARY
           echo "git push" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-      
+
       - name: Summary
         if: always()
         run: |
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
           echo "⏰ 実行時刻: $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S JST')" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ steps.check.outputs.has_changes }}" == "true" ]; then
             if [ "${{ inputs.auto_commit }}" == "true" ]; then
               echo "📝 ステータス: **更新あり** ✅ (自動コミット済み)" >> $GITHUB_STEP_SUMMARY
@@ -153,7 +170,7 @@ jobs:
           else
             echo "📝 ステータス: 更新なし" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 実行オプション" >> $GITHUB_STEP_SUMMARY
           echo "- 👤 実行者: @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
