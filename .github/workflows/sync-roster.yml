@@ -90,8 +90,8 @@ jobs:
       - name: Configure Git
         if: steps.check.outputs.has_changes == 'true' && (github.event_name == 'repository_dispatch' || inputs.auto_commit)
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "otiai10+ayanel-ci@gmail.com"
+          git config --local user.name "ayanel-ci"
 
       - name: Commit changes
         if: steps.check.outputs.has_changes == 'true' && (github.event_name == 'repository_dispatch' || inputs.auto_commit)
