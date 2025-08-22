@@ -185,3 +185,27 @@ npm run img:sync
 - **スキップ閾値**: 500KB以下のファイルは既に最適化済みとみなす
 
 詳細は `knowledge/04-operations/image-optimization.md` を参照。
+
+## 試合スケジュール管理
+
+試合スケジュール情報の管理と表示機能。
+
+### データ管理
+- **ソースファイル**: `SCHEDULE_2025.md` - Markdownテーブル形式でスケジュールを管理
+- **表示先**: `docs/index.html` の SCHEDULEセクション
+- **更新方法**: Markdownファイルを編集後、HTMLを手動更新
+
+### 機能
+- **Google Maps連携**: 会場への地図リンク
+- **Google Calendar連携**: 試合予定をカレンダーに追加
+- **チケット購入**: 外部チケットサイトへのリンク
+
+### 更新手順
+1. `SCHEDULE_2025.md` を編集
+2. `docs/index.html` のSCHEDULEセクションを更新
+3. 動作確認後、コミット・プッシュ
+
+詳細は以下のドキュメントを参照：
+- `knowledge/01-requirements/functional/pages/SCHEDULE.md` - 機能仕様
+- `knowledge/02-architecture/schedule-integration.md` - 技術仕様
+- `knowledge/04-operations/schedule-management.md` - 運用手順
