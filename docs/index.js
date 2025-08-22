@@ -274,7 +274,7 @@ function showMemberDetail(member) {
                         ${member.name.alphabet ? `<p class="text-gray-600 mb-4">${member.name.alphabet}</p>` : ''}
 
                         <div class="flex items-center gap-4 mb-6">
-                            <span class="bg-red-600 text-white px-3 py-1 rounded-full font-bold">#${member.jersey}</span>
+                            ${member.jersey ? `<span class="bg-red-600 text-white px-3 py-1 rounded-full font-bold">#${member.jersey}</span>` : ''}
                             <span class="font-semibold text-lg">${member.position}</span>
                             ${member.role ? `<span class="text-gray-600">${member.role}</span>` : ''}
                         </div>
