@@ -32,6 +32,10 @@ npx http-server
 
 メンバー画像は [Roster API](https://github.com/triax/roster-api) と同期して管理されています。
 
+## 🤝 スポンサー
+
+スポンサー企業の画像とリンクは`docs/assets/sponsors/`ディレクトリで管理されています。3つのTier（階層）で表示され、支援レベルに応じて表示サイズが異なります。
+
 ### よく使うコマンド
 
 ```bash

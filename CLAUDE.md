@@ -127,3 +127,13 @@ npm run img:sync
 - チームメンバーの物語と個性に焦点を当てる
 - ソーシャルメディア（Instagram）との連携
 - 多言語コンテンツの考慮のサポート
+
+## スポンサーセクション
+
+スポンサー企業を3つのTier（階層）で表示：
+- **Tier 1**: 最大サイズ（1段1社）- プラチナスポンサー
+- **Tier 2**: 中サイズ（1段最大2社）- ゴールドスポンサー  
+- **Tier 3**: 小サイズ（1段最大3社）- シルバースポンサー
+
+画像は `docs/assets/sponsors/{tier番号}/` に配置。
+詳細は `knowledge/01-requirements/functional/pages/SPONSORS.md` を参照。
