@@ -710,6 +710,33 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('member-modal').classList.add('hidden');
     });
 
+    // マイナスボタン（中立）のアクション
+    document.getElementById('neutral-modal').addEventListener('click', function () {
+        // シンプルにモーダルを閉じる
+        document.getElementById('member-modal').classList.add('hidden');
+    });
+
+    // ハートボタン（いいね）のアクション
+    document.getElementById('like-modal').addEventListener('click', function () {
+        // アニメーション効果を追加
+        const button = this;
+        button.classList.add('animate-pulse');
+        
+        // ハートを赤くする
+        const svg = button.querySelector('svg');
+        svg.classList.remove('text-green-500');
+        svg.classList.add('text-red-500');
+        
+        // 少し待ってからモーダルを閉じる
+        setTimeout(() => {
+            document.getElementById('member-modal').classList.add('hidden');
+            // 元の状態に戻す
+            button.classList.remove('animate-pulse');
+            svg.classList.remove('text-red-500');
+            svg.classList.add('text-green-500');
+        }, 500);
+    });
+
     document.getElementById('member-modal').addEventListener('click', function (e) {
         if (e.target === this) {
             this.classList.add('hidden');
