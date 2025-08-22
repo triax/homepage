@@ -192,9 +192,6 @@ function createMemberCard(member) {
                                      alt="${member.name.default}"
                                      class="lazy-load w-full h-full object-cover member-image"
                                      onerror="handleImageError(this)">
-                                ${member.jersey ? `<div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm z-10">
-                                    #${member.jersey}
-                                </div>` : ''}
                             </div>
                             <!-- 裏面: casual写真 -->
                             <div class="flip-card-back">
@@ -203,11 +200,12 @@ function createMemberCard(member) {
                                      alt="${member.name.default} casual"
                                      class="lazy-load w-full h-full object-cover member-image"
                                      onerror="handleImageError(this)">
-                                ${member.jersey ? `<div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm z-10">
-                                    #${member.jersey}
-                                </div>` : ''}
                             </div>
                         </div>
+                        <!-- 背番号（flipの外側に配置） -->
+                        ${member.jersey ? `<div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm z-10">
+                            #${member.jersey}
+                        </div>` : ''}
                     </div>
                     <!-- 情報部分（常に表示） -->
                     <div class="p-4">
