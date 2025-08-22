@@ -554,6 +554,50 @@ function startRandomFlips() {
     });
 }
 
+// ランダムメンバーピックアップ機能
+function displayRandomMemberPickup(members) {
+    const container = document.getElementById('pickup-member-container');
+    if (!container || !members || members.length === 0) return;
+
+    // ランダムにメンバーを選択
+    const randomMember = members[Math.floor(Math.random() * members.length)];
+    
+    // そのメンバーの写真を集める（serious + casual）
+    let allPhotos = [];
+    if (randomMember.photos) {
+        if (randomMember.photos.serious) {
+            allPhotos.push(randomMember.photos.serious);
+        }
+        if (randomMember.photos.casual && Array.isArray(randomMember.photos.casual)) {
+            allPhotos = allPhotos.concat(randomMember.photos.casual);
+        }
+    }
+    
+    // 写真がない場合は何も表示しない
+    if (allPhotos.length === 0) return;
+    
+    // ランダムに写真を選択
+    const randomPhoto = allPhotos[Math.floor(Math.random() * allPhotos.length)];
+    const googleDriveId = extractGoogleDriveId(randomPhoto);
+    
+    // 画像を表示（円形でクリック可能）
+    container.innerHTML = `
+        <div class="pickup-member cursor-pointer hover:scale-105 transition-transform">
+            <img src="${randomPhoto}"
+                 data-google-drive-id="${googleDriveId || ''}"
+                 alt="${randomMember.name.default}"
+                 class="w-40 h-40 md:w-64 md:h-64 rounded-full object-cover border-2 border-white shadow-lg"
+                 onerror="handleImageError(this)"
+                 title="${randomMember.name.default} #${randomMember.jersey || ''} ${randomMember.position}">
+        </div>
+    `;
+    
+    // クリックで詳細モーダルを表示
+    container.querySelector('.pickup-member').addEventListener('click', () => {
+        showMemberDetail(randomMember);
+    });
+}
+
 // 初期化
 document.addEventListener('DOMContentLoaded', async function () {
     // 画像マッピングを最初に読み込む
@@ -590,6 +634,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     const rosterData = await fetchRoster();
     if (rosterData && rosterData.members) {
         allMembers = rosterData.members;
+        
+        // ランダムメンバーピックアップを表示
+        displayRandomMemberPickup(allMembers);
+        
         displayMembers();
     } else {
         document.getElementById('members-container').innerHTML = `
