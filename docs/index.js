@@ -4,6 +4,51 @@ let currentPosition = 'ALL';
 let extensionAttempts = {};
 let imageMapping = {};
 
+// Google Maps リンクを開く
+function openGoogleMaps(venue) {
+    const venueMap = {
+        '富士通スタジアム川崎': 'https://www.google.com/maps/search/富士通スタジアム川崎',
+        'アミノバイタルフィールド': 'https://www.google.com/maps/search/アミノバイタルフィールド'
+    };
+
+    const url = venueMap[venue] || `https://www.google.com/maps/search/${encodeURIComponent(venue)}`;
+    window.open(url, '_blank');
+}
+
+// Google カレンダーに追加
+function addToGoogleCalendar(date, time, opponent, venue) {
+    // 日付と時間をパース
+    const [hours, minutes] = time.split(':');
+    const startDateTime = new Date(`${date}T${hours}:${minutes}:00+09:00`);
+    const endDateTime = new Date(startDateTime.getTime() + 3 * 60 * 60 * 1000); // 3時間後を終了時刻とする
+
+    // Google Calendar用のフォーマット (YYYYMMDDTHHmmss)
+    const formatDateTime = (date) => {
+        return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    };
+
+    const startStr = formatDateTime(startDateTime);
+    const endStr = formatDateTime(endDateTime);
+
+    // イベントの詳細
+    const title = `Club TRIAX vs ${opponent}`;
+    const details = `Club TRIAXの試合\n対戦相手: ${opponent}\n会場: ${venue}\nキックオフ: ${time}`;
+    const location = venue;
+
+    // Google Calendar URL作成
+    const params = new URLSearchParams({
+        action: 'TEMPLATE',
+        text: title,
+        dates: `${startStr}/${endStr}`,
+        details: details,
+        location: location,
+        ctz: 'Asia/Tokyo'
+    });
+
+    const url = `https://calendar.google.com/calendar/render?${params.toString()}`;
+    window.open(url, '_blank');
+}
+
 // 画像マッピングを読み込む
 async function loadImageMapping() {
     try {
@@ -562,7 +607,7 @@ function displayRandomMemberPickup(members) {
 
     // ランダムにメンバーを選択
     const randomMember = members[Math.floor(Math.random() * members.length)];
-    
+
     // そのメンバーの写真を集める（serious + casual）
     let allPhotos = [];
     if (randomMember.photos) {
@@ -573,14 +618,14 @@ function displayRandomMemberPickup(members) {
             allPhotos = allPhotos.concat(randomMember.photos.casual);
         }
     }
-    
+
     // 写真がない場合は何も表示しない
     if (allPhotos.length === 0) return;
-    
+
     // ランダムに写真を選択
     const randomPhoto = allPhotos[Math.floor(Math.random() * allPhotos.length)];
     const googleDriveId = extractGoogleDriveId(randomPhoto);
-    
+
     // 画像を表示（円形でクリック可能）
     container.innerHTML = `
         <div class="pickup-member cursor-pointer hover:scale-105 transition-transform">
@@ -592,12 +637,12 @@ function displayRandomMemberPickup(members) {
                  title="${randomMember.name.default} #${randomMember.jersey || ''} ${randomMember.position}">
         </div>
     `;
-    
+
     // クリックで詳細モーダルを表示
     container.querySelector('.pickup-member').addEventListener('click', () => {
         showMemberDetail(randomMember);
     });
-    
+
     // メンバー情報をランダムに表示
     if (infoContainer) {
         const infoOptions = [
@@ -607,18 +652,18 @@ function displayRandomMemberPickup(members) {
             { key: 'favorite', label: '最近の推し' },
             { key: 'what_i_like_about_triax', label: 'TRIAXの好きなところ' }
         ];
-        
+
         // 値が存在するオプションのみフィルター
         const availableOptions = infoOptions.filter(option => randomMember[option.key]);
-        
+
         if (availableOptions.length > 0) {
             // ランダムに一つ選択
             const selectedOption = availableOptions[Math.floor(Math.random() * availableOptions.length)];
-            
+
             // ラベルと値を表示
             const labelElement = document.getElementById('pickup-info-label');
             const valueElement = document.getElementById('pickup-info-value');
-            
+
             if (labelElement && valueElement) {
                 // 吹き出し風のデザインを追加
                 const infoContainer = document.getElementById('pickup-member-pickup-info');
@@ -627,7 +672,7 @@ function displayRandomMemberPickup(members) {
                     position: relative;
                     animation: fadeInUp 0.5s ease-out;
                 `;
-                
+
                 // 吹き出しの三角形を追加（CSS）
                 const style = document.createElement('style');
                 style.textContent = `
@@ -658,7 +703,7 @@ function displayRandomMemberPickup(members) {
                     style.id = 'pickup-speech-bubble-style';
                     document.head.appendChild(style);
                 }
-                
+
                 labelElement.innerHTML = `
                     <span class="text-xs md:text-sm text-gray-600 mb-1 block font-medium">
                         私の${selectedOption.label}
@@ -672,15 +717,15 @@ function displayRandomMemberPickup(members) {
             const infoContainer = document.getElementById('pickup-member-pickup-info');
             const labelElement = document.getElementById('pickup-info-label');
             const valueElement = document.getElementById('pickup-info-value');
-            
+
             // 吹き出しスタイルをリセット
             infoContainer.className = '';
             infoContainer.style.cssText = '';
-            
+
             if (labelElement) {
                 labelElement.innerHTML = '';
             }
-            
+
             if (valueElement) {
                 valueElement.textContent = '戦略と情熱が交差する場所';
                 valueElement.className = 'text-3xl md:text-5xl font-bold mb-4 text-center';
@@ -721,12 +766,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         // アニメーション効果を追加
         const button = this;
         button.classList.add('animate-pulse');
-        
+
         // ハートを赤くする
         const svg = button.querySelector('svg');
         svg.classList.remove('text-green-500');
         svg.classList.add('text-red-500');
-        
+
         // 少し待ってからモーダルを閉じる
         setTimeout(() => {
             document.getElementById('member-modal').classList.add('hidden');
@@ -752,10 +797,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     const rosterData = await fetchRoster();
     if (rosterData && rosterData.members) {
         allMembers = rosterData.members;
-        
+
         // ランダムメンバーピックアップを表示
         displayRandomMemberPickup(allMembers);
-        
+
         displayMembers();
     } else {
         document.getElementById('members-container').innerHTML = `
@@ -772,7 +817,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     setTimeout(() => {
         startRandomFlips();
     }, 3000);
-    
+
     // ギャラリー機能を初期化
     initGallery();
 });
@@ -783,39 +828,39 @@ function initGallery() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     const isSmallScreen = window.innerWidth < 1024;
-    
+
     // モバイルデバイスまたは小画面の場合はLightbox無効
     const isDesktop = !isMobile && !isSmallScreen;
-    
+
     if (!isDesktop) {
         // モバイル/タブレットではLightbox無効
         return;
     }
-    
+
     const galleryItems = document.querySelectorAll('.gallery-item');
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
     const closeBtn = document.getElementById('close-lightbox');
     const prevBtn = document.getElementById('prev-image');
     const nextBtn = document.getElementById('next-image');
-    
+
     if (!galleryItems.length || !lightbox) return;
-    
+
     let currentImageIndex = 0;
     const images = Array.from(galleryItems).map(item => item.querySelector('img').src);
-    
+
     // PCのみ：ギャラリーアイテムにカーソルポインターを追加
     galleryItems.forEach(item => {
         item.style.cursor = 'pointer';
     });
-    
+
     // ギャラリーアイテムクリックイベント
     galleryItems.forEach((item, index) => {
         item.addEventListener('click', () => {
             // 再度デバイスチェック
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             const isSmallScreen = window.innerWidth < 1024;
-            
+
             if (!isMobile && !isSmallScreen) {
                 currentImageIndex = index;
                 showImage(currentImageIndex);
@@ -824,13 +869,13 @@ function initGallery() {
             }
         });
     });
-    
+
     // Lightbox閉じる
     function closeLightbox() {
         lightbox.classList.add('hidden');
         lightbox.classList.remove('flex');
     }
-    
+
     // 画像表示
     function showImage(index) {
         if (index < 0) {
@@ -842,25 +887,25 @@ function initGallery() {
         }
         lightboxImage.src = images[currentImageIndex];
     }
-    
+
     // イベントリスナー
     closeBtn?.addEventListener('click', closeLightbox);
-    
+
     prevBtn?.addEventListener('click', () => {
         showImage(currentImageIndex - 1);
     });
-    
+
     nextBtn?.addEventListener('click', () => {
         showImage(currentImageIndex + 1);
     });
-    
+
     // 背景クリックで閉じる
     lightbox?.addEventListener('click', (e) => {
         if (e.target === lightbox) {
             closeLightbox();
         }
     });
-    
+
     // キーボードナビゲーション
     document.addEventListener('keydown', (e) => {
         if (lightbox?.classList.contains('flex')) {

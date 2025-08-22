@@ -163,40 +163,207 @@
     <section id="schedule" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12 fade-in">SCHEDULE</h2>
-            <div class="max-w-2xl mx-auto space-y-4 mb-8">
-                <div class="bg-white rounded-lg shadow p-6 fade-in">
-                    <div class="flex justify-between items-start flex-wrap gap-2">
-                        <div>
-                            <p class="font-bold text-lg">2025年9月15日（日）</p>
-                            <p class="text-gray-600">vs. チームA</p>
+            <div class="max-w-3xl mx-auto space-y-3 mb-8">
+                <!-- 9月7日 vs ペンタオーシャン パイレーツ -->
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow fade-in">
+                    <div class="flex flex-col sm:flex-row items-center p-4 gap-4">
+                        <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <div class="text-center sm:text-left sm:w-40">
+                                <p class="font-bold text-lg">9/7(日)</p>
+                                <p class="text-sm text-gray-600">15:15 キックオフ</p>
+                            </div>
+                            <div class="flex-1 text-center sm:text-left">
+                                <p class="font-semibold">vs ペンタオーシャン パイレーツ</p>
+                                <p class="text-sm text-gray-600">富士通スタジアム川崎</p>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-sm text-gray-500">会場: 横浜スタジアム</p>
-                            <p class="text-sm text-gray-500">14:00 キックオフ</p>
+                        <div class="flex gap-2">
+                            <button onclick="openGoogleMaps('富士通スタジアム川崎')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="会場マップ">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="addToGoogleCalendar('2025-09-07', '15:15', 'ペンタオーシャン パイレーツ', '富士通スタジアム川崎')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="カレンダー追加">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+                                </svg>
+                            </button>
+                            <a href="https://sports.banklives.com/events/clubtriax" target="_blank" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors" title="チケット購入">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"></path>
+                                </svg>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow p-6 fade-in">
-                    <div class="flex justify-between items-start flex-wrap gap-2">
-                        <div>
-                            <p class="font-bold text-lg">2025年9月29日（日）</p>
-                            <p class="text-gray-600">vs. チームB</p>
+
+                <!-- 9月23日 vs 胎内 ディアーズ -->
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow fade-in">
+                    <div class="flex flex-col sm:flex-row items-center p-4 gap-4">
+                        <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <div class="text-center sm:text-left sm:w-40">
+                                <p class="font-bold text-lg">9/23(火祝)</p>
+                                <p class="text-sm text-gray-600">10:30 キックオフ</p>
+                            </div>
+                            <div class="flex-1 text-center sm:text-left">
+                                <p class="font-semibold">vs 胎内 ディアーズ</p>
+                                <p class="text-sm text-gray-600">アミノバイタルフィールド</p>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-sm text-gray-500">会場: 川崎球場</p>
-                            <p class="text-sm text-gray-500">13:00 キックオフ</p>
+                        <div class="flex gap-2">
+                            <button onclick="openGoogleMaps('アミノバイタルフィールド')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="会場マップ">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="addToGoogleCalendar('2025-09-23', '10:30', '胎内 ディアーズ', 'アミノバイタルフィールド')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="カレンダー追加">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+                                </svg>
+                            </button>
+                            <a href="https://sports.banklives.com/events/clubtriax" target="_blank" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors" title="チケット購入">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"></path>
+                                </svg>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow p-6 fade-in">
-                    <div class="flex justify-between items-start flex-wrap gap-2">
-                        <div>
-                            <p class="font-bold text-lg">2025年10月13日（日）</p>
-                            <p class="text-gray-600">vs. チームC</p>
+
+                <!-- 10月4日 vs Bulls フットボールクラブ -->
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow fade-in">
+                    <div class="flex flex-col sm:flex-row items-center p-4 gap-4">
+                        <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <div class="text-center sm:text-left sm:w-40">
+                                <p class="font-bold text-lg">10/4(土)</p>
+                                <p class="text-sm text-gray-600">16:00 キックオフ</p>
+                            </div>
+                            <div class="flex-1 text-center sm:text-left">
+                                <p class="font-semibold">vs Bulls フットボールクラブ</p>
+                                <p class="text-sm text-gray-600">アミノバイタルフィールド</p>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-sm text-gray-500">会場: 横浜スタジアム</p>
-                            <p class="text-sm text-gray-500">14:00 キックオフ</p>
+                        <div class="flex gap-2">
+                            <button onclick="openGoogleMaps('アミノバイタルフィールド')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="会場マップ">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="addToGoogleCalendar('2025-10-04', '16:00', 'Bulls フットボールクラブ', 'アミノバイタルフィールド')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="カレンダー追加">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+                                </svg>
+                            </button>
+                            <a href="https://sports.banklives.com/events/clubtriax" target="_blank" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors" title="チケット購入">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10月18日 vs 品川CC ブルザイズ -->
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow fade-in">
+                    <div class="flex flex-col sm:flex-row items-center p-4 gap-4">
+                        <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <div class="text-center sm:text-left sm:w-40">
+                                <p class="font-bold text-lg">10/18(土)</p>
+                                <p class="text-sm text-gray-600">16:15 キックオフ</p>
+                            </div>
+                            <div class="flex-1 text-center sm:text-left">
+                                <p class="font-semibold">vs 品川CC ブルザイズ</p>
+                                <p class="text-sm text-gray-600">富士通スタジアム川崎</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openGoogleMaps('富士通スタジアム川崎')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="会場マップ">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="addToGoogleCalendar('2025-10-18', '16:15', '品川CC ブルザイズ', '富士通スタジアム川崎')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="カレンダー追加">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+                                </svg>
+                            </button>
+                            <a href="https://sports.banklives.com/events/clubtriax" target="_blank" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors" title="チケット購入">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11月3日 vs 電通 キャタピラーズ -->
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow fade-in">
+                    <div class="flex flex-col sm:flex-row items-center p-4 gap-4">
+                        <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <div class="text-center sm:text-left sm:w-40">
+                                <p class="font-bold text-lg">11/3(月祝)</p>
+                                <p class="text-sm text-gray-600">16:00 キックオフ</p>
+                            </div>
+                            <div class="flex-1 text-center sm:text-left">
+                                <p class="font-semibold">vs 電通 キャタピラーズ</p>
+                                <p class="text-sm text-gray-600">アミノバイタルフィールド</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openGoogleMaps('アミノバイタルフィールド')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="会場マップ">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="addToGoogleCalendar('2025-11-03', '16:00', '電通 キャタピラーズ', 'アミノバイタルフィールド')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="カレンダー追加">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+                                </svg>
+                            </button>
+                            <a href="https://sports.banklives.com/events/clubtriax" target="_blank" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors" title="チケット購入">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11月30日 vs ブルーサンダース -->
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow fade-in">
+                    <div class="flex flex-col sm:flex-row items-center p-4 gap-4">
+                        <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <div class="text-center sm:text-left sm:w-40">
+                                <p class="font-bold text-lg">11/30(日)</p>
+                                <p class="text-sm text-gray-600">16:30 キックオフ</p>
+                            </div>
+                            <div class="flex-1 text-center sm:text-left">
+                                <p class="font-semibold">vs ブルーサンダース</p>
+                                <p class="text-sm text-gray-600">富士通スタジアム川崎</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openGoogleMaps('富士通スタジアム川崎')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="会場マップ">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="addToGoogleCalendar('2025-11-30', '16:30', 'ブルーサンダース', '富士通スタジアム川崎')" class="p-2 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors" title="カレンダー追加">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+                                </svg>
+                            </button>
+                            <a href="https://sports.banklives.com/events/clubtriax" target="_blank" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors" title="チケット購入">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"></path>
+                                </svg>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -377,46 +544,46 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 fade-in">
                 <!-- Image 1 -->
                 <div class="gallery-item group relative overflow-hidden shadow-lg">
-                    <img src="./assets/gallery/01.jpg" 
-                         alt="Club TRIAX Photo 1" 
+                    <img src="./assets/gallery/01.jpg"
+                         alt="Club TRIAX Photo 1"
                          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
                 </div>
-                
+
                 <!-- Image 2 -->
                 <div class="gallery-item group relative overflow-hidden shadow-lg">
-                    <img src="./assets/gallery/02.jpg" 
-                         alt="Club TRIAX Photo 2" 
+                    <img src="./assets/gallery/02.jpg"
+                         alt="Club TRIAX Photo 2"
                          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
                 </div>
-                
+
                 <!-- Image 3 -->
                 <div class="gallery-item group relative overflow-hidden shadow-lg">
-                    <img src="./assets/gallery/03.jpg" 
-                         alt="Club TRIAX Photo 3" 
+                    <img src="./assets/gallery/03.jpg"
+                         alt="Club TRIAX Photo 3"
                          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
                 </div>
-                
+
                 <!-- Image 4 -->
                 <div class="gallery-item group relative overflow-hidden shadow-lg">
-                    <img src="./assets/gallery/04.jpg" 
-                         alt="Club TRIAX Photo 4" 
+                    <img src="./assets/gallery/04.jpg"
+                         alt="Club TRIAX Photo 4"
                          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
                 </div>
-                
+
                 <!-- Image 5 -->
                 <div class="gallery-item group relative overflow-hidden shadow-lg lg:col-span-2">
-                    <img src="./assets/gallery/05.jpg" 
-                         alt="Club TRIAX Photo 5" 
+                    <img src="./assets/gallery/05.jpg"
+                         alt="Club TRIAX Photo 5"
                          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
                 </div>
             </div>
         </div>
-        
+
         <!-- Lightbox Modal (PC only) -->
         <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4">
             <button id="close-lightbox" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300">&times;</button>
