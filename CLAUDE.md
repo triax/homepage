@@ -72,6 +72,8 @@ mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロ�
 
 ### 主要コマンド
 
+#### 画像同期コマンド
+
 ```bash
 # 画像の同期状態をチェック
 npm run img:check
@@ -87,6 +89,25 @@ npm run img:cleanup:force
 
 # ダウンロードと削除を同時に実行（完全同期）
 npm run img:sync
+```
+
+#### 画像最適化コマンド
+
+```bash
+# メンバー画像の最適化（800px, 85%品質）
+./scripts/optimize-images.sh --target=docs/assets/members
+
+# ギャラリー画像の最適化（1920px, 85%品質, 連番リネーム）
+./scripts/optimize-images.sh --target=docs/assets/gallery
+
+# ヘッダー画像の最適化（1920px, 90%品質）
+./scripts/optimize-images.sh --target=docs/assets/headers
+
+# スポンサー画像の最適化（600px, 85%品質）
+./scripts/optimize-images.sh --target=docs/assets/sponsors
+
+# 変更をプレビュー（dry-runモード）
+./scripts/optimize-images.sh --target=docs/assets/members --dry-run
 ```
 
 ### スクリプトの詳細
@@ -144,7 +165,7 @@ npm run img:sync
 
 ### 画像管理フロー
 1. 画像を `docs/assets/gallery/` に配置
-2. `./scripts/optimize-gallery.sh` で最適化＆リネーム
+2. `./scripts/optimize-images.sh --target=docs/assets/gallery` で最適化＆リネーム
 3. `node scripts/generate-gallery-html.js` でHTML生成
 
 ### 技術仕様
@@ -153,3 +174,14 @@ npm run img:sync
 - **Lightbox**: PC（1024px以上）のみ有効
 
 詳細は `knowledge/04-operations/gallery-management.md` を参照。
+
+## 画像最適化
+
+統合スクリプト `scripts/optimize-images.sh` で全ての画像を最適化できます。
+
+### 重要な技術的決定
+- **EXIF方向の処理**: `-auto-orient`フラグで画像の向きを正しく保持
+- **バックアップ**: Gitでバージョン管理しているため別途バックアップは作成しない
+- **スキップ閾値**: 500KB以下のファイルは既に最適化済みとみなす
+
+詳細は `knowledge/04-operations/image-optimization.md` を参照。
