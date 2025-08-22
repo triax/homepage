@@ -306,7 +306,7 @@ function showMemberDetail(member) {
                             ` : ''}
                             ${member.favorite ? `
                                 <div>
-                                    <dt class="font-semibold text-gray-700">お気に入り</dt>
+                                    <dt class="font-semibold text-gray-700">最近の推し</dt>
                                     <dd>${member.favorite}</dd>
                                 </div>
                             ` : ''}
@@ -557,6 +557,7 @@ function startRandomFlips() {
 // ランダムメンバーピックアップ機能
 function displayRandomMemberPickup(members) {
     const container = document.getElementById('pickup-member-container');
+    const infoContainer = document.getElementById('pickup-member-pickup-info');
     if (!container || !members || members.length === 0) return;
 
     // ランダムにメンバーを選択
@@ -596,6 +597,96 @@ function displayRandomMemberPickup(members) {
     container.querySelector('.pickup-member').addEventListener('click', () => {
         showMemberDetail(randomMember);
     });
+    
+    // メンバー情報をランダムに表示
+    if (infoContainer) {
+        const infoOptions = [
+            { key: 'enthusiasm', label: '意気込み' },
+            { key: 'watchme', label: '注目ポイント' },
+            { key: 'hobbies', label: '趣味' },
+            { key: 'favorite', label: '最近の推し' },
+            { key: 'what_i_like_about_triax', label: 'TRIAXの好きなところ' }
+        ];
+        
+        // 値が存在するオプションのみフィルター
+        const availableOptions = infoOptions.filter(option => randomMember[option.key]);
+        
+        if (availableOptions.length > 0) {
+            // ランダムに一つ選択
+            const selectedOption = availableOptions[Math.floor(Math.random() * availableOptions.length)];
+            
+            // ラベルと値を表示
+            const labelElement = document.getElementById('pickup-info-label');
+            const valueElement = document.getElementById('pickup-info-value');
+            
+            if (labelElement && valueElement) {
+                // 吹き出し風のデザインを追加
+                const infoContainer = document.getElementById('pickup-member-pickup-info');
+                infoContainer.className = 'relative mt-4 bg-white/95 backdrop-blur text-gray-800 px-8 py-4 rounded-2xl shadow-xl max-w-md mx-auto';
+                infoContainer.style.cssText = `
+                    position: relative;
+                    animation: fadeInUp 0.5s ease-out;
+                `;
+                
+                // 吹き出しの三角形を追加（CSS）
+                const style = document.createElement('style');
+                style.textContent = `
+                    #pickup-member-pickup-info::before {
+                        content: '';
+                        position: absolute;
+                        top: -10px;
+                        right: 30%;
+                        width: 0;
+                        height: 0;
+                        border-left: 12px solid transparent;
+                        border-right: 12px solid transparent;
+                        border-bottom: 12px solid rgba(255, 255, 255, 0.95);
+                        transform: translateX(50%);
+                    }
+                    @keyframes fadeInUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(10px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                `;
+                if (!document.querySelector('#pickup-speech-bubble-style')) {
+                    style.id = 'pickup-speech-bubble-style';
+                    document.head.appendChild(style);
+                }
+                
+                labelElement.innerHTML = `
+                    <span class="text-xs md:text-sm text-gray-600 mb-1 block font-medium">
+                        私の${selectedOption.label}
+                    </span>
+                `;
+                valueElement.textContent = randomMember[selectedOption.key];
+                valueElement.className = 'text-base md:text-xl font-bold text-gray-900 leading-relaxed';
+            }
+        } else {
+            // デフォルトのキャッチフレーズを表示（吹き出しスタイルなし）
+            const infoContainer = document.getElementById('pickup-member-pickup-info');
+            const labelElement = document.getElementById('pickup-info-label');
+            const valueElement = document.getElementById('pickup-info-value');
+            
+            // 吹き出しスタイルをリセット
+            infoContainer.className = '';
+            infoContainer.style.cssText = '';
+            
+            if (labelElement) {
+                labelElement.innerHTML = '';
+            }
+            
+            if (valueElement) {
+                valueElement.textContent = '戦略と情熱が交差する場所';
+                valueElement.className = 'text-3xl md:text-5xl font-bold mb-4 text-center';
+            }
+        }
+    }
 }
 
 // 初期化
