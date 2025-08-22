@@ -36,6 +36,20 @@ npx http-server
 
 スポンサー企業の画像とリンクは`docs/assets/sponsors/`ディレクトリで管理されています。3つのTier（階層）で表示され、支援レベルに応じて表示サイズが異なります。
 
+## 📷 フォトギャラリー
+
+チーム写真は`docs/assets/gallery/`で管理。自動最適化スクリプト付き。
+
+```bash
+# 画像の最適化とリネーム
+./scripts/optimize-gallery.sh
+
+# HTMLコード生成
+node scripts/generate-gallery-html.js
+```
+
+詳細は[ギャラリー管理手順書](knowledge/04-operations/gallery-management.md)を参照。
+
 ### よく使うコマンド
 
 ```bash

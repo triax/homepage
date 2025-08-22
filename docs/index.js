@@ -745,4 +745,116 @@ document.addEventListener('DOMContentLoaded', async function () {
     setTimeout(() => {
         startRandomFlips();
     }, 3000);
+    
+    // ギャラリー機能を初期化
+    initGallery();
+});
+
+// フォトギャラリー機能
+function initGallery() {
+    // デバイス判定（複数の方法を組み合わせ）
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isSmallScreen = window.innerWidth < 1024;
+    
+    // モバイルデバイスまたは小画面の場合はLightbox無効
+    const isDesktop = !isMobile && !isSmallScreen;
+    
+    if (!isDesktop) {
+        // モバイル/タブレットではLightbox無効
+        return;
+    }
+    
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const closeBtn = document.getElementById('close-lightbox');
+    const prevBtn = document.getElementById('prev-image');
+    const nextBtn = document.getElementById('next-image');
+    
+    if (!galleryItems.length || !lightbox) return;
+    
+    let currentImageIndex = 0;
+    const images = Array.from(galleryItems).map(item => item.querySelector('img').src);
+    
+    // PCのみ：ギャラリーアイテムにカーソルポインターを追加
+    galleryItems.forEach(item => {
+        item.style.cursor = 'pointer';
+    });
+    
+    // ギャラリーアイテムクリックイベント
+    galleryItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            // 再度デバイスチェック
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSmallScreen = window.innerWidth < 1024;
+            
+            if (!isMobile && !isSmallScreen) {
+                currentImageIndex = index;
+                showImage(currentImageIndex);
+                lightbox.classList.remove('hidden');
+                lightbox.classList.add('flex');
+            }
+        });
+    });
+    
+    // Lightbox閉じる
+    function closeLightbox() {
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+    }
+    
+    // 画像表示
+    function showImage(index) {
+        if (index < 0) {
+            currentImageIndex = images.length - 1;
+        } else if (index >= images.length) {
+            currentImageIndex = 0;
+        } else {
+            currentImageIndex = index;
+        }
+        lightboxImage.src = images[currentImageIndex];
+    }
+    
+    // イベントリスナー
+    closeBtn?.addEventListener('click', closeLightbox);
+    
+    prevBtn?.addEventListener('click', () => {
+        showImage(currentImageIndex - 1);
+    });
+    
+    nextBtn?.addEventListener('click', () => {
+        showImage(currentImageIndex + 1);
+    });
+    
+    // 背景クリックで閉じる
+    lightbox?.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+    
+    // キーボードナビゲーション
+    document.addEventListener('keydown', (e) => {
+        if (lightbox?.classList.contains('flex')) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                showImage(currentImageIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                showImage(currentImageIndex + 1);
+            }
+        }
+    });
+}
+
+// ウィンドウリサイズ時に再初期化
+window.addEventListener('resize', () => {
+    // モバイル→PCに変わった場合の対応
+    const lightbox = document.getElementById('lightbox');
+    if (window.innerWidth < 1024 && lightbox) {
+        // モバイルサイズになったらLightboxを閉じる
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+    }
 });

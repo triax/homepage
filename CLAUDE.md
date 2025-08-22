@@ -137,3 +137,19 @@ npm run img:sync
 
 画像は `docs/assets/sponsors/{tier番号}/` に配置。
 詳細は `knowledge/01-requirements/functional/pages/SPONSORS.md` を参照。
+
+## フォトギャラリー
+
+チーム写真ギャラリーを管理。PCではLightbox機能で拡大表示可能。
+
+### 画像管理フロー
+1. 画像を `docs/assets/gallery/` に配置
+2. `./scripts/optimize-gallery.sh` で最適化＆リネーム
+3. `node scripts/generate-gallery-html.js` でHTML生成
+
+### 技術仕様
+- **画像形式**: 連番（01.jpg, 02.jpg...）
+- **最適化**: 最大幅1920px、品質85%
+- **Lightbox**: PC（1024px以上）のみ有効
+
+詳細は `knowledge/04-operations/gallery-management.md` を参照。
