@@ -1,0 +1,26 @@
+{
+    "gold": [
+
+    ],
+    "silver": [
+
+    ],
+    "bronze": [
+        {
+            "logo": "assets/sponsors/bronze/andra.jpg",
+            "link": "https://www.instagram.com/diner_andra/"
+        },
+        {
+            "logo": "assets/sponsors/bronze/insurancetotalservice.png",
+            "link": "https://insurance.co.jp"
+        },
+        {
+            "logo": "assets/sponsors/bronze/ownstudio.png",
+            "link": "https://369suits.com"
+        },
+        {
+            "logo": "assets/sponsors/bronze/digitallove.png",
+            "link": "https://digitallove.jp/"
+        }
+    ]
+}

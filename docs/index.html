@@ -445,32 +445,16 @@
             <h2 class="text-4xl font-bold mb-16 fade-in">SPONSORS</h2>
             <div class="space-y-12 fade-in">
 
-                <div class="flex justify-center mx-auto">
-                    <div class="sponsor-t1 w-full p-8">
-                        <a href="https://r-inverse.com/">
-                            <img src="./assets/sponsors/1/refinverse.png" class="w-full h-auto" />
-                        </a>
-                    </div>
+                <div id="sponsor-gold" class="flex justify-center mx-auto">
+                    <!-- Gold sponsors will be loaded from index.json -->
                 </div>
 
-                <div class="flex flex-wrap justify-center mx-auto gap-6">
-                    <div class="sponsor-t2 w-5/12 max-w-sm p-2">
-                        <a href="https://pineal.co.jp/">
-                            <img src="./assets/sponsors/2/pineal.png" class="w-full h-auto" />
-                        </a>
-                    </div>
+                <div id="sponsor-silver" class="flex flex-wrap justify-center mx-auto gap-6">
+                    <!-- Silver sponsors will be loaded from index.json -->
                 </div>
 
-                <div class="flex flex-wrap justify-center items-center mx-auto gap-4">
-                    <div class="sponsor-t3 w-1/4 max-w-[200px] p-2">
-                        <a href="https://369suits.com"><img src="./assets/sponsors/3/ownstudio.png" class="w-full h-auto" /></a>
-                    </div>
-                    <div class="sponsor-t3 w-1/4 max-w-[200px] p-2">
-                        <a href="https://insurance.co.jp"><img src="./assets/sponsors/3/insurancetotalservice.png" class="w-full h-auto" /></a>
-                    </div>
-                    <div class="sponsor-t3 w-1/4 max-w-[200px] p-2">
-                        <a href="https://bridge-point.co.jp"><img src="./assets/sponsors/3/bridgepoint.png" class="w-full h-auto"/></a>
-                    </div>
+                <div id="sponsor-bronze" class="flex flex-wrap justify-center items-center mx-auto gap-4">
+                    <!-- Bronze sponsors will be loaded from index.json -->
                 </div>
             </div>
         </div>
@@ -639,5 +623,6 @@
         </div>
     </div>
     <script src="./index.js" defer></script>
+    <script src="./assets/sponsors/sponsor-loader.js" defer></script>
 </body>
 </html>
