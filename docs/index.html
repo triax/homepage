@@ -43,7 +43,7 @@
                 </button>
                 <div class="hidden md:flex space-x-8">
                     <a href="#hero" class="hover:text-primary transition-colors">TOP</a>
-                    <a href="#news" class="hover:text-primary transition-colors">NEWS</a>
+                    <!-- TODO: <a href="#news" class="hover:text-primary transition-colors">NEWS</a> -->
                     <a href="#members" class="hover:text-primary transition-colors">MEMBERS</a>
                     <a href="#schedule" class="hover:text-primary transition-colors">SCHEDULE</a>
                     <a href="#about" class="hover:text-primary transition-colors">ABOUT</a>
@@ -55,7 +55,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
             <div class="px-4 py-2 space-y-2">
                 <a href="#hero" class="block py-2 hover:text-primary">TOP</a>
-                <a href="#news" class="block py-2 hover:text-primary">NEWS</a>
+                <!-- TODO: <a href="#news" class="block py-2 hover:text-primary">NEWS</a> -->
                 <a href="#members" class="block py-2 hover:text-primary">MEMBERS</a>
                 <a href="#schedule" class="block py-2 hover:text-primary">SCHEDULE</a>
                 <a href="#about" class="block py-2 hover:text-primary">ABOUT</a>
@@ -89,18 +89,19 @@
                 <div id="pickup-info-label"></div>
                 <h1 id="pickup-info-value" class="text-4xl md:text-5xl font-bold mb-4 text-center">戦略と情熱が交差する場所</h1>
             </div>
-            <button onclick="document.getElementById('news').scrollIntoView({behavior: 'smooth'})" class="mt-8 px-8 py-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors">
+            <!-- TODO: <button onclick="document.getElementById('news').scrollIntoView({behavior: 'smooth'})" class="mt-8 px-8 py-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors"> -->
+            <a href="https://www.instagram.com/clubtriax/" target="_blank" class="mt-8 px-8 py-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors">
                 最新情報を見る
-            </button>
+            </a>
         </div>
     </section>
 
     <!-- NEWS Section -->
+    <!-- TODO: Instagram / Facebook の管理者問題を解決してから実装予定
     <section id="news" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12 fade-in">NEWS</h2>
             <div class="grid md:grid-cols-3 gap-8 mb-8">
-                <!-- Instagram埋め込みプレースホルダー -->
                 <div class="bg-white rounded-lg shadow-lg p-6 fade-in">
                     <div class="bg-gray-200 h-64 rounded mb-4 flex items-center justify-center">
                         <span class="text-gray-500">Instagram Post 1</span>
@@ -123,7 +124,6 @@
             <div class="text-center">
                 <a href="https://www.instagram.com/clubtriax/" target="_blank" class="inline-flex items-center text-primary hover:text-primary font-medium">
                     もっと見る
-                    <!-- Heroicons: arrow-right -->
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
                     </svg>
@@ -131,6 +131,7 @@
             </div>
         </div>
     </section>
+    -->
 
     <!-- MEMBERS Section -->
     <section id="members" class="py-20">
