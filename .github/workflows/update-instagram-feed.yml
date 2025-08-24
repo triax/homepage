@@ -1,0 +1,58 @@
+name: Update Instagram Feed
+
+on:
+  schedule:
+    # 2時間ごとに実行
+    # 日本時間との時差を考慮（UTC+9）
+    - cron: '0 */2 * * *'
+  workflow_dispatch: # 手動実行も可能にする
+
+jobs:
+  update-instagram:
+    runs-on: ubuntu-latest
+    
+    # mainブランチのみで実行
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Fetch Instagram posts
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_LIMIT: '6' # 最新6件を取得
+        run: |
+          npx tsx scripts/fetch-instagram.ts
+          
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet docs/assets/instagram/posts.json; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in posts.json"
+            git diff --stat docs/assets/instagram/posts.json
+          fi
+          
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "otiai10+ayanel-ci@gmail.com"
+          git config --local user.name "ayanel-ci"
+          git add docs/assets/instagram/posts.json
+          git commit -m "Instagram投稿データを更新
+
+          🤖 自動更新 by GitHub Actions
+          最新のInstagram投稿を取得しました"
+          git push
