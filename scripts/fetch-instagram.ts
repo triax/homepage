@@ -4,6 +4,10 @@
 
 import { promises as fs } from "fs";
 import path from "path";
+import dotenv from "dotenv";
+
+// .envファイルを読み込み
+dotenv.config();
 
 type InstagramChild = {
   media_type: string;
