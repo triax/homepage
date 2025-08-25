@@ -150,7 +150,7 @@ npm run instagram:refresh-token
 npm run instagram:fetch
 
 # JSONファイルを確認
-cat docs/assets/instagram/posts.json | jq '.data[0]'
+cat docs/assets/instagram/posts.json | jq '.posts[0]'
 ```
 
 ### GitHub Actions手動実行

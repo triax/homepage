@@ -120,7 +120,7 @@ async function main() {
     fetched_at: new Date().toISOString(),
     user_id: IG_USER_ID,
     count: postsData.length,
-    data: postsData,
+    posts: postsData,
   };
 
   const next = JSON.stringify(out, null, 2) + '\n';
