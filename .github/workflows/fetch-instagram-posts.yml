@@ -2,9 +2,9 @@ name: Update Instagram Feed
 
 on:
   schedule:
-    # 2時間ごとに実行
-    # 日本時間との時差を考慮（UTC+9）
-    - cron: '0 */2 * * *'
+    # 12時間ごとに実行（0:00と12:00 UTC）
+    # 日本時間では9:00と21:00
+    - cron: '0 0,12 * * *'
   workflow_dispatch: # 手動実行も可能にする
 
 jobs:

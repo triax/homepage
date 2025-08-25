@@ -85,23 +85,7 @@ async function main() {
 
   await ensureDir(OUT_JSON);
 
-  // 既存ファイルを読み込んで投稿データ部分のみ比較
-  let existingData: any = null;
-  try {
-    const existingContent = await fs.readFile(OUT_JSON, "utf8");
-    existingData = JSON.parse(existingContent);
-  } catch {}
-
-  // 投稿データ部分が同じなら更新しない
-  const existingPostsJson = existingData ? JSON.stringify(existingData.data) : "";
-  const newPostsJson = JSON.stringify(postsData);
-  
-  if (existingPostsJson === newPostsJson) {
-    console.log("No changes in posts data.");
-    return;
-  }
-
-  // 投稿データが変わった場合のみfetched_atを更新して保存
+  // 常に最新のデータで更新（media_urlの有効期限更新のため）
   const out = {
     fetched_at: new Date().toISOString(),
     user_id: IG_USER_ID,
