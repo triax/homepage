@@ -42,8 +42,8 @@ cat scripts/gallery-html-output.html
 ```html
 <!-- Image XX -->
 <div class="gallery-item group relative overflow-hidden shadow-lg">
-    <img src="./assets/gallery/XX.jpg" 
-         alt="Club TRIAX Photo XX" 
+    <img src="./assets/gallery/XX.jpg"
+         alt="Club TRIAX Photo XX"
          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
 </div>
@@ -77,7 +77,7 @@ npx http-server docs
 ### 画像選定
 - **解像度**: 最低1920x1080px推奨
 - **アスペクト比**: 横長推奨（16:9, 4:3など）
-- **内容**: 
+- **内容**:
   - チーム活動の様子
   - 試合風景
   - イベント写真

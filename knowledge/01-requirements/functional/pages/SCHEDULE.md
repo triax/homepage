@@ -109,7 +109,7 @@ function addToGoogleCalendar(date, time, opponent, venue) {
     // 日付をISO形式に変換
     const year = new Date().getFullYear();
     const dateStr = convertToISODate(date, year);
-    
+
     // Google Calendar URLを生成
     const params = new URLSearchParams({
         action: 'TEMPLATE',
@@ -118,7 +118,7 @@ function addToGoogleCalendar(date, time, opponent, venue) {
         location: venue,
         details: `Club TRIAXの試合\\n対戦相手: ${opponent}\\n会場: ${venue}`
     });
-    
+
     window.open(`https://calendar.google.com/calendar/render?${params}`, '_blank');
 }
 ```

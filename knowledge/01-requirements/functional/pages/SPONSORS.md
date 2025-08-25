@@ -56,7 +56,7 @@ docs/assets/sponsors/
     <div class="container max-w-4xl text-center">
         <h2 class="text-4xl font-bold mb-16 fade-in">SPONSORS</h2>
         <div class="space-y-12 fade-in">
-            
+
             <!-- Tier 1: 1段1社 -->
             <div class="flex justify-center mx-auto">
                 <div class="sponsor-t1 w-full p-8">
@@ -65,7 +65,7 @@ docs/assets/sponsors/
                     </a>
                 </div>
             </div>
-            
+
             <!-- Tier 2: 1段最大2社 -->
             <div class="flex flex-wrap justify-center mx-auto gap-6">
                 <div class="sponsor-t2 w-5/12 max-w-sm p-2">
@@ -74,7 +74,7 @@ docs/assets/sponsors/
                     </a>
                 </div>
             </div>
-            
+
             <!-- Tier 3: 1段最大3社 -->
             <div class="flex flex-wrap justify-center items-center mx-auto gap-4">
                 <div class="sponsor-t3 w-1/4 max-w-[200px] p-2">

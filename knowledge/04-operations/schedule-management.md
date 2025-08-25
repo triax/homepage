@@ -56,13 +56,13 @@ grep -n "id=\"schedule\"" docs/index.html
             <div class="text-lg font-bold text-gray-800">[月日（曜日）]</div>
             <div class="text-2xl font-bold text-primary">[キックオフ時間]</div>
         </div>
-        
+
         <!-- 試合情報 -->
         <div class="flex-grow text-center sm:text-left">
             <div class="text-xl font-bold text-gray-900 mb-1">[対戦相手]</div>
             <div class="text-sm text-gray-600">[試合会場]</div>
         </div>
-        
+
         <!-- アクションボタン -->
         <div class="flex justify-center sm:justify-end gap-2">
             <!-- 地図ボタン -->
@@ -149,7 +149,7 @@ const venueMap = {
 
 #### 3. レイアウトが崩れる
 **原因**: 長いチーム名や会場名
-**対処**: 
+**対処**:
 - 必要に応じて改行を入れる
 - フォントサイズを調整
 - 省略表記を検討

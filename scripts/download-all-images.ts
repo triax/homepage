@@ -98,7 +98,6 @@ interface DownloadResult {
   error?: string;
 }
 
-
 // ディレクトリが存在しない場合は作成
 if (!fs.existsSync(CONFIG.IMAGES_DIR)) {
   fs.mkdirSync(CONFIG.IMAGES_DIR, { recursive: true });
@@ -323,7 +322,6 @@ async function downloadImagesInParallel(
 
   return results;
 }
-
 
 // メインの処理
 async function main(): Promise<void> {

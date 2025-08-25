@@ -90,7 +90,7 @@ jobs:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
           repository: triax/homepage
-      
+
       - name: Trigger homepage workflow
         uses: peter-evans/repository-dispatch@v3
         with:

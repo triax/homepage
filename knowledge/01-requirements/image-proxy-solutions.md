@@ -40,21 +40,21 @@ addEventListener('fetch', event => {
 async function handleRequest(request) {
   const url = new URL(request.url)
   const imageUrl = url.searchParams.get('url')
-  
+
   if (!imageUrl) {
     return new Response('URL parameter required', { status: 400 })
   }
-  
+
   const response = await fetch(imageUrl, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (compatible; ImageProxy/1.0)'
     }
   })
-  
+
   const headers = new Headers(response.headers)
   headers.set('Access-Control-Allow-Origin', '*')
   headers.delete('x-frame-options')
-  
+
   return new Response(response.body, {
     status: response.status,
     headers
@@ -78,16 +78,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Fetch roster data
         run: |
           curl -s https://raw.githubusercontent.com/triax/roster-api/refs/heads/main/data/roster.json -o roster.json
-      
+
       - name: Download images
         run: |
           # スクリプトで画像をダウンロード
           python scripts/download_images.py
-      
+
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"

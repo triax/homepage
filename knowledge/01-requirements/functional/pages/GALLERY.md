@@ -30,7 +30,7 @@ docs/assets/gallery/
 ## 表示仕様
 
 ### レイアウト
-- **グリッド構成**: 
+- **グリッド構成**:
   - モバイル: 1カラム
   - タブレット: 2カラム（sm:grid-cols-2）
   - デスクトップ: 3カラム（lg:grid-cols-3）
@@ -41,7 +41,7 @@ docs/assets/gallery/
 - 最後の画像が5番目の場合: `lg:col-span-2`（2カラム分の幅）
 
 ### インタラクション
-- **ホバー効果**: 
+- **ホバー効果**:
   - 画像を110%拡大
   - 半透明黒オーバーレイ（30%）
 - **トランジション**: 300ms
@@ -69,19 +69,19 @@ docs/assets/gallery/
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 fade-in">
             <!-- 画像アイテム（通常） -->
             <div class="gallery-item group relative overflow-hidden shadow-lg">
-                <img src="./assets/gallery/XX.jpg" 
-                     alt="Club TRIAX Photo XX" 
+                <img src="./assets/gallery/XX.jpg"
+                     alt="Club TRIAX Photo XX"
                      class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
             </div>
-            
+
             <!-- 最後の画像（幅広版）※必要に応じて -->
             <div class="gallery-item group relative overflow-hidden shadow-lg lg:col-span-2">
                 <!-- 同じ構造 -->
             </div>
         </div>
     </div>
-    
+
     <!-- Lightbox Modal (PC only) -->
     <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4">
         <button id="close-lightbox" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300">&times;</button>

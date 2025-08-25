@@ -7,7 +7,7 @@
 
 ### 実行方法
 1. GitHubリポジトリの「Actions」タブを開く
-2. 「Sync Roster and Images」を選択  
+2. 「Sync Roster and Images」を選択
 3. 「Run workflow」をクリック
 4. オプションを設定して実行
 
@@ -62,7 +62,7 @@ commit_message: （使用されない）
 
 #### npm ci でエラー
 **原因**: package-lock.jsonが最新でない
-**解決**: 
+**解決**:
 ```bash
 npm install
 git add package-lock.json

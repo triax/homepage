@@ -115,7 +115,7 @@ const isDesktop = !isMobile && !isSmallScreen;
 
 ## 関連ファイル
 - `/docs/index.html` - ギャラリーセクション
-- `/docs/index.js` - Lightbox機能 
+- `/docs/index.js` - Lightbox機能
 - `/scripts/optimize-gallery.sh` - 最適化スクリプト
 - `/scripts/generate-gallery-html.js` - HTML生成
 - `/knowledge/01-requirements/functional/pages/GALLERY.md` - 仕様書

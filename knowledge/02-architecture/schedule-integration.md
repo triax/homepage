@@ -22,7 +22,7 @@ External Services (Google Maps/Calendar)
 - **役割**: スケジュールデータのマスターソース
 - **形式**: Markdownテーブル
 - **更新方法**: 手動編集
-- **利点**: 
+- **利点**:
   - バージョン管理が容易
   - 人間が読みやすい
   - 編集が簡単
@@ -69,11 +69,11 @@ function openGoogleMaps(venue) {
         '富士通スタジアム川崎': 'https://www.google.com/maps/search/富士通スタジアム川崎',
         'アミノバイタルフィールド': 'https://www.google.com/maps/search/アミノバイタルフィールド'
     };
-    
+
     // マッピングにない場合は汎用検索
-    const url = venueMap[venue] || 
+    const url = venueMap[venue] ||
                 `https://www.google.com/maps/search/${encodeURIComponent(venue)}`;
-    
+
     window.open(url, '_blank');
 }
 ```
@@ -87,21 +87,21 @@ function openGoogleMaps(venue) {
 ```javascript
 function addToGoogleCalendar(date, time, opponent, venue) {
     const year = new Date().getFullYear();
-    
+
     // 日付パース処理
     const monthDayMatch = date.match(/(\d+)月(\d+)日/);
     if (!monthDayMatch) return;
-    
+
     const month = parseInt(monthDayMatch[1]);
     const day = parseInt(monthDayMatch[2]);
-    
+
     // 時刻パース処理
     const [hours, minutes] = time.split(':').map(Number);
-    
+
     // ISO8601形式の日時生成
     const startDate = new Date(year, month - 1, day, hours, minutes);
     const endDate = new Date(startDate.getTime() + 3 * 60 * 60 * 1000); // 3時間後
-    
+
     // Google Calendar URL生成
     const params = new URLSearchParams({
         action: 'TEMPLATE',
@@ -110,7 +110,7 @@ function addToGoogleCalendar(date, time, opponent, venue) {
         location: venue,
         details: `Club TRIAXの試合\\n対戦相手: ${opponent}\\n会場: ${venue}`
     });
-    
+
     window.open(`https://calendar.google.com/calendar/render?${params}`, '_blank');
 }
 ```
@@ -124,7 +124,7 @@ function addToGoogleCalendar(date, time, opponent, venue) {
 
 ### Google Maps API
 - **方式**: URL Scheme（API不要）
-- **メリット**: 
+- **メリット**:
   - APIキー不要
   - 実装が簡単
   - メンテナンスフリー
@@ -178,12 +178,12 @@ lg: 1024px  /* デスクトップ */
 ### 検討事項
 1. **データの動的読み込み**: 現在は静的HTML
    - 将来的にはJSONファイルから動的生成も検討
-2. **キャッシュ戦略**: 
+2. **キャッシュ戦略**:
    - スケジュール変更頻度が低いため静的配信で十分
 
 ## セキュリティ考慮事項
 
-1. **XSS対策**: 
+1. **XSS対策**:
    - HTMLエスケープ処理（手動更新のため現状は不要）
    - 将来的な動的生成時は必須
 
@@ -207,11 +207,11 @@ lg: 1024px  /* デスクトップ */
 ## 技術的決定事項
 
 ### なぜ静的HTMLか
-- **理由**: 
+- **理由**:
   - 更新頻度が低い（週1回程度）
   - GitHub Pagesでのホスティング
   - 実装・運用の簡単さ
-- **トレードオフ**: 
+- **トレードオフ**:
   - 手動更新が必要
   - リアルタイム性なし
 
@@ -235,7 +235,7 @@ lg: 1024px  /* デスクトップ */
 
 ## メンテナンス指針
 
-1. **定期更新**: 
+1. **定期更新**:
    - シーズン開始前に全試合情報更新
    - 変更があれば都度更新
 

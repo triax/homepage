@@ -121,7 +121,7 @@ async function fetchRoster() {
 ```javascript
 function displayMembers(data) {
   const container = document.getElementById('members-container');
-  
+
   data.members.forEach(member => {
     const card = createMemberCard(member);
     container.appendChild(card);
@@ -147,7 +147,7 @@ function createMemberCard(member) {
 ```javascript
 function filterByPosition(members, position) {
   if (!position || position === 'ALL') return members;
-  
+
   return members.filter(member => member.position === position);
 }
 
@@ -201,13 +201,13 @@ const CACHE_DURATION = 60 * 60 * 1000; // 1時間
 function getCachedRoster() {
   const cached = localStorage.getItem(CACHE_KEY);
   if (!cached) return null;
-  
+
   const { data, timestamp } = JSON.parse(cached);
   if (Date.now() - timestamp > CACHE_DURATION) {
     localStorage.removeItem(CACHE_KEY);
     return null;
   }
-  
+
   return data;
 }
 
@@ -224,7 +224,7 @@ async function getRosterWithCache() {
   // キャッシュチェック
   const cached = getCachedRoster();
   if (cached) return cached;
-  
+
   // APIから取得
   const data = await fetchRoster();
   if (data) {
