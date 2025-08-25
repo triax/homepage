@@ -10,6 +10,7 @@
     "roster:download": "npx tsx scripts/download-roster.ts",
     "instagram:fetch": "npx tsx scripts/fetch-instagram.ts",
     "instagram:refresh-token": "npx tsx scripts/refresh-instagram-token.ts",
+    "instagram:exchange-token": "npx tsx scripts/exchange-instagram-token.ts",
     "img:check": "npx tsx scripts/check-image-sync.ts",
     "img:download": "npx tsx scripts/download-all-images.ts",
     "img:cleanup": "npx tsx scripts/cleanup-unused-images.ts --force",
