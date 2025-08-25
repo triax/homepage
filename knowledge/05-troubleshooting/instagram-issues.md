@@ -52,13 +52,52 @@ Failed to refresh token: {
 ```
 
 #### 原因
-- Instagram APIの仕様：24時間以内のトークンは更新不可
+- リフレッシュAPIの制限：作成/更新から24時間以内のトークンは更新不可
+- 短期トークンを長期トークンに「交換」する必要がある場合がある
 
 #### 解決方法
+
+**短期トークンを長期トークンに交換する場合**
+```bash
+# リフレッシュではなく交換を使用
+npm run instagram:exchange-token
+```
+
+**既に長期トークンの場合**
 - 24時間後に再実行
 - 緊急の場合は現在のトークンをそのまま使用
 
-### 4. GitHub Actions失敗
+### 4. エラー: "Session has expired"
+
+#### 症状
+- `fetch-instagram.ts`実行時にHTTP 400エラー
+- エラーメッセージ: "Session has expired on [date]"
+
+#### 原因
+Instagram Access Tokenの有効期限切れ：
+- **短期トークン**: 数時間で期限切れ（Facebook Developersから取得した直後のトークン）
+- **長期トークン**: 60日間で期限切れ
+
+#### 解決方法
+
+**短期トークンの場合（新規取得直後）**
+1. Facebook開発者コンソールでApp IDとApp Secretを取得
+2. 短期トークンを長期トークンに交換：
+   ```bash
+   # .envにApp IDとApp Secretを追加
+   IG_APP_ID=your_app_id
+   IG_APP_SECRET=your_app_secret
+   
+   # トークンを交換
+   npm run instagram:exchange-token
+   ```
+
+**長期トークンの場合（期限切れ）**
+1. Facebook Developersで新しいトークンを取得
+2. 上記の手順で長期トークンに交換
+3. GitHub Secretsを更新
+
+### 5. GitHub Actions失敗
 
 #### 症状
 - ワークフローが赤くなる
@@ -181,3 +220,4 @@ gh workflow run refresh-instagram-token.yml
 - [アーキテクチャ](../02-architecture/instagram-integration.md)
 - [初期設定](../04-operations/instagram-secrets-setup.md)
 - [トークン更新](../04-operations/instagram-token-refresh.md)
+- [トークン交換（短期→長期）](../04-operations/instagram-token-exchange.md)
