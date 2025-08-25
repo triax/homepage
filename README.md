@@ -50,6 +50,28 @@ node scripts/generate-gallery-html.js
 
 詳細は[ギャラリー管理手順書](knowledge/04-operations/gallery-management.md)を参照。
 
+## 📱 Instagram連携
+
+[![Update Instagram Feed](https://github.com/triax/homepage/actions/workflows/fetch-instagram-posts.yml/badge.svg)](https://github.com/triax/homepage/actions/workflows/fetch-instagram-posts.yml)
+[![Refresh Instagram Token](https://github.com/triax/homepage/actions/workflows/refresh-instagram-token.yml/badge.svg)](https://github.com/triax/homepage/actions/workflows/refresh-instagram-token.yml)
+
+最新のInstagram投稿を自動取得・表示します。
+
+### 自動更新
+- **投稿取得**: 12時間ごと（media_url有効期限対策）
+- **トークン更新**: 月2回（1日と15日）
+
+### 手動実行コマンド
+```bash
+# Instagram投稿を取得
+npm run instagram:fetch
+
+# Access Tokenを更新（24時間経過後のみ）
+npm run instagram:refresh-token
+```
+
+詳細は[Instagram連携ドキュメント](knowledge/02-architecture/instagram-integration.md)を参照。
+
 ### よく使うコマンド
 
 ```bash

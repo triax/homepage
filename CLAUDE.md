@@ -30,7 +30,7 @@ mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロ�
 /
 ├── index.html        # メインホームページファイル
 ├── README.md         # GitHub Pagesデプロイメントバッジを含む
-├── assets/          
+├── assets/
 │   ├── headers/     # 各セクション用ヘッダー画像
 │   └── ogp/         # Open Graph Protocol画像
 ├── docs/
@@ -42,7 +42,9 @@ mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロ�
 │   ├── check-image-sync.ts       # 同期状態チェック
 │   ├── cleanup-unused-images.ts  # 不要画像削除
 │   ├── create-image-mapping.ts   # 画像マッピング作成
-│   └── check-missing-images.ts   # 画像表示チェック（要Playwright）
+│   ├── check-missing-images.ts   # 画像表示チェック（要Playwright）
+│   ├── fetch-instagram.ts        # Instagram投稿取得
+│   └── refresh-instagram-token.ts # Instagram Access Token更新
 └── specs/           # デザイン仕様と要件
     ├── pages/       # 個別ページ仕様
     └── *.md         # 各種仕様書
@@ -153,7 +155,7 @@ npm run img:sync
 
 スポンサー企業を3つのTier（階層）で表示：
 - **Tier 1**: 最大サイズ（1段1社）- プラチナスポンサー
-- **Tier 2**: 中サイズ（1段最大2社）- ゴールドスポンサー  
+- **Tier 2**: 中サイズ（1段最大2社）- ゴールドスポンサー
 - **Tier 3**: 小サイズ（1段最大3社）- シルバースポンサー
 
 画像は `docs/assets/sponsors/{tier番号}/` に配置。
@@ -209,3 +211,40 @@ npm run img:sync
 - `knowledge/01-requirements/functional/pages/SCHEDULE.md` - 機能仕様
 - `knowledge/02-architecture/schedule-integration.md` - 技術仕様
 - `knowledge/04-operations/schedule-management.md` - 運用手順
+
+## Instagram連携
+
+### 概要
+Instagram Graph APIを使用して最新投稿を自動取得・表示する機能。
+
+### 自動更新システム
+- **投稿取得**: 12時間ごとに自動実行（media_url期限対策）
+- **トークン更新**: 月2回自動実行（1日と15日）
+
+### 管理コマンド
+```bash
+# Instagram投稿を手動取得
+npm run instagram:fetch
+
+# Access Tokenを手動更新（24時間経過後のみ可能）
+npm run instagram:refresh-token
+```
+
+### 必要な環境変数 / Secrets
+- **ローカル開発**: `.env`ファイル
+  - `IG_USER_ID`: InstagramユーザーID
+  - `IG_ACCESS_TOKEN`: Long-lived Access Token
+
+- **GitHub Actions**: Repository Secrets
+  - 同上の値をSecrets設定から登録
+
+### トラブルシューティング
+- media_url期限切れ: 12時間ごとの自動更新で解決
+- トークン期限切れ: 月2回の自動更新で解決
+- 手動介入が必要な場合: `knowledge/05-troubleshooting/instagram-issues.md`参照
+
+### 関連ドキュメント
+- `knowledge/02-architecture/instagram-integration.md` - アーキテクチャ
+- `knowledge/04-operations/instagram-secrets-setup.md` - 初期設定
+- `knowledge/04-operations/instagram-token-refresh.md` - トークン管理
+- `knowledge/05-troubleshooting/instagram-issues.md` - トラブルシューティング
