@@ -10,29 +10,29 @@ on:
 jobs:
   update-instagram:
     runs-on: ubuntu-latest
-    
+
     # mainブランチのみで実行
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Fetch Instagram posts
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_LIMIT: '6' # 最新6件を取得
         run: |
-          npx tsx scripts/fetch-instagram.ts
-          
+          npm run instagram:fetch
+
       - name: Check for changes
         id: check_changes
         run: |
@@ -44,7 +44,7 @@ jobs:
             echo "Changes detected in posts.json"
             git diff --stat docs/assets/instagram/posts.json
           fi
-          
+
       - name: Commit and push changes
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |

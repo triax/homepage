@@ -818,7 +818,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // ギャラリー機能を初期化
     initGallery();
+
+    initInstagram();
 });
+
+async function initInstagram() {
+    const response = await fetch("./assets/instagram/posts.json");
+    const data = await response.json();
+    console.log(data);
+}
 
 // フォトギャラリー機能
 function initGallery() {

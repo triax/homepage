@@ -9,6 +9,7 @@
   "scripts": {
     "roster:download": "npx tsx scripts/download-roster.ts",
     "instagram:fetch": "npx tsx scripts/fetch-instagram.ts",
+    "instagram:refresh-token": "npx tsx scripts/refresh-instagram-token.ts",
     "img:check": "npx tsx scripts/check-image-sync.ts",
     "img:download": "npx tsx scripts/download-all-images.ts",
     "img:cleanup": "npx tsx scripts/cleanup-unused-images.ts --force",
@@ -17,18 +18,21 @@
     "lint": "eslint scripts/**/*.ts",
     "lint:fix": "eslint scripts/**/*.ts --fix",
     "format": "sed -i '' 's/[[:space:]]*$//' docs/index.html docs/index.css",
-    "format:check": "grep -n ' $' docs/index.html docs/index.css || echo 'No trailing spaces found'"
+    "format:check": "npx tsx scripts/format-check.ts",
+    "format:fix": "npx tsx scripts/format-check.ts --fix"
   },
   "author": "otiai10",
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.54.2",
     "@types/dotenv": "^8.2.3",
+    "@types/libsodium-wrappers": "^0.7.14",
     "@types/node": "^24.2.1",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
     "dotenv": "^17.2.1",
     "eslint": "^9.33.0",
+    "libsodium-wrappers": "^0.7.15",
     "playwright": "^1.54.2",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2"

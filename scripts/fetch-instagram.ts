@@ -2,9 +2,9 @@
 // Node 20 + npx tsx で実行想定（fetch標準搭載）
 // 必要なSecrets: IG_USER_ID, IG_ACCESS_TOKEN
 
-import { promises as fs } from "fs";
-import path from "path";
-import dotenv from "dotenv";
+import { promises as fs } from 'fs';
+import * as path from 'path';
+import * as dotenv from 'dotenv';
 
 // .envファイルを読み込み
 dotenv.config();
@@ -26,14 +26,14 @@ type InstagramItem = {
   children?: { data: InstagramChild[] };
 };
 
-const IG_USER_ID = process.env.IG_USER_ID || "17841443759135863";
+const IG_USER_ID = process.env.IG_USER_ID || '17841443759135863';
 const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
 const IG_POST_LIMIT = Number(process.env.IG_LIMIT ?? 3); // 既定=3
 
-const OUT_JSON = path.join("docs", "assets", "instagram", "posts.json");
+const OUT_JSON = path.join('docs', 'assets', 'instagram', 'posts.json');
 
 if (!IG_USER_ID || !IG_ACCESS_TOKEN) {
-  console.error("ENV missing: IG_USER_ID and IG_ACCESS_TOKEN are required.");
+  console.error('ENV missing: IG_USER_ID and IG_ACCESS_TOKEN are required.');
   process.exit(1);
 }
 
@@ -57,9 +57,39 @@ async function fetchJson<T = any>(url: string, timeoutMs = 15000): Promise<T> {
   }
 }
 
+async function checkTokenExpiry(token: string): Promise<void> {
+  try {
+    const debugUrl = `https://graph.facebook.com/debug_token?input_token=${encodeURIComponent(
+      token
+    )}&access_token=${encodeURIComponent(token)}`;
+
+    const response = await fetch(debugUrl);
+    const result = await response.json() as any;
+
+    if (result.data?.expires_at) {
+      const expiresAt = result.data.expires_at;
+      const now = Math.floor(Date.now() / 1000);
+      const daysRemaining = Math.floor((expiresAt - now) / 86400);
+
+      if (daysRemaining < 7) {
+        console.warn(`⚠️  WARNING: Instagram access token expires in ${daysRemaining} days!`);
+        console.warn('   Please run the refresh-instagram-token workflow soon.');
+      } else if (daysRemaining < 30) {
+        console.log(`ℹ️  Token expires in ${daysRemaining} days`);
+      }
+    }
+  } catch (error) {
+    // トークンチェックは失敗しても処理を続行
+    console.debug('Could not check token expiry:', error);
+  }
+}
+
 async function main() {
+  // トークンの有効期限をチェック
+  await checkTokenExpiry(IG_ACCESS_TOKEN!);
+
   const fields =
-    "id,permalink,media_type,caption,timestamp,media_url,thumbnail_url,children{media_type,permalink,media_url}";
+    'id,permalink,media_type,caption,timestamp,media_url,thumbnail_url,children{media_type,permalink,media_url}';
   const url =
     `https://graph.facebook.com/v22.0/${IG_USER_ID}/media` +
     `?fields=${encodeURIComponent(fields)}` +
@@ -76,7 +106,7 @@ async function main() {
     id: m.id,
     permalink: m.permalink,
     media_type: m.media_type,
-    caption: m.caption ?? "",
+    caption: m.caption ?? '',
     timestamp: m.timestamp,
     media_url: m.media_url ?? null,
     thumbnail_url: m.thumbnail_url ?? null,
@@ -93,12 +123,12 @@ async function main() {
     data: postsData,
   };
 
-  const next = JSON.stringify(out, null, 2) + "\n";
-  await fs.writeFile(OUT_JSON, next, "utf8");
+  const next = JSON.stringify(out, null, 2) + '\n';
+  await fs.writeFile(OUT_JSON, next, 'utf8');
   console.log(`Wrote: ${OUT_JSON}`);
 }
 
 main().catch((e) => {
-  console.error("fetch-instagram failed:", e);
+  console.error('fetch-instagram failed:', e);
   process.exit(1);
 });
