@@ -9,6 +9,11 @@
 - Tailwind CSS (CDN経由)
 - jQuery 3.7.1 (CDN経由)
 
+### 本番環境
+- **URL**: https://www.triax.football/
+- **カスタムドメイン**: www.triax.football
+- **ホスティング**: GitHub Pages（`/docs` フォルダから公開）
+
 ## 一般的な開発タスク
 
 ### ローカル開発
@@ -270,3 +275,29 @@ Club TRIAXは「**LIFE・WORK・PLAY**」という理念と「**個人の充実*
 - `knowledge/02-architecture/ogp-meta-tags.md` - OGPメタタグ仕様
 - `knowledge/04-operations/ogp-image-management.md` - OGP画像管理
 - `knowledge/07-team-culture/team-philosophy.md` - チーム理念・価値観
+
+## カスタムドメイン設定
+
+### DNS設定状況
+Club TRIAXのサイトは `www.triax.football` でアクセス可能です。
+
+### DNS確認コマンド
+```bash
+# CNAMEレコードの確認
+dig www.triax.football CNAME
+
+# Aレコードの確認（apex domain）
+dig triax.football A
+
+# 複数のDNSサーバーで確認
+dig @8.8.8.8 www.triax.football  # Google DNS
+dig @1.1.1.1 www.triax.football  # Cloudflare DNS
+
+# HTTPS接続テスト
+curl -I https://www.triax.football
+```
+
+### 関連ドキュメント
+- `knowledge/04-operations/custom-domain-setup.md` - カスタムドメイン設定手順
+- `knowledge/05-troubleshooting/custom-domain-issues.md` - ドメイン関連のトラブルシューティング
+- `knowledge/02-architecture/dns-configuration.md` - DNS構成アーキテクチャ

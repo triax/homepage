@@ -6,7 +6,9 @@ Club TRIAXの公式ウェブサイトのソースコードです。
 
 ## 🌐 サイト
 
-- **本番環境**: https://triax.github.io/homepage/
+- **本番環境**: https://www.triax.football/
+- **カスタムドメイン**: www.triax.football
+- **GitHub Pages URL**: https://triax.github.io/homepage/ (カスタムドメインへリダイレクト)
 - **リポジトリ**: https://github.com/triax/homepage
 
 ## 🚀 開発環境のセットアップ
@@ -120,9 +122,10 @@ npm run img:sync
 ## 🔧 技術スタック
 
 - **フロントエンド**: HTML5, Tailwind CSS (CDN), jQuery
-- **ホスティング**: GitHub Pages
+- **ホスティング**: GitHub Pages (カスタムドメイン: www.triax.football)
 - **画像管理**: Node.js スクリプト
 - **データソース**: [Roster API](https://github.com/triax/roster-api)
+- **DNS/SSL**: Squarespace Domains + GitHub Pages自動SSL証明書
 
 ## 📝 開発ガイドライン
 
