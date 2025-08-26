@@ -248,3 +248,25 @@ npm run instagram:refresh-token
 - `knowledge/04-operations/instagram-secrets-setup.md` - 初期設定
 - `knowledge/04-operations/instagram-token-refresh.md` - トークン管理
 - `knowledge/05-troubleshooting/instagram-issues.md` - トラブルシューティング
+
+## OGPメタタグ設定
+
+### チーム理念の反映
+Club TRIAXは「**LIFE・WORK・PLAY**」という理念と「**個人の充実**」を最重要価値観として掲げています。
+この理念はOGPメタタグにも反映されています：
+
+```html
+<meta property="og:title" content="Club TRIAX - LIFE・WORK・PLAY">
+<meta property="og:description" content="X1リーグ所属 Club TRIAX のホームページです。Club TRIAX は「LIFE・WORK・PLAY」のチーム理念のもと、私生活と仕事とアメフトの相乗効果を通じて、一人一人の個性と充実を最大化することで「強いフットボールチーム」を目指しています。">
+<meta property="og:image" content="https://www.triax.football/assets/ogp/default.jpg">
+```
+
+### OGP画像
+- **ファイルパス**: `docs/assets/ogp/default.jpg`
+- **推奨サイズ**: 1200 x 630px（アスペクト比 1.91:1）
+- **デザイン**: チーム全体の円陣写真にTRIAXロゴをオーバーレイ
+
+### 関連ドキュメント
+- `knowledge/02-architecture/ogp-meta-tags.md` - OGPメタタグ仕様
+- `knowledge/04-operations/ogp-image-management.md` - OGP画像管理
+- `knowledge/07-team-culture/team-philosophy.md` - チーム理念・価値観
