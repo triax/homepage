@@ -48,10 +48,11 @@ html {
 }
 /* 画像読み込み中のスタイル */
 .member-image {
-    background-color: #e5e7eb;
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%239ca3af" font-family="sans-serif" font-size="14">Loading...</text></svg>');
+    background-color: #f3f4f6;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" stroke="%23e5e7eb" stroke-width="3" fill="none"/><circle cx="20" cy="20" r="18" stroke="%239ca3af" stroke-width="3" fill="none" stroke-dasharray="28 85" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1.2s" repeatCount="indefinite"/></circle></svg>');
     background-position: center;
     background-repeat: no-repeat;
+    background-size: 40px 40px;
 }
 
 /* カードflipアニメーション（写真部分のみ） */
