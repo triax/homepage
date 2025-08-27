@@ -46,6 +46,15 @@ html {
     opacity: 1;
     transform: translateY(0);
 }
+/* 横スクロールバーを非表示にする */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+}
+
 /* 画像読み込み中のスタイル */
 .member-image {
     background-color: #f3f4f6;

@@ -109,8 +109,14 @@
     <section id="news" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12 fade-in">NEWS</h2>
-            <div id="instagram-feed" class="grid md:grid-cols-3 gap-8 mb-8">
-                <!-- Instagram Posts will be injected here -->
+            <!-- モバイル: 横スクロール形式、デスクトップ: グリッド形式 -->
+            <div class="md:hidden overflow-x-auto no-scrollbar">
+                <div id="instagram-feed-mobile" class="flex gap-4 mb-8" style="width: max-content;">
+                    <!-- Instagram Posts will be injected here for mobile -->
+                </div>
+            </div>
+            <div id="instagram-feed" class="hidden md:grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Instagram Posts will be injected here for desktop -->
             </div>
             <div class="text-center">
                 <a href="https://www.instagram.com/clubtriax/" target="_blank" class="inline-flex items-center text-primary hover:text-primary font-medium">
