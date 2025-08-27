@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2025-08-27T03:01:13.297Z",
+  "updated_at": "2025-08-27T03:14:55.372Z",
   "members": [
     {
       "timestamp": "2025-08-01T09:38:53.000Z",
@@ -1455,37 +1455,6 @@
       "favorite": "推し恋愛番組の人物は、シャッフルアイランドのみれいちゃん",
       "gifts": "プロテイン",
       "what_i_like_about_triax": "同期は仲良く、先輩も優しい"
-    },
-    {
-      "timestamp": "2025-07-31T19:20:23.000Z",
-      "name": {
-        "default": "梅川修一",
-        "hiragana": "うめかわしゅういち",
-        "alphabet": "UMEKAWA SHUICHI"
-      },
-      "position": "DL",
-      "jersey": 91,
-      "next_introduction": "わかりません。すみません。",
-      "role": "",
-      "photos": {
-        "serious": {
-          "url": "https://drive.usercontent.google.com/download?id=1Yuyoa6B4-Co7W2fD8Ad4LCelBUMo69IB&export=view",
-          "mime_type": "image/jpeg"
-        },
-        "casual": [
-          {
-            "url": "https://drive.usercontent.google.com/download?id=1aVMR4GstLWjkplzGLPDt4-wCAzk__t4N&export=view",
-            "mime_type": "image/jpeg"
-          }
-        ]
-      },
-      "university": "京都大学",
-      "enthusiasm": "がんばります！",
-      "watchme": "パスラッシュ",
-      "hobbies": "昼寝",
-      "favorite": "アーティスト、清水翔太",
-      "gifts": "冷たいお茶",
-      "what_i_like_about_triax": "アサイメントが深いところ"
     },
     {
       "timestamp": "2025-08-04T22:08:54.000Z",
