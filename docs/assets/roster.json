@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2025-08-26T18:20:15.237Z",
+  "updated_at": "2025-08-27T03:01:13.297Z",
   "members": [
     {
       "timestamp": "2025-08-01T09:38:53.000Z",
@@ -412,41 +412,6 @@
       "favorite": "自分の家の猫",
       "gifts": "声援",
       "what_i_like_about_triax": "みんなやる気があるところ"
-    },
-    {
-      "timestamp": "2025-07-28T22:06:32.000Z",
-      "name": {
-        "default": "沖塩将弘",
-        "hiragana": "おきしおまさひろ",
-        "alphabet": "Masahiro Okishio"
-      },
-      "position": "WR",
-      "jersey": 17,
-      "next_introduction": "TRIAXのインフラ男。このチームはおれがリクルートで強くした。",
-      "role": "パパぁ",
-      "photos": {
-        "serious": {
-          "url": "https://drive.usercontent.google.com/download?id=1gDZPlMU_bZM6tb90g0PXr71ENEYsKiWu&export=view",
-          "mime_type": "image/jpeg"
-        },
-        "casual": [
-          {
-            "url": "https://drive.usercontent.google.com/download?id=16A3kQDuRK6uUeOveBnYvG20Fiov7SonU&export=view",
-            "mime_type": "image/jpeg"
-          },
-          {
-            "url": "https://drive.usercontent.google.com/download?id=1t8v26geZsC1y4dBDDUCUoSmBxSF5JGic&export=view",
-            "mime_type": "image/jpeg"
-          }
-        ]
-      },
-      "university": "慶應義塾大学",
-      "enthusiasm": "息子がアメフトに興味を持ってもらうために活躍します",
-      "watchme": "プリプリなお・し・り・🤍",
-      "hobbies": "朝5時、息子に起こされる散歩",
-      "favorite": "主将馬渡健裕の惚気顔",
-      "gifts": "株",
-      "what_i_like_about_triax": "若い、チーム全員がチームのために考えて行動しているところ"
     },
     {
       "timestamp": "2025-08-12T18:02:00.000Z",
