@@ -93,7 +93,7 @@ IG_ACCESS_TOKEN=short_lived_token
 
 ## セキュリティ注意事項
 
-⚠️ **重要**: 
+⚠️ **重要**:
 - App Secretは絶対にGitにコミットしない
 - `.env`ファイルは`.gitignore`に含まれていることを確認
 - 本番環境ではGitHub Secretsを使用

@@ -16,8 +16,9 @@
     "img:cleanup": "npx tsx scripts/cleanup-unused-images.ts --force",
     "img:sync": "npm run img:download && npm run img:cleanup",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint scripts/**/*.ts",
-    "lint:fix": "eslint scripts/**/*.ts --fix",
+    "lint": "npm run lint:eslint && npm run format:check",
+    "lint:eslint": "eslint scripts/**/*.ts",
+    "lint:fix": "npm run lint:eslint -- --fix && npm run format:fix",
     "format": "sed -i '' 's/[[:space:]]*$//' docs/index.html docs/index.css",
     "format:check": "npx tsx scripts/format-check.ts",
     "format:fix": "npx tsx scripts/format-check.ts --fix"

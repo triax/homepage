@@ -26,7 +26,7 @@ TTL: 4 hrs
 
 #### 推奨設定（apex domain も使用する場合）
 
-**Apex domain用（A レコード）:** 
+**Apex domain用（A レコード）:**
 以下4つすべてを設定：
 ```
 Host: @

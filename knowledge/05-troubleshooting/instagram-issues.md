@@ -87,7 +87,7 @@ Instagram Access Tokenの有効期限切れ：
    # .envにApp IDとApp Secretを追加
    IG_APP_ID=your_app_id
    IG_APP_SECRET=your_app_secret
-   
+
    # トークンを交換
    npm run instagram:exchange-token
    ```

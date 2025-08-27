@@ -7,8 +7,8 @@
 #### エラーメッセージ
 ```
 Both www.triax.football and its alternate name are improperly configured
-Your site's DNS settings are using a custom subdomain, www.triax.football, 
-that is not set up with a correct CNAME record. We recommend you change this 
+Your site's DNS settings are using a custom subdomain, www.triax.football,
+that is not set up with a correct CNAME record. We recommend you change this
 to a CNAME record pointing to triax.github.io.
 ```
 
@@ -54,7 +54,7 @@ git push
 
 #### エラーメッセージ
 ```
-Enforce HTTPS — Unavailable for your site because your domain is not properly 
+Enforce HTTPS — Unavailable for your site because your domain is not properly
 configured to support HTTPS (www.triax.football)
 ```
 

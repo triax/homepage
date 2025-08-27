@@ -54,13 +54,13 @@ class FormatChecker {
 
     try {
       if (this.isFixMode) {
-        const { stdout } = await execAsync('npm run lint:fix 2>&1');
+        const { stdout } = await execAsync('npm run lint:eslint -- --fix 2>&1');
         if (stdout.includes('problems')) {
           console.log('  ✅ Fixed TypeScript/JavaScript formatting issues');
           this.fixed.push('TypeScript/JavaScript files');
         }
       } else {
-        const { stdout } = await execAsync('npm run lint 2>&1');
+        const { stdout } = await execAsync('npm run lint:eslint 2>&1');
         if (stdout.includes('problems')) {
           const matches = stdout.match(/(\d+) problems?/);
           if (matches) {
@@ -107,11 +107,12 @@ class FormatChecker {
   }
 
   private async checkHtmlCssFiles() {
-    console.log('🎨 Checking HTML/CSS files...');
+    console.log('🎨 Checking HTML/CSS/JS files...');
 
     const files = [
       'docs/index.html',
-      'docs/index.css'
+      'docs/index.css',
+      'docs/index.js'
     ];
 
     for (const file of files) {

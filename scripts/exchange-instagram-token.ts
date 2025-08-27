@@ -16,7 +16,8 @@ dotenv.config();
 // 環境変数から取得（コマンドライン引数で上書き可能）
 // FACEBOOK_APP_ID または IG_APP_ID の両方をサポート
 const IG_APP_ID = process.env.FACEBOOK_APP_ID || process.env.IG_APP_ID || process.argv[2];
-const IG_APP_SECRET = process.env.FACEBOOK_APP_SECRET || process.env.IG_APP_SECRET || process.argv[3];
+const IG_APP_SECRET =
+  process.env.FACEBOOK_APP_SECRET || process.env.IG_APP_SECRET || process.argv[3];
 const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN || process.argv[4];
 
 // 短期トークンを長期トークンに交換
@@ -65,7 +66,7 @@ async function getTokenInfo(accessToken: string): Promise<{
 }> {
   try {
     // App Access Tokenを使用してデバッグ（可能な場合）
-    const debugToken = IG_APP_ID && IG_APP_SECRET 
+    const debugToken = IG_APP_ID && IG_APP_SECRET
       ? `${IG_APP_ID}|${IG_APP_SECRET}`
       : accessToken;
 
@@ -80,7 +81,7 @@ async function getTokenInfo(accessToken: string): Promise<{
       const expiresAt = data.data.expires_at || 0;
       const now = Math.floor(Date.now() / 1000);
       const expiresIn = expiresAt - now;
-      
+
       // トークンタイプを判定
       let tokenType = 'unknown';
       if (expiresIn > 0 && expiresIn < 7200) {
@@ -186,10 +187,10 @@ async function main() {
   if (tokenInfo.expires_in !== undefined) {
     const hours = Math.floor(tokenInfo.expires_in / 3600);
     const days = Math.floor(tokenInfo.expires_in / 86400);
-    
+
     if (days > 0) {
       console.log(`  Expires in: ${days} days`);
-      
+
       // 既に長期トークンの場合
       if (days > 7) {
         console.log('\n✅ This token is already a long-lived token!');
@@ -229,7 +230,7 @@ async function main() {
 
   if (exchangeResult.error) {
     console.error('\n❌ Failed to exchange token');
-    
+
     // エラーの詳細を解析
     if (exchangeResult.error.message?.includes('Invalid OAuth')) {
       console.error('   The token appears to be invalid or already expired.');

@@ -40,7 +40,7 @@ triax.football
 - **デプロイ元**: `/docs` フォルダ
 - **カスタムドメイン**: www.triax.football
 - **SSL/TLS**: Let's Encrypt（GitHub自動発行）
-- **特記事項**: 
+- **特記事項**:
   - プロジェクトリポジトリのため、カスタムドメイン設定により `/homepage/` パスは削除される
   - Apex domainとwwwサブドメインの両方を設定し、自動リダイレクト
 
@@ -55,7 +55,7 @@ triax.football
 
 - **mvp URL**: https://mvp.triax.football/
 - **console URL**: https://console.triax.football/
-- **用途**: 
+- **用途**:
   - mvp: MVP版のウェブサイト
   - console: 管理用コンソール
 - **管理**: Cloudflare Dashboard
@@ -76,7 +76,7 @@ triax.football
   ```bash
   # ローカルDNS
   dig www.triax.football
-  
+
   # パブリックDNS
   dig @8.8.8.8 www.triax.football  # Google
   dig @1.1.1.1 www.triax.football  # Cloudflare
