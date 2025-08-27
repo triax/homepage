@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2025-08-27T03:14:55.372Z",
+  "updated_at": "2025-08-27T18:20:20.056Z",
   "members": [
     {
       "timestamp": "2025-08-01T09:38:53.000Z",
@@ -1354,6 +1354,49 @@
       "favorite": "推しP：Marquette King、pat mcafee",
       "gifts": "抹茶カステラ、千葉ロッテ観戦チケット、（私のスポンサーになってくださる人や企業のご紹介）",
       "what_i_like_about_triax": "練習場所全て人工芝、家からまだ近い"
+    },
+    {
+      "timestamp": "2025-08-27T14:50:45.000Z",
+      "name": {
+        "default": "吉澤 僚馬",
+        "hiragana": "よしざわ リょうま",
+        "alphabet": "Ryoma Yoshizawa"
+      },
+      "position": "Sp",
+      "jersey": 81,
+      "next_introduction": "かなりシュアハンドでまぁキレがいい。と聞きました",
+      "role": "",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1IsNUYwgW95xK0X3ZPJHBX9NZ4uOh9LPC&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1fcVHIQNj2q1vL-W5CHMI6tu2HITIt0cp&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1cLNjkv59tkAc4_QHKhnC1XlPOKQyVAnN&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1hBIqTuBZElyfctLs4mc8SxwXKHR7xZK0&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1XT5Ur_Vhdk1q7GAuHkNsaMDzZc0tIOTy&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "早稲田実業学校高等部・早稲田大学",
+      "enthusiasm": "TD1本・平均挽回ヤード50",
+      "watchme": "バッキバキなももとプリップリなおしりから生み出される脚力",
+      "hobbies": "たくさん寝るたくさん食べる自然と戯れる",
+      "favorite": "推しP：Marquette King（写真4枚目）・Pat McAfee",
+      "gifts": "抹茶カステラ、スポンサー契約（チームとの契約、僕個人との契約どちらでも）",
+      "what_i_like_about_triax": "練習場所全て人工芝、まだ家から近い"
     },
     {
       "timestamp": "2025-07-31T21:16:22.000Z",
