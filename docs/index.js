@@ -534,13 +534,19 @@ function initLazyLoad() {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 img.src = img.dataset.src;
-                img.classList.add('loaded');
+
+                // 画像の読み込み完了時にloadedクラスを追加（フェードイン効果）
+                img.onload = function() {
+                    img.classList.add('loaded');
+                };
 
                 // エラーハンドリングを追加
                 img.onerror = function () {
                     console.error(`Failed to load image: ${img.dataset.src}`);
                     this.onerror = null;
                     this.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23e5e7eb%22 width=%22100%22 height=%22100%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22 font-family=%22sans-serif%22 font-size=%2216%22>No Image</text></svg>';
+                    // エラーの場合もloadedクラスを追加（プレースホルダーを表示）
+                    img.classList.add('loaded');
                 };
 
                 imageObserver.unobserve(img);

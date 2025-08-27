@@ -53,6 +53,13 @@ html {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 40px 40px;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+/* 画像読み込み完了時のフェードイン */
+.member-image.loaded {
+    opacity: 1;
 }
 
 /* カードflipアニメーション（写真部分のみ） */
