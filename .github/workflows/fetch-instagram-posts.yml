@@ -25,6 +25,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Fetch Instagram posts
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
