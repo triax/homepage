@@ -841,6 +841,10 @@ async function initInstagram() {
         document.getElementById('instagram-feed-mobile').insertAdjacentHTML('beforeend', mobilePostItem);
     });
 
+    // モバイル用の「もっと見る」カードを最後に追加
+    const moreCard = createMoreCard();
+    document.getElementById('instagram-feed-mobile').insertAdjacentHTML('beforeend', moreCard);
+
     // Instagram要素に対してfade-inアニメーションを適用
     const instagramItems = document.querySelectorAll('#instagram-feed .fade-in, #instagram-feed-mobile .fade-in');
     const observer = new IntersectionObserver((entries) => {
@@ -874,7 +878,7 @@ function createInstagramPostItem({ caption, media_type, permalink, timestamp, th
     <div class="bg-white rounded-lg shadow-lg overflow-hidden fade-in hover:shadow-xl transition-shadow">
         <a href="${permalink}" target="_blank" rel="noopener noreferrer" class="block">
             <!-- メディア表示エリア -->
-            <div class="relative aspect-square bg-gray-100">
+            <div class="relative aspect-[3/4] sm:aspect-[3/4] md:aspect-square bg-gray-100">
                 ${displayUrl ? `
                     <img src="${displayUrl}"
                          alt="Instagram投稿"
@@ -958,10 +962,10 @@ function createInstagramPostItemMobile({ caption, media_type, permalink, timesta
     const displayUrl = thumbnail_url || media_url;
 
     return `
-    <div class="flex-shrink-0 w-40 fade-in">
+    <div class="flex-shrink-0 w-[67vw] sm:w-48 md:w-40 fade-in">
         <a href="${permalink}" target="_blank" rel="noopener noreferrer" class="block">
             <!-- メディア表示エリア -->
-            <div class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden shadow-md">
+            <div class="relative aspect-[3/4] sm:aspect-[3/4] md:aspect-square bg-gray-100 rounded-lg overflow-hidden shadow-md">
                 ${displayUrl ? `
                     <img src="${displayUrl}"
                          alt="Instagram投稿"
@@ -979,8 +983,8 @@ function createInstagramPostItemMobile({ caption, media_type, permalink, timesta
                 <!-- 動画の場合のみ再生アイコンを表示 -->
                 ${media_type === 'VIDEO' ? `
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div class="bg-white/10 backdrop-blur-sm rounded-full p-2">
-                            <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-full p-3 sm:p-2">
+                            <svg class="w-12 h-12 sm:w-10 md:w-8 text-white" viewBox="0 0 24 24" fill="currentColor">
                                 <path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd"/>
                             </svg>
                         </div>
@@ -1014,6 +1018,29 @@ function createInstagramPostItemMobile({ caption, media_type, permalink, timesta
                 <p class="text-xs text-gray-700 line-clamp-2">
                     ${shortCaption || 'Club TRIAXの投稿'}
                 </p>
+            </div>
+        </a>
+    </div>`;
+}
+
+// 「もっと見る」カードを作成
+function createMoreCard() {
+    return `
+    <div class="flex-shrink-0 w-[67vw] sm:w-48 md:w-40 fade-in">
+        <a href="https://www.instagram.com/clubtriax/" target="_blank" rel="noopener noreferrer" class="block h-full">
+            <!-- カード全体 -->
+            <div class="relative aspect-[3/4] sm:aspect-[3/4] md:aspect-square bg-gradient-to-br from-purple-400 via-pink-500 to-orange-400 rounded-lg overflow-hidden shadow-md flex flex-col items-center justify-center">
+                <!-- Instagramアイコン -->
+                <svg class="w-16 h-16 text-white mb-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                </svg>
+                <!-- テキスト -->
+                <p class="text-white font-bold text-lg">もっと見る</p>
+                <p class="text-white/90 text-sm mt-1">@clubtriax</p>
+                <!-- 矢印アイコン -->
+                <svg class="w-6 h-6 text-white mt-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
+                </svg>
             </div>
         </a>
     </div>`;
