@@ -1,6 +1,11 @@
 {
   "gold": [],
-  "silver": [],
+  "silver": [
+    {
+      "logo": "assets/sponsors/silver/kenseikai.jpg",
+      "link": "https://www.kenseikai-group.or.jp/"
+    }
+  ],
   "bronze": [
     {
       "logo": "assets/sponsors/bronze/andra.jpg",
