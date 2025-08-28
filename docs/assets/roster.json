@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2025-08-28T01:08:25.688Z",
+  "updated_at": "2025-08-28T18:20:22.886Z",
   "members": [
     {
       "timestamp": "2025-08-01T09:38:53.000Z",
@@ -412,6 +412,37 @@
       "favorite": "自分の家の猫",
       "gifts": "声援",
       "what_i_like_about_triax": "みんなやる気があるところ"
+    },
+    {
+      "timestamp": "2025-08-28T12:42:27.000Z",
+      "name": {
+        "default": "内藤海人",
+        "hiragana": "ないとうかいと",
+        "alphabet": "KAITO NAITO"
+      },
+      "position": "RB",
+      "jersey": 16,
+      "next_introduction": "基本、世の中を舐めている",
+      "role": "RBパートリーダー(20%)",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1O44u_dAkX0Xk9YlOKUqRlxz7eQosLRLu&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1stFRz_PJmUuMaJ1oK6ZlP8rrpOe4UaiS&export=view",
+            "mime_type": "image/png"
+          }
+        ]
+      },
+      "university": "慶應義塾大学",
+      "enthusiasm": "男を見せる",
+      "watchme": "リズム感",
+      "hobbies": "寝溜め",
+      "favorite": "美園和花という女優",
+      "gifts": "グリーンダカラ",
+      "what_i_like_about_triax": "「頭はクールに、ハートは熱く」なところ"
     },
     {
       "timestamp": "2025-08-12T18:02:00.000Z",
