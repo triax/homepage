@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2025-08-27T18:20:20.056Z",
+  "updated_at": "2025-08-28T01:08:25.688Z",
   "members": [
     {
       "timestamp": "2025-08-01T09:38:53.000Z",
@@ -1845,36 +1845,6 @@
       "favorite": "旅先のカフェ",
       "gifts": "",
       "what_i_like_about_triax": "熱いところ🔥"
-    },
-    {
-      "timestamp": "2025-08-01T20:39:02.000Z",
-      "name": {
-        "default": "谷　優菜",
-        "hiragana": "たに　ゆうな",
-        "alphabet": "YUNA TANI"
-      },
-      "position": "Staff",
-      "next_introduction": "",
-      "role": "裏方",
-      "photos": {
-        "serious": {
-          "url": "https://drive.usercontent.google.com/download?id=1Q-dFIKJc5BDZzo6hr7nVOSDHVKFVUnG6&export=view",
-          "mime_type": "image/jpeg"
-        },
-        "casual": [
-          {
-            "url": "https://drive.usercontent.google.com/download?id=1sQafnnXVvU83NIi0v7lKUXDoz4ZwzmRA&export=view",
-            "mime_type": "image/jpeg"
-          }
-        ]
-      },
-      "university": "青山学院大学",
-      "enthusiasm": "皆さんのお力になれるよう頑張ります",
-      "watchme": "仕事ぶり",
-      "hobbies": "カメラを持って散歩をする事",
-      "favorite": "アーティスト:wave to earth",
-      "gifts": "",
-      "what_i_like_about_triax": "暖かい雰囲気"
     },
     {
       "timestamp": "2025-08-04T23:14:54.000Z",
