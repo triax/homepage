@@ -11,11 +11,18 @@ async function loadSponsors() {
             sponsors.gold.forEach(sponsor => {
                 const div = document.createElement('div');
                 div.className = 'sponsor-t1 w-full p-8';
-                div.innerHTML = `
-                    <a href="${sponsor.link}" target="_blank" rel="noopener noreferrer">
+                // リンクがある場合とない場合で分岐
+                if (sponsor.link) {
+                    div.innerHTML = `
+                        <a href="${sponsor.link}" target="_blank" rel="noopener noreferrer">
+                            <img src="${sponsor.logo}" class="w-full h-auto" />
+                        </a>
+                    `;
+                } else {
+                    div.innerHTML = `
                         <img src="${sponsor.logo}" class="w-full h-auto" />
-                    </a>
-                `;
+                    `;
+                }
                 goldContainer.appendChild(div);
             });
         }
@@ -27,11 +34,18 @@ async function loadSponsors() {
             sponsors.silver.forEach(sponsor => {
                 const div = document.createElement('div');
                 div.className = 'sponsor-t2 w-5/12 max-w-sm p-2';
-                div.innerHTML = `
-                    <a href="${sponsor.link}" target="_blank" rel="noopener noreferrer">
+                // リンクがある場合とない場合で分岐
+                if (sponsor.link) {
+                    div.innerHTML = `
+                        <a href="${sponsor.link}" target="_blank" rel="noopener noreferrer">
+                            <img src="${sponsor.logo}" class="w-full h-auto" />
+                        </a>
+                    `;
+                } else {
+                    div.innerHTML = `
                         <img src="${sponsor.logo}" class="w-full h-auto" />
-                    </a>
-                `;
+                    `;
+                }
                 silverContainer.appendChild(div);
             });
         }
@@ -43,11 +57,18 @@ async function loadSponsors() {
             sponsors.bronze.forEach(sponsor => {
                 const div = document.createElement('div');
                 div.className = 'sponsor-t3 w-1/4 max-w-[200px] p-2';
-                div.innerHTML = `
-                    <a href="${sponsor.link}" target="_blank" rel="noopener noreferrer">
+                // リンクがある場合とない場合で分岐
+                if (sponsor.link) {
+                    div.innerHTML = `
+                        <a href="${sponsor.link}" target="_blank" rel="noopener noreferrer">
+                            <img src="${sponsor.logo}" class="w-full h-auto" />
+                        </a>
+                    `;
+                } else {
+                    div.innerHTML = `
                         <img src="${sponsor.logo}" class="w-full h-auto" />
-                    </a>
-                `;
+                    `;
+                }
                 bronzeContainer.appendChild(div);
             });
         }
