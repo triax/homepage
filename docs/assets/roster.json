@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2025-08-31T18:18:17.245Z",
+  "updated_at": "2025-09-01T18:19:36.648Z",
   "members": [
     {
       "timestamp": "2025-08-01T09:38:53.000Z",
@@ -1420,6 +1420,53 @@
       "favorite": "油そば",
       "gifts": "ファンクラブの加入！",
       "what_i_like_about_triax": "活気があっていい人が多いところ！"
+    },
+    {
+      "timestamp": "2025-09-01T12:45:07.000Z",
+      "name": {
+        "default": "平船新大",
+        "hiragana": "たいらぶねあらた",
+        "alphabet": "Tairabune Arata"
+      },
+      "position": "TE",
+      "jersey": 86,
+      "next_introduction": "ブロックの師匠。ばりデカい。",
+      "role": "タッチダウン量産します！盛り上げます！",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1PfFvef9QQoO1IzESxCDMqALpcxb592bY&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1k3c5GiP7czYqDsWUmQE2s4pameflCzi4&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1XEi20iqLJFwvLbptVGGaqljCggohYB6H&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1zuxYkYBVKuKzJf9qbyzznCoLmcfbzT9B&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1nBCuzNuo54kI-VI48k--KUoWk9dXJAQC&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1SsW9wznFURiFr4ZdJR0AqX0wPK2lrDI2&export=view",
+            "mime_type": "image/jpeg"
+          }
+        ]
+      },
+      "university": "同志社大学",
+      "enthusiasm": "自分のプレーでチームを勝たせます！リーディングレシーバー狙います！",
+      "watchme": "サイズを行かしたキャッチ",
+      "hobbies": "サーフィン",
+      "favorite": "音楽ジャンル　house",
+      "gifts": "キンキンに冷えたアイス",
+      "what_i_like_about_triax": "仕事もアメフトも全力な人が集まってるところ"
     },
     {
       "timestamp": "2025-07-30T22:05:02.000Z",
