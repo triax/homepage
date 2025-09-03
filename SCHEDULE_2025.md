@@ -11,6 +11,6 @@
 
 # その他の情報
 
-- チケットリンク: https://sports.banklives.com/events/clubtriax
+- チケットリンク: https://sports.banklives.com/events/clubtriax/155
 - GoogleMapsリンク: 自動生成する
 - GoogleCalendarリンク: 自動生成する
