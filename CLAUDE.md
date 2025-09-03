@@ -158,13 +158,32 @@ npm run img:sync
 
 ## スポンサーセクション
 
-スポンサー企業を3つのTier（階層）で表示：
-- **Tier 1**: 最大サイズ（1段1社）- プラチナスポンサー
-- **Tier 2**: 中サイズ（1段最大2社）- ゴールドスポンサー
-- **Tier 3**: 小サイズ（1段最大3社）- シルバースポンサー
+### 概要
+スポンサー企業情報は `docs/assets/sponsors/index.json` で管理され、`sponsor-loader.js` により動的に表示されます。
 
-画像は `docs/assets/sponsors/{tier番号}/` に配置。
-詳細は `knowledge/01-requirements/functional/pages/SPONSORS.md` を参照。
+### Tier構成
+- **Gold Tier**: 最大サイズ（1段1社）- プラチナスポンサー
+- **Silver Tier**: 中サイズ（1段最大2社）- ゴールドスポンサー  
+- **Bronze Tier**: 小サイズ（1段最大3社）- シルバースポンサー
+
+### ディレクトリ構造
+```
+docs/assets/sponsors/
+├── gold/          # Gold Tierスポンサー画像
+├── silver/        # Silver Tierスポンサー画像（研精会グループなど）
+├── bronze/        # Bronze Tierスポンサー画像
+├── index.json     # スポンサー情報（URL、画像パス）
+└── sponsor-loader.js  # 動的読み込みスクリプト
+```
+
+### 管理方法
+1. 画像を適切なTierディレクトリに配置
+2. `index.json` にスポンサー情報を追加・更新
+3. ページ読み込み時に自動的に反映
+
+詳細は以下を参照：
+- `knowledge/04-operations/sponsor-management.md` - スポンサー管理ガイド
+- `knowledge/01-requirements/functional/pages/SPONSORS.md` - 機能仕様
 
 ## フォトギャラリー
 
