@@ -2,7 +2,8 @@
   "gold": [],
   "silver": [
     {
-      "logo": "assets/sponsors/silver/kenseikai.jpg"
+      "logo": "assets/sponsors/silver/kenseikai.jpg",
+      "link": "https://www.kenseikai-group.or.jp/"
     }
   ],
   "bronze": [
