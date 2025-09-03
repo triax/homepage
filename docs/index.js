@@ -731,7 +731,7 @@ function displayRandomMemberPickup(members) {
             }
 
             if (valueElement) {
-                valueElement.textContent = '戦略と情熱が交差する場所';
+                valueElement.textContent = '';
                 valueElement.className = 'text-3xl md:text-5xl font-bold mb-4 text-center';
             }
         }
