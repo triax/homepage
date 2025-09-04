@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2025-09-03T18:19:46.936Z",
+  "updated_at": "2025-09-04T18:19:47.310Z",
   "members": [
     {
       "timestamp": "2025-08-01T09:38:53.000Z",
@@ -478,6 +478,53 @@
       "favorite": "上品な妻の下品な言葉",
       "gifts": "株",
       "what_i_like_about_triax": "若い、幹部のメリハリあるリーダーシップ"
+    },
+    {
+      "timestamp": "2025-09-04T23:55:23.000Z",
+      "name": {
+        "default": "新城塁斗",
+        "hiragana": "しんじょうるいと",
+        "alphabet": "SHINJO RUITO"
+      },
+      "position": "WR",
+      "jersey": 18,
+      "next_introduction": "アメフトオタク博士です",
+      "role": "選手のリクルートリーダーしてます！振られたらフリースタイルラップもします！",
+      "photos": {
+        "serious": {
+          "url": "https://drive.usercontent.google.com/download?id=1w1FvuYQW6XX5kBJznKCjaj1vZpO8Hz3k&export=view",
+          "mime_type": "image/jpeg"
+        },
+        "casual": [
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1YeKAd2LfX8Io6xllDzKHmczBD6uWekQy&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=16aauKy1X1PY9ZLp6Wy_IBdwFD4E9mfe0&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1YY3M1904caq0QtAND219O93s1OITAgL8&export=view",
+            "mime_type": "image/png"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=1UlDrcTwmHFO6GR4vi1b5ClkGuTu2ZxsX&export=view",
+            "mime_type": "image/jpeg"
+          },
+          {
+            "url": "https://drive.usercontent.google.com/download?id=10Eoqg-BEF-A1kQBMYXBg3PB-TmnkutfS&export=view",
+            "mime_type": "image/png"
+          }
+        ]
+      },
+      "university": "慶應義塾大学",
+      "enthusiasm": "スピードと持ち前のキャッチ力でTD取りまくります！",
+      "watchme": "スピード、キャッチ、バイタリティ",
+      "hobbies": "ゴルフ、資格勉強、ラップ",
+      "favorite": "推しドラマ「PRIDE」",
+      "gifts": "スポンサーお願いします！",
+      "what_i_like_about_triax": "若手が多く、自由闊達で勢いのあるところ"
     },
     {
       "timestamp": "2025-07-28T18:39:23.000Z",
