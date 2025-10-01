@@ -256,8 +256,8 @@ npm run instagram:refresh-token
 
 ### 必要な環境変数 / Secrets
 - **ローカル開発**: `.env`ファイル
-  - `IG_USER_ID`: InstagramユーザーID
-  - `IG_ACCESS_TOKEN`: Long-lived Access Token
+  - `INSTAGRAM_USER_ID`: InstagramユーザーID
+  - `FACEBOOK_ACCESS_TOKEN`: Long-lived Access Token
 
 - **GitHub Actions**: Repository Secrets
   - 同上の値をSecrets設定から登録

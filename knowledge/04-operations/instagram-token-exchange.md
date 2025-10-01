@@ -41,9 +41,9 @@ npm run instagram:exchange-token
 
 **注意**: このコマンドを実行するには、`.env`ファイルに以下が必要です：
 ```env
-IG_APP_ID=your_app_id
-IG_APP_SECRET=your_app_secret
-IG_ACCESS_TOKEN=short_lived_token
+FACEBOOK_APP_ID=your_app_id
+FACEBOOK_APP_SECRET=your_app_secret
+FACEBOOK_ACCESS_TOKEN=short_lived_token
 ```
 
 ## App IDとApp Secretの取得方法
@@ -65,7 +65,7 @@ IG_ACCESS_TOKEN=short_lived_token
 
 1. 長期トークンを取得したら、`.env`ファイルを更新：
    ```bash
-   IG_ACCESS_TOKEN=新しい長期トークン
+   FACEBOOK_ACCESS_TOKEN=新しい長期トークン
    ```
 
 2. 動作確認：
@@ -75,7 +75,7 @@ IG_ACCESS_TOKEN=short_lived_token
 
 3. GitHub Secretsも更新（本番環境用）：
    - リポジトリのSettings → Secrets and variables → Actions
-   - `IG_ACCESS_TOKEN`を更新
+   - `FACEBOOK_ACCESS_TOKEN`を更新
 
 ## トラブルシューティング
 

@@ -85,8 +85,8 @@ Instagram Access Tokenの有効期限切れ：
 2. 短期トークンを長期トークンに交換：
    ```bash
    # .envにApp IDとApp Secretを追加
-   IG_APP_ID=your_app_id
-   IG_APP_SECRET=your_app_secret
+   FACEBOOK_APP_ID=your_app_id
+   FACEBOOK_APP_SECRET=your_app_secret
 
    # トークンを交換
    npm run instagram:exchange-token
@@ -106,8 +106,8 @@ Instagram Access Tokenの有効期限切れ：
 #### 確認手順
 1. Actionsタブでエラーログを確認
 2. Secretsの設定を確認
-   - IG_USER_ID
-   - IG_ACCESS_TOKEN
+   - INSTAGRAM_USER_ID
+   - FACEBOOK_ACCESS_TOKEN
 
 #### 解決方法
 ```bash
@@ -165,7 +165,7 @@ Instagram Access Tokenの有効期限切れ：
    - Long-lived tokenに変換
 
 4. **更新場所**
-   - GitHub Secrets: IG_ACCESS_TOKEN
+   - GitHub Secrets: FACEBOOK_ACCESS_TOKEN
    - ローカル: .envファイル
 
 ### 注意事項

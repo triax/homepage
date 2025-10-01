@@ -1,6 +1,6 @@
 // scripts/fetch-instagram.ts
 // Node 20 + npx tsx で実行想定（fetch標準搭載）
-// 必要なSecrets: IG_USER_ID, IG_ACCESS_TOKEN
+// 必要なSecrets: INSTAGRAM_USER_ID, FACEBOOK_ACCESS_TOKEN
 
 import { promises as fs } from 'fs';
 import * as path from 'path';
@@ -26,14 +26,14 @@ type InstagramItem = {
   children?: { data: InstagramChild[] };
 };
 
-const IG_USER_ID = process.env.IG_USER_ID || '17841443759135863';
-const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
-const IG_POST_LIMIT = Number(process.env.IG_LIMIT ?? 3); // 既定=3
+const instagramUserId = process.env.INSTAGRAM_USER_ID || '17841443759135863';
+const instagramAccessToken = process.env.FACEBOOK_ACCESS_TOKEN;
+const mediaLimit = Number(process.env.INSTAGRAM_MEDIA_LIMIT ?? 6); // 既定=6
 
 const OUT_JSON = path.join('docs', 'assets', 'instagram', 'posts.json');
 
-if (!IG_USER_ID || !IG_ACCESS_TOKEN) {
-  console.error('ENV missing: IG_USER_ID and IG_ACCESS_TOKEN are required.');
+if (!instagramUserId || !instagramAccessToken) {
+  console.error('ENV missing: INSTAGRAM_USER_ID and FACEBOOK_ACCESS_TOKEN are required.');
   process.exit(1);
 }
 
@@ -86,15 +86,15 @@ async function checkTokenExpiry(token: string): Promise<void> {
 
 async function main() {
   // トークンの有効期限をチェック
-  await checkTokenExpiry(IG_ACCESS_TOKEN!);
+  await checkTokenExpiry(instagramAccessToken!);
 
   const fields =
     'id,permalink,media_type,caption,timestamp,media_url,thumbnail_url,children{media_type,permalink,media_url}';
   const url =
-    `https://graph.facebook.com/v22.0/${IG_USER_ID}/media` +
+    `https://graph.facebook.com/v22.0/${instagramUserId}/media` +
     `?fields=${encodeURIComponent(fields)}` +
-    `&limit=${IG_POST_LIMIT}` +
-    `&access_token=${encodeURIComponent(IG_ACCESS_TOKEN!)}`;
+    `&limit=${mediaLimit}` +
+    `&access_token=${encodeURIComponent(instagramAccessToken!)}`;
 
   const payload = await fetchJson<{ data: InstagramItem[] }>(url);
   const items = (payload?.data ?? []).slice().sort((a, b) =>
@@ -118,7 +118,7 @@ async function main() {
   // 常に最新のデータで更新（media_urlの有効期限更新のため）
   const out = {
     fetched_at: new Date().toISOString(),
-    user_id: IG_USER_ID,
+    user_id: instagramUserId,
     count: postsData.length,
     posts: postsData,
   };

@@ -56,7 +56,7 @@ graph LR
 
    | Runtime | Input | Output |
    |---------|-------|--------|
-   | GitHub Actions | secrets.IG_ACCESS_TOKEN | GitHub Secrets API |
+   | GitHub Actions | secrets.FACEBOOK_ACCESS_TOKEN | GitHub Secrets API |
    | Local Dev | .env file | .env file + backup |
 
 ## セキュリティ考慮事項

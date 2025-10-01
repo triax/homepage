@@ -6,11 +6,11 @@
 // ┌─────────────────┬──────────────────────┬─────────────────────────────┐
 // │ Runtime         │ Input                │ Output                      │
 // ├─────────────────┼──────────────────────┼─────────────────────────────┤
-// │ GitHub Actions  │ secrets.IG_ACCESS_   │ GitHub Secrets APIで        │
-// │                 │ TOKEN (環境変数)     │ IG_ACCESS_TOKENを更新       │
+// │ GitHub Actions  │ secrets.FACEBOOK_    │ GitHub Secrets APIで        │
+// │                 │ ACCESS_TOKEN (環境変数)│ FACEBOOK_ACCESS_TOKENを更新 │
 // ├─────────────────┼──────────────────────┼─────────────────────────────┤
 // │ Local Dev       │ .envファイルから     │ .envファイルを更新          │
-// │                 │ IG_ACCESS_TOKEN      │ (環境変数も自動更新)        │
+// │                 │ FACEBOOK_ACCESS_TOKEN│ (環境変数も自動更新)        │
 // └─────────────────┴──────────────────────┴─────────────────────────────┘
 
 import { promises as fs } from 'fs';
@@ -19,13 +19,25 @@ import * as dotenv from 'dotenv';
 // .envファイルを読み込み
 dotenv.config();
 
-const IG_ACCESS_TOKEN = process.env.IG_ACCESS_TOKEN;
+const accessToken = process.env.FACEBOOK_ACCESS_TOKEN;
+const appId = process.env.FACEBOOK_APP_ID;
+const appSecret = process.env.FACEBOOK_APP_SECRET;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // GitHub Actions環境で自動設定される
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY; // owner/repo形式
 const GITHUB_API_BASE = 'https://api.github.com';
 
-if (!IG_ACCESS_TOKEN) {
-  console.error('ERROR: IG_ACCESS_TOKEN is required');
+if (!accessToken) {
+  console.error('ERROR: FACEBOOK_ACCESS_TOKEN is required');
+  process.exit(1);
+}
+
+if (!appId) {
+  console.error('ERROR: FACEBOOK_APP_ID is required');
+  process.exit(1);
+}
+
+if (!appSecret) {
+  console.error('ERROR: FACEBOOK_APP_SECRET is required');
   process.exit(1);
 }
 
@@ -58,17 +70,18 @@ async function getTokenInfo(accessToken: string): Promise<{
   }
 }
 
-// Instagram Graph APIでトークンをリフレッシュ
+// Instagram Graph APIでトークンをリフレッシュ（Meta推奨のfb_exchange_tokenフロー）
 async function refreshInstagramToken(currentToken: string): Promise<{
   access_token?: string;
   token_type?: string;
   expires_in?: number;
   error?: any;
 }> {
-  const refreshUrl =
-    'https://graph.instagram.com/refresh_access_token' +
-    '?grant_type=ig_refresh_token' +
-    `&access_token=${encodeURIComponent(currentToken)}`;
+  const refreshUrl = new URL('https://graph.facebook.com/v22.0/oauth/access_token');
+  refreshUrl.searchParams.set('grant_type', 'fb_exchange_token');
+  refreshUrl.searchParams.set('client_id', appId!);
+  refreshUrl.searchParams.set('client_secret', appSecret!);
+  refreshUrl.searchParams.set('fb_exchange_token', currentToken);
 
   try {
     const response = await fetch(refreshUrl);
@@ -162,7 +175,7 @@ async function updateGitHubSecret(
 }
 
 // ローカル環境の.envファイルを更新
-async function updateLocalEnv(newToken: string): Promise<boolean> {
+async function updateLocalEnv(envKey: string, newToken: string): Promise<boolean> {
   const envPath = '.env';
 
   try {
@@ -175,16 +188,14 @@ async function updateLocalEnv(newToken: string): Promise<boolean> {
       return false;
     }
 
-    // IG_ACCESS_TOKENの行を更新
-    if (!/^IG_ACCESS_TOKEN=/m.test(envContent)) {
-      console.error('❌ IG_ACCESS_TOKEN not found in .env file');
+    // 対象行（FACEBOOK_ACCESS_TOKEN など）を更新
+    const envPattern = new RegExp(`^${envKey}=.*`, 'm');
+    if (!envPattern.test(envContent)) {
+      console.error(`❌ ${envKey} not found in .env file`);
       return false;
     }
 
-    envContent = envContent.replace(
-      /^IG_ACCESS_TOKEN=.*/m,
-      `IG_ACCESS_TOKEN=${newToken}`
-    );
+    envContent = envContent.replace(envPattern, `${envKey}=${newToken}`);
 
     // バックアップを作成
     const backupPath = `.env.backup.${Date.now()}`;
@@ -196,7 +207,7 @@ async function updateLocalEnv(newToken: string): Promise<boolean> {
     console.log('✅ Local .env file updated successfully');
 
     // 環境変数も更新（現在のプロセス用）
-    process.env.IG_ACCESS_TOKEN = newToken;
+    process.env[envKey] = newToken;
     console.log('✅ Environment variable updated for current process');
 
     return true;
@@ -211,7 +222,7 @@ async function main() {
 
   // 現在のトークン情報を取得
   console.log('\n📊 Current token status:');
-  const tokenInfo = await getTokenInfo(IG_ACCESS_TOKEN!);
+  const tokenInfo = await getTokenInfo(accessToken!);
 
   if (tokenInfo.is_valid === false) {
     console.error('❌ Current token is invalid or expired!');
@@ -238,7 +249,7 @@ async function main() {
 
   // トークンをリフレッシュ
   console.log('\n🔄 Refreshing token...');
-  const refreshResult = await refreshInstagramToken(IG_ACCESS_TOKEN!);
+  const refreshResult = await refreshInstagramToken(accessToken!);
 
   if (refreshResult.error) {
     console.error('❌ Failed to refresh token');
@@ -264,7 +275,7 @@ async function main() {
     console.log('   Output: Updating GitHub repository secret via API');
 
     const updated = await updateGitHubSecret(
-      'IG_ACCESS_TOKEN',
+      'FACEBOOK_ACCESS_TOKEN',
       refreshResult.access_token
     );
 
@@ -277,7 +288,7 @@ async function main() {
     console.log('   Input: .env file (via dotenv)');
     console.log('   Output: Updating .env file and process environment');
 
-    const updated = await updateLocalEnv(refreshResult.access_token);
+    const updated = await updateLocalEnv('FACEBOOK_ACCESS_TOKEN', refreshResult.access_token);
 
     if (!updated) {
       console.error('❌ Failed to update local environment');

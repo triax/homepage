@@ -36,7 +36,9 @@ jobs:
 
       - name: Refresh Instagram token
         env:
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
+          FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+          FACEBOOK_APP_SECRET: ${{ secrets.FACEBOOK_APP_SECRET }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
@@ -45,12 +47,16 @@ jobs:
 
       - name: Verify token update
         env:
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
         run: |
           echo "🔍 Verifying new token works..."
           # 簡単なAPIコールでトークンが有効か確認
-          curl -s "https://graph.facebook.com/v22.0/${IG_USER_ID}?fields=id&access_token=${IG_ACCESS_TOKEN}" | grep -q '"id"' && echo "✅ Token is valid" || (echo "❌ Token validation failed" && exit 1)
+          if [ -z "$FACEBOOK_ACCESS_TOKEN" ]; then
+            echo "❌ Token not found in secrets"
+            exit 1
+          fi
+          curl -s "https://graph.facebook.com/v22.0/${INSTAGRAM_USER_ID}?fields=id&access_token=${FACEBOOK_ACCESS_TOKEN}" | grep -q '"id"' && echo "✅ Token is valid" || (echo "❌ Token validation failed" && exit 1)
 
       - name: Create issue on failure
         if: failure()
@@ -62,6 +68,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `⚠️ Instagram Access Token更新失敗 - ${today}`,
-              body: `## Instagram Access Tokenの自動更新に失敗しました\n\n### 対応が必要です\n1. [Facebook Developers](https://developers.facebook.com/)にログイン\n2. 新しいLong-lived Access Tokenを手動で生成\n3. GitHub Secretsの\`IG_ACCESS_TOKEN\`を更新\n\n### 参考ドキュメント\n- [instagram-secrets-setup.md](knowledge/04-operations/instagram-secrets-setup.md)\n\n### ワークフロー実行\n- [実行ログを確認](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
+              body: `## Instagram Access Tokenの自動更新に失敗しました\n\n### 対応が必要です\n1. [Facebook Developers](https://developers.facebook.com/)にログイン\n2. 新しいLong-lived Access Tokenを手動で生成\n3. GitHub Secretsの\`FACEBOOK_ACCESS_TOKEN\`を更新\n\n### 参考ドキュメント\n- [instagram-secrets-setup.md](knowledge/04-operations/instagram-secrets-setup.md)\n\n### ワークフロー実行\n- [実行ログを確認](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
               labels: ['bug', 'instagram', 'urgent']
             });

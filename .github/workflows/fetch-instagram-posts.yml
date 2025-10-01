@@ -30,9 +30,9 @@ jobs:
 
       - name: Fetch Instagram posts
         env:
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-          IG_LIMIT: '6' # 最新6件を取得
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
+          INSTAGRAM_MEDIA_LIMIT: '6' # 最新6件を取得
         run: |
           npm run instagram:fetch
 

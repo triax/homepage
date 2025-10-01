@@ -8,8 +8,8 @@ Instagram Graph APIのLong-lived Access Tokenは60日で有効期限が切れる
 
 | Runtime | Input | Output |
 |---------|-------|--------|
-| **GitHub Actions** | `secrets.IG_ACCESS_TOKEN`<br>(環境変数) | GitHub Secrets APIで<br>`IG_ACCESS_TOKEN`を更新 |
-| **Local Dev** | `.env`ファイルから<br>`IG_ACCESS_TOKEN` | `.env`ファイルを更新<br>(環境変数も自動更新) |
+| **GitHub Actions** | `secrets.FACEBOOK_ACCESS_TOKEN`<br>(環境変数) | GitHub Secrets APIで<br>`FACEBOOK_ACCESS_TOKEN`を更新 |
+| **Local Dev** | `.env`ファイルから<br>`FACEBOOK_ACCESS_TOKEN` | `.env`ファイルを更新<br>(環境変数も自動更新) |
 
 ## コマンド
 
@@ -31,14 +31,14 @@ npm run instagram:refresh-token
 
 ### 更新プロセス
 1. 現在のトークンの有効期限をチェック
-2. Instagram Graph APIのリフレッシュエンドポイントを呼び出し
+2. Graph APIの `/oauth/access_token?grant_type=fb_exchange_token` を呼び出し
 3. 新しいトークンを取得（さらに60日延長）
 4. 環境に応じて保存先を更新
 
 ## ローカル環境での動作
 
 ### 前提条件
-- `.env`ファイルに`IG_ACCESS_TOKEN`が設定されていること
+- `.env`ファイルに`FACEBOOK_ACCESS_TOKEN`が設定されていること
 - `libsodium-wrappers`がインストール済み（`npm install`で自動）
 
 ### 更新プロセス
@@ -51,7 +51,7 @@ npm run instagram:refresh-token
 ## GitHub Actionsでの動作
 
 ### 必要なSecrets
-- `IG_ACCESS_TOKEN`: 現在の有効なトークン
+- `FACEBOOK_ACCESS_TOKEN`: 現在の有効なトークン
 - `GITHUB_TOKEN`: 自動的に提供される（設定不要）
 
 ### 更新プロセス

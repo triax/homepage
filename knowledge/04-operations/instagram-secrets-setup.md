@@ -4,8 +4,8 @@
 
 ## 必要なSecrets
 
-1. **IG_USER_ID** - InstagramビジネスアカウントのユーザーID
-2. **IG_ACCESS_TOKEN** - Instagram Graph APIのアクセストークン
+1. **INSTAGRAM_USER_ID** - InstagramビジネスアカウントのユーザーID
+2. **FACEBOOK_ACCESS_TOKEN** - Instagram Graph APIの長期アクセストークン
 
 ## 設定手順
 
@@ -17,13 +17,13 @@
 4. **New repository secret** ボタンをクリック
 5. 以下の2つのSecretsを追加：
 
-#### IG_USER_ID
-- **Name**: `IG_USER_ID`
+#### INSTAGRAM_USER_ID
+- **Name**: `INSTAGRAM_USER_ID`
 - **Value**: `17841443759135863` (Club TRIAXのInstagram ID)
 
-#### IG_ACCESS_TOKEN
-- **Name**: `IG_ACCESS_TOKEN`
-- **Value**: Instagram Graph APIのアクセストークン（後述の手順で取得）
+#### FACEBOOK_ACCESS_TOKEN
+- **Name**: `FACEBOOK_ACCESS_TOKEN`
+- **Value**: Instagram Graph APIの長期アクセストークン（後述の手順で取得）
 
 ### 2. Instagram Graph APIアクセストークンの取得
 
@@ -50,8 +50,8 @@
 
 #### ローカル実行（テスト用）
 ```bash
-export IG_USER_ID="17841443759135863"
-export IG_ACCESS_TOKEN="your_access_token_here"
+export INSTAGRAM_USER_ID="17841443759135863"
+export FACEBOOK_ACCESS_TOKEN="your_access_token_here"
 npx tsx scripts/fetch-instagram.ts
 ```
 
@@ -67,7 +67,7 @@ npx tsx scripts/fetch-instagram.ts
 - トークンが正しくコピーされているか確認
 
 ### エラー: "User ID not found"
-- IG_USER_IDが正しいか確認
+- INSTAGRAM_USER_IDが正しいか確認
 - Instagramアカウントがビジネスアカウントになっているか確認
 
 ### 更新されない
