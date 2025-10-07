@@ -65,14 +65,48 @@ npm run instagram:refresh-token
 - ラベル: `bug`, `instagram`, `urgent`
 - 手動での対応手順が記載される
 
+## 手動でLong-lived Tokenを生成する方法
+
+トークンが期限切れになった場合や、新規に60日間有効なトークンが必要な場合は、以下の方法で手動生成できます。
+
+### 方法1: Token Generator（Facebook App Dashboard）
+1. [Facebook App Dashboard](https://developers.facebook.com/)にアクセス
+2. 該当のアプリを選択 → Instagram → "Generate Token"
+3. 生成されるトークンは**既に60日間有効なLong-lived Token**
+
+### 方法2: Access Token Debugger（推奨）
+1. [Access Token Debugger](https://developers.facebook.com/tools/debug/accesstoken/)にアクセス
+2. 現在のトークンを貼り付け
+3. **"Extend Access Token"** ボタンをクリック
+4. 新しい60日間有効なトークンが返される
+
+**推奨理由**:
+- 既存トークンから簡単に更新可能
+- 有効期限の確認と延長が同時にできる
+- アプリ設定を変更する必要がない
+
+### 更新後の設定
+
+#### ローカル環境
+`.env`ファイルの`FACEBOOK_ACCESS_TOKEN`を新しいトークンで更新:
+```bash
+FACEBOOK_ACCESS_TOKEN=新しいトークン
+```
+
+#### GitHub Actions
+1. リポジトリの **Settings** → **Secrets and variables** → **Actions**
+2. `FACEBOOK_ACCESS_TOKEN`を選択して **Update secret**
+3. 新しいトークンを貼り付けて保存
+
 ## トラブルシューティング
 
 ### エラー: "Invalid OAuth access token"
 **原因**: トークンが無効または期限切れ
 **対策**:
-1. Facebook Developersコンソールで新しいトークンを手動生成
-2. `.env`または GitHub Secretsを更新
-3. 再度実行
+1. 上記「手動でLong-lived Tokenを生成する方法」を参照
+2. 方法2（Access Token Debugger）で新しいトークンを生成
+3. `.env`または GitHub Secretsを更新
+4. 再度実行
 
 ### エラー: "Token is less than 24 hours old"
 **原因**: トークンが新しすぎる（24時間未満）
