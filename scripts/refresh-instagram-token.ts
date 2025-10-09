@@ -23,7 +23,7 @@ dotenv.config();
 const accessToken = process.env.FACEBOOK_ACCESS_TOKEN;
 const appId = process.env.FACEBOOK_APP_ID;
 const appSecret = process.env.FACEBOOK_APP_SECRET;
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // GitHub Actions環境で自動設定される
+const GITHUB_TOKEN = process.env.TRIAX_HOMEPAGE_GHACTIONS; // Fine-grained Personal Access Token
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY; // owner/repo形式
 const GITHUB_API_BASE = 'https://api.github.com';
 
