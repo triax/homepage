@@ -126,7 +126,12 @@ async function updateGitHubSecret(
     );
 
     if (!keyResponse.ok) {
-      console.error(`Failed to get public key: ${keyResponse.status}`);
+      const errorDetail = await keyResponse.text().catch(() => '');
+      const statusText = keyResponse.statusText ? ` ${keyResponse.statusText}` : '';
+      const detailSuffix = errorDetail ? ` - ${errorDetail}` : '';
+      console.error(
+        `Failed to get public key: ${keyResponse.status}${statusText}${detailSuffix}`
+      );
       return false;
     }
 
@@ -165,7 +170,12 @@ async function updateGitHubSecret(
       console.log(`✅ GitHub Secret '${secretName}' updated successfully`);
       return true;
     } else {
-      console.error(`Failed to update secret: ${updateResponse.status}`);
+      const errorDetail = await updateResponse.text().catch(() => '');
+      const statusText = updateResponse.statusText ? ` ${updateResponse.statusText}` : '';
+      const detailSuffix = errorDetail ? ` - ${errorDetail}` : '';
+      console.error(
+        `Failed to update secret: ${updateResponse.status}${statusText}${detailSuffix}`
+      );
       return false;
     }
   } catch (error) {
