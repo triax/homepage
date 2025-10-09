@@ -1,6 +1,8 @@
 # Club TRIAX Homepage
 
 [![pages-build-deployment](https://github.com/triax/homepage/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/triax/homepage/actions/workflows/pages/pages-build-deployment)
+[![Update Instagram Feed](https://github.com/triax/homepage/actions/workflows/fetch-instagram-posts.yml/badge.svg)](https://github.com/triax/homepage/actions/workflows/fetch-instagram-posts.yml)
+[![Refresh Instagram Token](https://github.com/triax/homepage/actions/workflows/refresh-instagram-token.yml/badge.svg)](https://github.com/triax/homepage/actions/workflows/refresh-instagram-token.yml)
 
 Club TRIAXの公式ウェブサイトのソースコードです。
 
@@ -53,9 +55,6 @@ node scripts/generate-gallery-html.js
 詳細は[ギャラリー管理手順書](knowledge/04-operations/gallery-management.md)を参照。
 
 ## 📱 Instagram連携
-
-[![Update Instagram Feed](https://github.com/triax/homepage/actions/workflows/fetch-instagram-posts.yml/badge.svg)](https://github.com/triax/homepage/actions/workflows/fetch-instagram-posts.yml)
-[![Refresh Instagram Token](https://github.com/triax/homepage/actions/workflows/refresh-instagram-token.yml/badge.svg)](https://github.com/triax/homepage/actions/workflows/refresh-instagram-token.yml)
 
 最新のInstagram投稿を自動取得・表示します。
 
