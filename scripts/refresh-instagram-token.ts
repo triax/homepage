@@ -15,6 +15,7 @@
 
 import { promises as fs } from 'fs';
 import * as dotenv from 'dotenv';
+import sodium from 'libsodium-wrappers';
 
 // .envファイルを読み込み
 dotenv.config();
@@ -131,8 +132,7 @@ async function updateGitHubSecret(
 
     const keyData = await keyResponse.json() as { key: string; key_id: string };
 
-    // libsodium-wrappersを動的インポート（Node.js環境用）
-    const sodium = await import('libsodium-wrappers');
+    // libsodium 初期化を待機
     await sodium.ready;
 
     // 値を暗号化
