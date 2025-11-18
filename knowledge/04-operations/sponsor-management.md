@@ -14,6 +14,12 @@ Club TRIAXのスポンサー企業情報の管理と表示に関するガイド�
   - ロゴ: `assets/sponsors/silver/kenseikai.jpg`
   - URL: https://www.kenseikai-group.or.jp/
 
+- **日本電設工業**
+  - 正式名称: 日本電設工業株式会社
+  - ローマ字表記: nihondensetsukogyo
+  - ロゴ: `assets/sponsors/silver/nihondensetsukogyo.jpg`
+  - URL: https://www.densetsuko.co.jp/
+
 #### Bronze Tier
 - **DINER ANDRA**
   - ロゴ: `assets/sponsors/bronze/andra.jpg`
