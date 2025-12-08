@@ -2,7 +2,6 @@
 
 [![pages-build-deployment](https://github.com/triax/homepage/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/triax/homepage/actions/workflows/pages/pages-build-deployment)
 [![Update Instagram Feed](https://github.com/triax/homepage/actions/workflows/fetch-instagram-posts.yml/badge.svg)](https://github.com/triax/homepage/actions/workflows/fetch-instagram-posts.yml)
-[![Refresh Instagram Token](https://github.com/triax/homepage/actions/workflows/refresh-instagram-token.yml/badge.svg)](https://github.com/triax/homepage/actions/workflows/refresh-instagram-token.yml)
 
 Club TRIAXの公式ウェブサイトのソースコードです。
 
@@ -60,15 +59,12 @@ node scripts/generate-gallery-html.js
 
 ### 自動更新
 - **投稿取得**: 12時間ごと（media_url有効期限対策）
-- **トークン更新**: 月2回（1日と15日）
+- **トークン更新**: 不要（Page Access Tokenは無期限）
 
 ### 手動実行コマンド
 ```bash
 # Instagram投稿を取得
-npm run instagram:fetch
-
-# Access Tokenを更新（24時間経過後のみ）
-npm run instagram:refresh-token
+pnpm instagram:fetch
 ```
 
 詳細は[Instagram連携ドキュメント](knowledge/02-architecture/instagram-integration.md)を参照。
