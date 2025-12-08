@@ -243,44 +243,44 @@ Instagram Graph APIを使用して最新投稿を自動取得・表示する機�
 
 ### 自動更新システム
 - **投稿取得**: 12時間ごとに自動実行（media_url期限対策）
-- **トークン更新**: 月2回自動実行（1日と15日）
+- **トークン更新**: 不要（Page Access Tokenは無期限）
 
 ### 管理コマンド
 ```bash
 # Instagram投稿を手動取得
 pnpm instagram:fetch
 
-# 短期トークン → Long-Livedトークンに変換（24時間制限なし）
-pnpm instagram:exchange-slt2llt
+# Page Access Token（無期限）を取得（初回のみ）
+pnpm instagram:get-page-token
 
-# Long-Livedトークンを更新（発行後24時間経過が必要）
-pnpm instagram:refresh-token
+# 短期トークン → Long-Livedトークンに変換（get-page-tokenの前に実行）
+pnpm instagram:exchange-slt2llt
 ```
 
-### トークンの種類と制限
-| 操作 | 24時間制限 | スクリプト |
-|------|-----------|-----------|
-| 短期→Long-Lived変換 | なし | `instagram:exchange-slt2llt` |
-| Long-Lived→Long-Lived更新 | あり | `instagram:refresh-token` |
+### Access Token
+**Page Access Token（無期限）を使用**しています。
 
-### 必要な環境変数 / Secrets
-- **ローカル開発**: `.env`ファイル
-  - `INSTAGRAM_USER_ID`: InstagramユーザーID
-  - `FACEBOOK_ACCESS_TOKEN`: Long-lived Access Token
+| 環境変数 | 説明 |
+|----------|------|
+| `FACEBOOK_PAGE_ACCESS_TOKEN` | Page Access Token（無期限）|
+| `INSTAGRAM_BUSINESS_ACCOUNT_ID` | Instagram Business Account ID |
 
-- **GitHub Actions**: Repository Secrets
-  - 同上の値をSecrets設定から登録
+※ レガシー変数（`FACEBOOK_ACCESS_TOKEN`, `INSTAGRAM_USER_ID`）もフォールバックとしてサポート
 
-### トラブルシューティング
-- media_url期限切れ: 12時間ごとの自動更新で解決
-- トークン期限切れ: 月2回の自動更新で解決
-- 手動介入が必要な場合: `knowledge/05-troubleshooting/instagram-issues.md`参照
+### トークンが無効化された場合の復旧
+```bash
+# 1. Graph API Explorerで短期トークンを取得し.envに設定
+# 2. Long-lived変換
+pnpm instagram:exchange-slt2llt
+# 3. Page Access Token取得
+pnpm instagram:get-page-token
+# 4. GitHub Secretsを更新
+```
 
 ### 関連ドキュメント
-- `knowledge/02-architecture/instagram-integration.md` - アーキテクチャ
-- `knowledge/04-operations/instagram-secrets-setup.md` - 初期設定
-- `knowledge/04-operations/instagram-token-refresh.md` - トークン管理
+- `knowledge/02-architecture/instagram-integration.md` - アーキテクチャ（詳細）
 - `knowledge/05-troubleshooting/instagram-issues.md` - トラブルシューティング
+- `.env.example` - 環境変数の詳細
 
 ## OGPメタタグ設定
 

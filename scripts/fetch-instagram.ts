@@ -26,8 +26,16 @@ type InstagramItem = {
   children?: { data: InstagramChild[] };
 };
 
-const instagramUserId = process.env.INSTAGRAM_USER_ID || '17841443759135863';
-const instagramAccessToken = process.env.FACEBOOK_ACCESS_TOKEN;
+// Instagram Business Account ID（INSTAGRAM_BUSINESS_ACCOUNT_IDを優先、なければINSTAGRAM_USER_ID）
+const instagramUserId =
+  process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID ||
+  process.env.INSTAGRAM_USER_ID ||
+  '17841443759135863';
+
+// Access Token（FACEBOOK_PAGE_ACCESS_TOKENを優先、なければFACEBOOK_ACCESS_TOKEN）
+// Page Access Tokenは無期限、User Access Tokenは60日有効
+const instagramAccessToken =
+  process.env.FACEBOOK_PAGE_ACCESS_TOKEN || process.env.FACEBOOK_ACCESS_TOKEN;
 const mediaLimit = Number(process.env.INSTAGRAM_MEDIA_LIMIT ?? 6); // 既定=6
 
 const OUT_JSON = path.join('docs', 'assets', 'instagram', 'posts.json');

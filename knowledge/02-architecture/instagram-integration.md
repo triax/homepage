@@ -13,23 +13,127 @@ graph LR
     A[Instagram Graph API] --> B[GitHub Actions]
     B --> C[posts.json]
     C --> D[Website]
-    B --> E[GitHub Secrets]
-    E --> B
+    E[GitHub Secrets] --> B
 ```
 
 ### 主要コンポーネント
 
 1. **Instagram Graph API**
-   - Long-lived Access Token（60日有効）
-   - User ID: 17841443759135863
+   - **Page Access Token（無期限）** ← 推奨
+   - Instagram Business Account ID: 17841443759135863
 
 2. **GitHub Actions Workflows**
    - `fetch-instagram-posts.yml`: 12時間ごとに投稿を取得
-   - `refresh-instagram-token.yml`: 月2回トークンを更新
 
 3. **データストレージ**
    - `docs/assets/instagram/posts.json`: 投稿データ
    - GitHub Secrets: トークンの安全な保存
+
+## Access Tokenアーキテクチャ
+
+### トークンの種類と推奨
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Access Token の種類                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  [推奨] Page Access Token                                       │
+│  ├─ 有効期限: 無期限（Never Expire）                            │
+│  ├─ 取得方法: pnpm instagram:get-page-token                     │
+│  ├─ 更新: 不要                                                  │
+│  └─ 環境変数: FACEBOOK_PAGE_ACCESS_TOKEN                        │
+│                                                                 │
+│  [非推奨] User Access Token (Long-Lived)                        │
+│  ├─ 有効期限: 60日                                              │
+│  ├─ 問題: fb_exchange_tokenでは延長不可（後述）                 │
+│  ├─ 更新: 60日ごとに手動で再取得が必要                          │
+│  └─ 環境変数: FACEBOOK_ACCESS_TOKEN（レガシー）                 │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 環境変数
+
+| 変数名 | 説明 | 必須 |
+|--------|------|------|
+| `FACEBOOK_PAGE_ACCESS_TOKEN` | Page Access Token（無期限）| ✅ 推奨 |
+| `INSTAGRAM_BUSINESS_ACCOUNT_ID` | Instagram Business Account ID | ✅ 推奨 |
+| `FACEBOOK_ACCESS_TOKEN` | User Access Token（レガシー）| フォールバック |
+| `INSTAGRAM_USER_ID` | Instagram User ID（レガシー）| フォールバック |
+
+スクリプトは新しい変数を優先し、なければレガシー変数にフォールバックします。
+
+## fb_exchange_token の問題（重要）
+
+### 発見された問題
+
+2024年12月の調査で、`fb_exchange_token` グラントタイプに重大な制限があることが判明しました。
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  fb_exchange_token の実際の挙動                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  短期トークン → Long-Lived Token                                │
+│  ✅ 正常に動作（60日トークンを取得）                            │
+│                                                                 │
+│  Long-Lived Token → Long-Lived Token (リフレッシュ)             │
+│  ❌ 同じトークン・同じ有効期限が返される                        │
+│     → 実質的にリフレッシュされない                              │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 証拠（GitHub Actions実行ログより）
+
+| 実行日 | 更新前の残り日数 | 更新後の残り日数 |
+|--------|------------------|------------------|
+| 10/15 | 51日 | 51日（変化なし）|
+| 11/1 | 34日 | 34日（変化なし）|
+| 11/15 | 20日 | 20日（変化なし）|
+| 12/1 | 4日 | 4日（変化なし）|
+
+### 原因
+
+Facebook Graph APIの仕様として、Long-Lived User Access Tokenを`fb_exchange_token`でリフレッシュしようとしても、**同じトークンがそのまま返される**。これはWebアプリケーションの制限であり、ネイティブモバイルアプリのみが自動リフレッシュをサポートしています。
+
+### 解決策
+
+**Page Access Token（無期限）を使用する**ことで、この問題を完全に回避できます。
+
+## Page Access Token 取得フロー
+
+### 初回セットアップ
+
+```bash
+# 1. Graph API Explorerで短期トークンを取得
+#    https://developers.facebook.com/tools/explorer
+#    権限: instagram_basic, pages_show_list, pages_read_engagement
+
+# 2. 短期トークンをLong-lived User Access Tokenに変換
+#    .envのFACEBOOK_ACCESS_TOKENに短期トークンを設定後:
+pnpm instagram:exchange-slt2llt
+
+# 3. Page Access Token（無期限）を取得
+pnpm instagram:get-page-token
+
+# 4. 動作確認
+pnpm instagram:fetch
+
+# 5. GitHub Secretsを更新
+#    - FACEBOOK_PAGE_ACCESS_TOKEN
+#    - INSTAGRAM_BUSINESS_ACCOUNT_ID
+```
+
+### スクリプト一覧
+
+| スクリプト | 用途 | 使用頻度 |
+|-----------|------|----------|
+| `instagram:get-page-token` | Page Access Token（無期限）を取得 | 初回のみ |
+| `instagram:exchange-slt2llt` | 短期→Long-lived変換 | 必要時のみ |
+| `instagram:fetch` | Instagram投稿を取得 | 12時間ごと（自動）|
+| `instagram:refresh-token` | ~~Token更新~~ | **非推奨（機能しない）** |
 
 ## データフロー
 
@@ -45,66 +149,67 @@ graph LR
    - git diffで実際の変更を検出
    - 変更がある場合のみコミット
 
-### トークン更新フロー
+## Page Access Token の運用
 
-1. **定期実行**（月2回：1日と15日）
-   ```
-   現在のトークン → Refresh API → 新トークン（+60日） → GitHub Secrets
-   ```
+### 定期的なリフレッシュは不要
 
-2. **実行環境別の動作**
+Page Access Token は **技術的に無期限（Never Expire）** です。
+User Access Token のように60日で期限切れになることはありません。
 
-   | Runtime | Input | Output |
-   |---------|-------|--------|
-   | GitHub Actions | secrets.FACEBOOK_ACCESS_TOKEN | GitHub Secrets API |
-   | Local Dev | .env file | .env file + backup |
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  なぜリフレッシュ不要か                                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  User Access Token（60日有効）                                  │
+│  └─ 時間経過で自動的に期限切れ → 定期リフレッシュ必要           │
+│     └─ しかし fb_exchange_token では延長不可（前述）            │
+│                                                                 │
+│  Page Access Token（無期限）                                    │
+│  └─ 時間経過では期限切れにならない → リフレッシュ不要           │
+│     └─ 外部要因でのみ無効化される（下記参照）                   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-## Access Tokenの種類と制限
+### Page Access Token が無効化されるケース
 
-### トークンの種類
+以下のケースでのみ無効化されます（いずれも稀）：
 
-| 種類 | 有効期限 | 取得方法 |
-|------|----------|----------|
-| **短期トークン (Short-Lived)** | 約1時間 | Graph API Explorer で生成 |
-| **長期トークン (Long-Lived)** | 約60日 | 短期トークンから変換、または既存のLong-Livedを更新 |
+| ケース | 発生頻度 | 対処法 |
+|--------|----------|--------|
+| Facebookアプリが削除された | 非常に稀 | アプリを再作成し、トークンを再取得 |
+| ページ管理者の権限が剥奪された | 稀 | 権限を持つ管理者で再取得 |
+| ユーザーがアプリ連携を解除した | 稀 | 再度連携してトークンを再取得 |
+| Facebookのポリシー変更 | 非常に稀 | 新しい要件に従って再取得 |
+| アプリのセキュリティ違反検出 | 非常に稀 | Facebookの指示に従う |
 
-### 24時間制限ルール
+### トークン無効化の検知
 
-⚠️ **重要**: 操作によって24時間制限の有無が異なります
+`fetch-instagram-posts.yml` ワークフローが失敗した場合、トークンが無効化された可能性があります。
+GitHub Actions の失敗通知で検知できるため、**別途の監視ワークフローは不要**です。
 
-| 操作 | 24時間制限 | 使用スクリプト |
-|------|-----------|---------------|
-| 短期 → Long-Lived 変換 | **なし**（即座に可能） | `pnpm instagram:exchange-slt2llt` |
-| Long-Lived → Long-Lived 更新 | **あり**（発行後24時間経過が必要） | `pnpm instagram:refresh-token` |
+### 復旧手順
 
-### トークン完全期限切れ時の復旧手順
+トークンが無効化された場合：
 
-トークンが完全に期限切れになった場合（GitHub Actionsが失敗し始めた場合）:
+```bash
+# 1. Graph API Explorerで新しい短期トークンを取得
+#    https://developers.facebook.com/tools/explorer
 
-1. **Facebook Developer Console にアクセス**
-   - Graph API Explorer: https://developers.facebook.com/tools/explorer
-   - Access Token Debugger: https://developers.facebook.com/tools/debug/accesstoken/
+# 2. Long-lived User Access Tokenに変換
+pnpm instagram:exchange-slt2llt
 
-2. **新しい短期トークンを取得**
-   - Graph API Explorer → Meta App選択 → 「Get Token」→「Get User Access Token」
-   - 必要な権限: `instagram_basic`, `pages_show_list`, `pages_read_engagement`
+# 3. Page Access Token（無期限）を再取得
+pnpm instagram:get-page-token
 
-3. **アカウント連携の確認**
-   - Facebookページ管理者の個人アカウントでログイン
-   - Club TRIAXアプリへの再リンクを承認
+# 4. 動作確認
+pnpm instagram:fetch
 
-4. **Long-Lived Tokenに変換**
-   ```bash
-   # .envのFACEBOOK_ACCESS_TOKENに短期トークンを設定後
-   pnpm instagram:exchange-slt2llt
-   ```
-
-5. **GitHub Secretsを更新**
-   - https://github.com/triax/homepage/settings/secrets/actions
-   - `FACEBOOK_ACCESS_TOKEN` を新しいLong-Lived Tokenで更新
-
-6. **動作確認**
-   - GitHub Actionsのワークフローを手動実行して確認
+# 5. GitHub Secretsを更新
+#    - FACEBOOK_PAGE_ACCESS_TOKEN
+#    - INSTAGRAM_BUSINESS_ACCOUNT_ID
+```
 
 ## セキュリティ考慮事項
 
@@ -114,12 +219,7 @@ graph LR
    - 本番: GitHub Secrets（暗号化）
    - 開発: .envファイル（gitignore）
 
-2. **有効期限管理**
-   - 60日の有効期限
-   - 30日ごとの自動更新
-   - 期限警告の実装
-
-3. **アクセス制限**
+2. **アクセス制限**
    - mainブランチのみで実行
    - 環境変数経由でのみアクセス
 
@@ -131,11 +231,13 @@ graph LR
 
 ## エラーハンドリング
 
-### トークン更新失敗時
+### トークン無効化時
 
-1. GitHub Issueの自動作成
-2. ラベル付け（bug, instagram, urgent）
-3. 手動介入手順の記載
+Page Access Tokenが無効化された場合（稀）:
+
+1. エラーログを確認
+2. 上記「Page Access Token 取得フロー」を再実行
+3. GitHub Secretsを更新
 
 ### API制限
 
@@ -145,26 +247,25 @@ graph LR
 
 ## 技術的決定事項
 
+### なぜPage Access Tokenか
+
+1. **無期限**: 定期的な更新作業が不要
+2. **安定性**: fb_exchange_tokenの問題を回避
+3. **シンプル**: 複雑なリフレッシュロジックが不要
+
 ### なぜ12時間ごとか
 
 1. media_urlの有効期限（24-48時間）に対する安全マージン
 2. APIレート制限の回避
 3. 更新頻度とコストのバランス
 
-### なぜ比較ロジックを削除したか
+### refresh-instagram-token.yml について
 
-1. media_urlが頻繁に変わるため
-2. git diffで十分な重複排除が可能
-3. シンプルな実装の維持
-
-### libsodium-wrappers の採用理由
-
-1. GitHub Secrets APIの要求仕様
-2. セキュリティの専門性
-3. 実績のあるライブラリ
+このワークフローは**現在機能していません**（fb_exchange_tokenの制限により）。
+Page Access Token採用後は、このワークフローは不要となり、将来的に削除予定です。
 
 ## 関連ドキュメント
 
 - [Instagram Secrets設定手順](../04-operations/instagram-secrets-setup.md)
-- [Instagram Token更新手順](../04-operations/instagram-token-refresh.md)
 - [トラブルシューティング](../05-troubleshooting/instagram-issues.md)
+- `.env.example` - 環境変数の詳細な説明
