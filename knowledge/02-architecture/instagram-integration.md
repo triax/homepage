@@ -59,6 +59,53 @@ graph LR
    | GitHub Actions | secrets.FACEBOOK_ACCESS_TOKEN | GitHub Secrets API |
    | Local Dev | .env file | .env file + backup |
 
+## Access Tokenの種類と制限
+
+### トークンの種類
+
+| 種類 | 有効期限 | 取得方法 |
+|------|----------|----------|
+| **短期トークン (Short-Lived)** | 約1時間 | Graph API Explorer で生成 |
+| **長期トークン (Long-Lived)** | 約60日 | 短期トークンから変換、または既存のLong-Livedを更新 |
+
+### 24時間制限ルール
+
+⚠️ **重要**: 操作によって24時間制限の有無が異なります
+
+| 操作 | 24時間制限 | 使用スクリプト |
+|------|-----------|---------------|
+| 短期 → Long-Lived 変換 | **なし**（即座に可能） | `pnpm instagram:exchange-slt2llt` |
+| Long-Lived → Long-Lived 更新 | **あり**（発行後24時間経過が必要） | `pnpm instagram:refresh-token` |
+
+### トークン完全期限切れ時の復旧手順
+
+トークンが完全に期限切れになった場合（GitHub Actionsが失敗し始めた場合）:
+
+1. **Facebook Developer Console にアクセス**
+   - Graph API Explorer: https://developers.facebook.com/tools/explorer
+   - Access Token Debugger: https://developers.facebook.com/tools/debug/accesstoken/
+
+2. **新しい短期トークンを取得**
+   - Graph API Explorer → Meta App選択 → 「Get Token」→「Get User Access Token」
+   - 必要な権限: `instagram_basic`, `pages_show_list`, `pages_read_engagement`
+
+3. **アカウント連携の確認**
+   - Facebookページ管理者の個人アカウントでログイン
+   - Club TRIAXアプリへの再リンクを承認
+
+4. **Long-Lived Tokenに変換**
+   ```bash
+   # .envのFACEBOOK_ACCESS_TOKENに短期トークンを設定後
+   pnpm instagram:exchange-slt2llt
+   ```
+
+5. **GitHub Secretsを更新**
+   - https://github.com/triax/homepage/settings/secrets/actions
+   - `FACEBOOK_ACCESS_TOKEN` を新しいLong-Lived Tokenで更新
+
+6. **動作確認**
+   - GitHub Actionsのワークフローを手動実行して確認
+
 ## セキュリティ考慮事項
 
 ### トークン管理

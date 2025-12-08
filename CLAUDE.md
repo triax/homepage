@@ -248,11 +248,20 @@ Instagram Graph APIを使用して最新投稿を自動取得・表示する機�
 ### 管理コマンド
 ```bash
 # Instagram投稿を手動取得
-npm run instagram:fetch
+pnpm instagram:fetch
 
-# Access Tokenを手動更新（24時間経過後のみ可能）
-npm run instagram:refresh-token
+# 短期トークン → Long-Livedトークンに変換（24時間制限なし）
+pnpm instagram:exchange-slt2llt
+
+# Long-Livedトークンを更新（発行後24時間経過が必要）
+pnpm instagram:refresh-token
 ```
+
+### トークンの種類と制限
+| 操作 | 24時間制限 | スクリプト |
+|------|-----------|-----------|
+| 短期→Long-Lived変換 | なし | `instagram:exchange-slt2llt` |
+| Long-Lived→Long-Lived更新 | あり | `instagram:refresh-token` |
 
 ### 必要な環境変数 / Secrets
 - **ローカル開発**: `.env`ファイル
