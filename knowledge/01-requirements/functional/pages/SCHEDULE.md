@@ -1,28 +1,64 @@
 # SCHEDULEセクション仕様書
 
 ## 概要
-Club TRIAXの試合スケジュールを表示するセクション。2025年シーズンの全試合情報を一覧形式で提供し、各試合へのアクセス情報（地図、カレンダー登録、チケット購入）を統合的に提供する。
+Club TRIAXの試合スケジュールを表示するセクション。JSONファイルから試合データを読み込み、JavaScriptで動的にHTMLを生成して表示する。各試合へのアクセス情報（地図、カレンダー登録、チケット購入、試合スタッツ）を統合的に提供する。
 
 ## データソース
-- **ファイル**: `/SCHEDULE_2025.md`
-- **形式**: Markdownテーブル形式
-- **更新方法**: 手動でMarkdownファイルを編集
+- **ファイル**: `docs/assets/games/2025.json`
+- **形式**: JSON
+- **スキーマ**: `docs/assets/games/schema.json`
+- **更新方法**: JSONファイルを直接編集
 
 ## データ構造
 
-### SCHEDULE_2025.md
-```markdown
-| 日付 | 対戦相手 | キックオフ時間 | 試合会場 |
-|-----|---------|--------------|---------|
-| 9月7日（日） | ペンタオーシャン パイレーツ | 15:15 | 富士通スタジアム川崎 |
+### 2025.json
+```json
+{
+  "year": 2025,
+  "preseason": {
+    "status": "closed",
+    "ticket": "https://...",
+    "game": null
+  },
+  "regularseason": {
+    "status": "open",
+    "ticket": "https://sports.banklives.com/events/clubtriax/155",
+    "games": [
+      {
+        "date": "2025-09-07",
+        "dayOfWeek": "日",
+        "opponent": "ペンタオーシャン パイレーツ",
+        "kickoff": "15:15",
+        "endTime": "17:45",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": null,
+        "result": null,
+        "stats": null
+      }
+    ]
+  }
+}
 ```
 
 ### 必要な情報
-- **日付**: 月日と曜日（例: 9月7日（日））
+- **日付**: ISO形式（例: `2025-09-07`）
+- **曜日**: 漢字1文字（例: `日`）
+- **祝日**: 任意（例: `祝`）
 - **対戦相手**: チーム名
-- **キックオフ時間**: 24時間表記（例: 15:15）
-- **試合会場**: スタジアム名
-- **チケットリンク**: 全試合共通 `https://sports.banklives.com/events/clubtriax`
+- **キックオフ時間**: 24時間表記（例: `15:15`）
+- **終了時間**: キックオフから約2.5時間後（例: `17:45`）
+- **試合会場**: 会場名とGoogle Maps検索用クエリ
+- **ホーム/アウェイ**: `true`=ホーム, `false`=アウェイ, `null`=未設定
+- **試合結果**: 終了前は`null`、終了後はスコア情報
+- **スタッツ**: 終了前は`null`、終了後はURL情報
+
+### シーズンステータス
+- `closed`: チケット販売前（チケットボタン非表示）
+- `open`: チケット販売中（チケットボタン表示）
+- `finished`: シーズン終了
 
 ## UI/UX要件
 
@@ -30,17 +66,18 @@ Club TRIAXの試合スケジュールを表示するセクション。2025年シ
 1. **モバイルファースト**: スマートフォンでの閲覧を最優先
 2. **情報の階層化**: 重要な情報（日時、対戦相手）を目立たせる
 3. **アクション重視**: 各試合への具体的なアクション（地図、カレンダー、チケット）を提供
+4. **動的な情報表示**: 試合前は日程情報、試合後は結果を自動切替
 
 ### レイアウト
 
-#### モバイル版（〜768px）
+#### モバイル版（〜640px）
 - 1列表示
 - カード型デザイン（スリムな高さ）
 - 中央揃えのテキスト
 - 横幅いっぱいのカード
 
-#### PC版（768px〜）
-- 1列表示（最大幅900px、中央配置）
+#### PC版（640px〜）
+- 1列表示（最大幅48rem、中央配置）
 - 左揃えのテキスト
 - 日時の横位置を固定幅で統一
 
@@ -48,50 +85,80 @@ Club TRIAXの試合スケジュールを表示するセクション。2025年シ
 
 #### 構成要素
 1. **日時エリア**（左側）
-   - 日付（1行目）
+   - 日付（1行目）: `月/日(曜日祝)`形式
    - キックオフ時間（2行目）
    - PC版: 固定幅（`sm:w-40`）で横位置統一
 
 2. **試合情報エリア**（中央）
-   - 対戦相手（太字、大きめのフォント）
+   - 試合前: `vs 対戦相手` 表示
+   - 試合後: スコア表示（`21 - 14 WIN vs 対戦相手`）
    - 試合会場（小さめのフォント、グレー）
-   - モバイル: 中央揃え（`text-center`）
-   - PC: 左揃え（`sm:text-left`）
 
 3. **アクションボタン**（右側）
    - アイコンのみ表示（テキストなし）
-   - 3つのボタンを横並び
-   - 順序: 地図 → カレンダー → チケット
+   - 条件付き表示:
+     - 地図: 常時表示
+     - カレンダー: 常時表示
+     - スタッツ: 試合終了後のみ（青色）
+     - チケット: 試合前かつstatus=openの場合のみ（赤色）
 
 ### アクションボタン仕様
 
 #### 共通仕様
-- **サイズ**: `w-10 h-10`（ボタン）、`w-6 h-6`（アイコン）
-- **スタイル**: 角丸（`rounded-lg`）、ホバー時に色変化
+- **スタイル**: 丸型（`rounded-full`）、ホバー時に色変化
 - **レスポンシブ**: モバイルでも同じサイズ
 
 #### 各ボタンの詳細
 
 1. **地図ボタン**
    - アイコン: Heroicons `map-pin`
-   - 色: グレー（`text-gray-600`、ホバー時 `bg-gray-100`）
+   - 色: グレー（`bg-gray-100`、ホバー時 `bg-gray-200`）
    - 機能: Google Mapsで会場を検索
 
 2. **カレンダーボタン**
    - アイコン: Heroicons `calendar-days`
-   - 色: グレー（`text-gray-600`、ホバー時 `bg-gray-100`）
+   - 色: グレー（`bg-gray-100`、ホバー時 `bg-gray-200`）
    - 機能: Google カレンダーに追加
 
-3. **チケットボタン**
+3. **スタッツボタン**（試合終了後のみ）
+   - アイコン: バーチャートアイコン
+   - 色: 青（`bg-blue-600`、ホバー時 `bg-blue-700`）
+   - 機能: スタッツページへ遷移
+
+4. **チケットボタン**（試合前・販売中のみ）
    - アイコン: Heroicons `ticket`
-   - 色: プライマリカラー（`text-primary`、ホバー時 `bg-primary/10`）
+   - 色: 赤（`bg-red-600`、ホバー時 `bg-red-700`）
    - 機能: チケット購入サイトへ遷移
 
 ## 技術実装
 
 ### JavaScript関数
 
-#### openGoogleMaps(venue)
+#### schedule-loader.js
+```javascript
+// メインローダー
+async function loadSchedule() {
+    const response = await fetch('./assets/games/2025.json');
+    const data = await response.json();
+    // 動的にHTMLを生成
+}
+
+// 試合カード生成
+function createGameCard(game, ticketUrl, isOpen) { ... }
+
+// 試合結果表示
+function createResultDisplay(game) { ... }
+
+// 各種ボタン生成
+function createMapButton(mapsQuery) { ... }
+function createCalendarButton(game) { ... }
+function createTicketButton(ticketUrl) { ... }
+function createStatsButton(statsUrl) { ... }
+```
+
+#### index.js内の連携関数
+
+##### openGoogleMaps(venue)
 ```javascript
 function openGoogleMaps(venue) {
     const venueMap = {
@@ -103,20 +170,19 @@ function openGoogleMaps(venue) {
 }
 ```
 
-#### addToGoogleCalendar(date, time, opponent, venue)
+##### addToGoogleCalendar(date, time, opponent, venue)
 ```javascript
 function addToGoogleCalendar(date, time, opponent, venue) {
-    // 日付をISO形式に変換
-    const year = new Date().getFullYear();
-    const dateStr = convertToISODate(date, year);
+    const startDateTime = new Date(`${date}T${time}:00+09:00`);
+    const endDateTime = new Date(startDateTime.getTime() + 3 * 60 * 60 * 1000);
 
-    // Google Calendar URLを生成
     const params = new URLSearchParams({
         action: 'TEMPLATE',
         text: `Club TRIAX vs ${opponent}`,
-        dates: `${startDateTime}/${endDateTime}`,
+        dates: `${formatDateTime(startDateTime)}/${formatDateTime(endDateTime)}`,
         location: venue,
-        details: `Club TRIAXの試合\\n対戦相手: ${opponent}\\n会場: ${venue}`
+        details: `...`,
+        ctz: 'Asia/Tokyo'
     });
 
     window.open(`https://calendar.google.com/calendar/render?${params}`, '_blank');
@@ -127,7 +193,7 @@ function addToGoogleCalendar(date, time, opponent, venue) {
 
 #### カードコンテナ
 ```html
-<div class="bg-white rounded-lg shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow">
+<div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow fade-in">
 ```
 
 #### レスポンシブ対応
@@ -144,24 +210,49 @@ function addToGoogleCalendar(date, time, opponent, venue) {
 
 ## パフォーマンス考慮事項
 
-1. **遅延読み込み**: スケジュールセクションは初期表示に含める（重要情報のため）
+1. **動的読み込み**: JSONからの非同期データ取得
 2. **アイコン**: インラインSVGで表示（追加リクエスト不要）
-3. **JavaScript**: 必要最小限の処理のみ実装
+3. **JavaScript**: `defer`属性で遅延実行
 
 ## 運用・更新
 
 ### 更新フロー
-1. `SCHEDULE_2025.md`を編集
-2. `docs/index.html`のSCHEDULEセクションを手動更新
+1. `docs/assets/games/2025.json`を編集
+2. ローカルで動作確認
 3. 変更をコミット・プッシュ
 4. GitHub Pagesで自動デプロイ
 
+### 試合結果の記録
+試合終了後、`result`と`stats`を更新:
+```json
+{
+  "result": {
+    "score": { "team": 21, "opponent": 14 },
+    "quarters": {
+      "Q1": { "team": 7, "opponent": 0 },
+      "Q2": { "team": 0, "opponent": 7 },
+      "Q3": { "team": 7, "opponent": 0 },
+      "Q4": { "team": 7, "opponent": 7 },
+      "OT": null
+    },
+    "win": true
+  },
+  "stats": { "url": "https://..." }
+}
+```
+
 ### 注意事項
 - 試合日程の変更は迅速に反映する
-- チケットリンクは全試合共通URLを使用
-- 新しいスタジアムが追加された場合は、`openGoogleMaps`関数の`venueMap`を更新
+- statusを`open`に変更するとチケットボタンが表示される
+- 新しいスタジアムが追加された場合は、`venue.mapsQuery`で検索対応可能
 
 ## 関連ファイル
-- `/SCHEDULE_2025.md`: スケジュールデータ
-- `/docs/index.html`: SCHEDULEセクションの実装
-- `/docs/index.js`: Google Maps/Calendar連携機能
+- `docs/assets/games/2025.json`: スケジュールデータ
+- `docs/assets/games/schema.json`: JSONスキーマ
+- `docs/assets/games/schedule-loader.js`: 動的ローダー
+- `docs/index.html`: SCHEDULEセクションのコンテナ
+- `docs/index.js`: Google Maps/Calendar連携機能
+
+## 更新履歴
+- 2025-08-22: 初版作成（静的HTML方式）
+- 2025-12-28: JSONベースの動的生成方式に刷新

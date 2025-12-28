@@ -1,0 +1,100 @@
+{
+  "year": 2025,
+  "preseason": {
+    "status": "closed",
+    "ticket": "https://sports.banklives.com/events/clubtriax/155",
+    "game": null
+  },
+  "regularseason": {
+    "status": "closed",
+    "ticket": "https://sports.banklives.com/events/clubtriax/155",
+    "games": [
+      {
+        "date": "2025-09-07",
+        "dayOfWeek": "日",
+        "opponent": "ペンタオーシャン パイレーツ",
+        "kickoff": "15:15",
+        "endTime": "17:45",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": false,
+        "result": null,
+        "stats": null
+      },
+      {
+        "date": "2025-09-23",
+        "dayOfWeek": "火",
+        "holiday": "祝",
+        "opponent": "胎内 ディアーズ",
+        "kickoff": "10:30",
+        "endTime": "13:00",
+        "venue": {
+          "name": "アミノバイタルフィールド",
+          "mapsQuery": "アミノバイタルフィールド"
+        },
+        "home": false,
+        "result": null,
+        "stats": null
+      },
+      {
+        "date": "2025-10-04",
+        "dayOfWeek": "土",
+        "opponent": "Bulls フットボールクラブ",
+        "kickoff": "16:00",
+        "endTime": "18:30",
+        "venue": {
+          "name": "アミノバイタルフィールド",
+          "mapsQuery": "アミノバイタルフィールド"
+        },
+        "home": true,
+        "result": null,
+        "stats": null
+      },
+      {
+        "date": "2025-10-18",
+        "dayOfWeek": "土",
+        "opponent": "品川CC ブルザイズ",
+        "kickoff": "16:15",
+        "endTime": "18:45",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": true,
+        "result": null,
+        "stats": null
+      },
+      {
+        "date": "2025-11-03",
+        "dayOfWeek": "月",
+        "holiday": "祝",
+        "opponent": "電通 キャタピラーズ",
+        "kickoff": "16:00",
+        "endTime": "18:30",
+        "venue": {
+          "name": "アミノバイタルフィールド",
+          "mapsQuery": "アミノバイタルフィールド"
+        },
+        "home": false,
+        "result": null,
+        "stats": null
+      },
+      {
+        "date": "2025-11-30",
+        "dayOfWeek": "日",
+        "opponent": "ブルーサンダース",
+        "kickoff": "13:30",
+        "endTime": "16:00",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": true,
+        "result": null,
+        "stats": null
+      }
+    ]
+  }
+}

@@ -214,24 +214,74 @@ docs/assets/sponsors/
 
 ## 試合スケジュール管理
 
-試合スケジュール情報の管理と表示機能。
+試合スケジュール情報の管理と表示機能。JSONファイルで管理し、JavaScriptで動的に表示。
 
-### データ管理
-- **ソースファイル**: `SCHEDULE_2025.md` - Markdownテーブル形式でスケジュールを管理
-- **表示先**: `docs/index.html` の SCHEDULEセクション
-- **更新方法**: Markdownファイルを編集後、HTMLを手動更新
+### ディレクトリ構造
+```
+docs/assets/games/
+├── 2025.json           # 2025年シーズンの試合データ
+├── schema.json         # JSONスキーマ（構造のドキュメント）
+└── schedule-loader.js  # 動的ローダースクリプト
+```
+
+### データ構造（2025.json）
+```json
+{
+  "year": 2025,
+  "preseason": { "status": "closed", "ticket": "...", "game": null },
+  "regularseason": {
+    "status": "open",  // closed=非公開, open=公開中, finished=終了
+    "ticket": "チケットURL",
+    "games": [
+      {
+        "date": "2025-09-07",
+        "dayOfWeek": "日",
+        "holiday": "祝",           // 祝日の場合のみ
+        "opponent": "対戦相手",
+        "kickoff": "15:15",
+        "endTime": "17:45",        // Google Calendar用（kickoff+2.5h）
+        "venue": { "name": "会場名", "mapsQuery": "検索クエリ" },
+        "home": null,              // true=ホーム, false=アウェイ, null=未設定
+        "result": null,            // 試合結果（未決着ならnull）
+        "stats": null              // スタッツURL（試合前はnull）
+      }
+    ]
+  }
+}
+```
+
+### 試合結果の記録
+試合終了後、`result`と`stats`を更新：
+```json
+{
+  "result": {
+    "score": { "team": 21, "opponent": 14 },
+    "quarters": {
+      "Q1": { "team": 7, "opponent": 0 },
+      "Q2": { "team": 0, "opponent": 7 },
+      "Q3": { "team": 7, "opponent": 0 },
+      "Q4": { "team": 7, "opponent": 7 },
+      "OT": null
+    },
+    "win": true
+  },
+  "stats": { "url": "https://example.com/stats/..." }
+}
+```
 
 ### 機能
 - **Google Maps連携**: 会場への地図リンク
 - **Google Calendar連携**: 試合予定をカレンダーに追加
-- **チケット購入**: 外部チケットサイトへのリンク
+- **チケット購入**: status="open"の場合のみ表示
+- **試合結果表示**: resultがある場合はスコアと勝敗を表示
+- **スタッツリンク**: stats.urlがある場合はボタン表示
 
 ### 更新手順
-1. `SCHEDULE_2025.md` を編集
-2. `docs/index.html` のSCHEDULEセクションを更新
-3. 動作確認後、コミット・プッシュ
+1. `docs/assets/games/2025.json` を編集
+2. 動作確認後、コミット・プッシュ（HTMLの編集は不要）
 
 詳細は以下のドキュメントを参照：
+- `docs/assets/games/schema.json` - JSONスキーマ定義
 - `knowledge/01-requirements/functional/pages/SCHEDULE.md` - 機能仕様
 - `knowledge/02-architecture/schedule-integration.md` - 技術仕様
 - `knowledge/04-operations/schedule-management.md` - 運用手順

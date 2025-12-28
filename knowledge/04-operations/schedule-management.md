@@ -2,6 +2,15 @@
 
 ## 概要
 Club TRIAXの試合スケジュール情報の管理と更新に関する運用手順書。
+JSONファイルで管理し、JavaScriptで動的に表示する。
+
+## ファイル構成
+```
+docs/assets/games/
+├── 2025.json           # 2025年シーズンの試合データ
+├── schema.json         # JSONスキーマ（構造のドキュメント）
+└── schedule-loader.js  # 動的ローダースクリプト
+```
 
 ## 更新タイミング
 
@@ -13,78 +22,89 @@ Club TRIAXの試合スケジュール情報の管理と更新に関する運用�
 - **日程変更**: リーグからの通知後、速やかに更新
 - **会場変更**: 確定次第即座に反映
 - **キックオフ時間変更**: 変更決定後24時間以内に更新
+- **試合結果**: 試合終了後にresultとstatsを更新
 
 ## 更新手順
 
 ### 1. スケジュールデータの更新
 
-#### Step 1: SCHEDULE_2025.mdを編集
+#### JSONファイルを編集
 ```bash
 # ファイルを開く
-code SCHEDULE_2025.md
+code docs/assets/games/2025.json
 ```
 
-#### Step 2: データ形式に従って記入
-```markdown
-| 日付 | 対戦相手 | キックオフ時間 | 試合会場 |
-|-----|---------|--------------|---------|
-| 9月7日（日） | ペンタオーシャン パイレーツ | 15:15 | 富士通スタジアム川崎 |
+#### データ形式
+```json
+{
+  "year": 2025,
+  "regularseason": {
+    "status": "open",
+    "ticket": "https://sports.banklives.com/events/clubtriax/155",
+    "games": [
+      {
+        "date": "2025-09-07",
+        "dayOfWeek": "日",
+        "opponent": "ペンタオーシャン パイレーツ",
+        "kickoff": "15:15",
+        "endTime": "17:45",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": null,
+        "result": null,
+        "stats": null
+      }
+    ]
+  }
+}
 ```
 
 **記入ルール**:
-- 日付: `月日（曜日）`形式
+- 日付: ISO形式 `YYYY-MM-DD`
 - キックオフ時間: 24時間表記 `HH:MM`
+- endTime: キックオフから2.5時間後
 - 会場名: 正式名称を使用
+- holiday: 祝日の場合のみ追加（例: `"holiday": "祝"`）
 
-### 2. HTMLファイルの更新
+### 2. 試合結果の記録
 
-#### Step 1: index.htmlのSCHEDULEセクションを特定
-```bash
-# SCHEDULEセクションを検索
-grep -n "id=\"schedule\"" docs/index.html
+試合終了後、`result`と`stats`を更新:
+
+```json
+{
+  "result": {
+    "score": { "team": 21, "opponent": 14 },
+    "quarters": {
+      "Q1": { "team": 7, "opponent": 0 },
+      "Q2": { "team": 0, "opponent": 7 },
+      "Q3": { "team": 7, "opponent": 0 },
+      "Q4": { "team": 7, "opponent": 7 },
+      "OT": null
+    },
+    "win": true
+  },
+  "stats": { "url": "https://example.com/stats/2025-09-07" }
+}
 ```
 
-#### Step 2: 各試合のカードを更新
+### 3. シーズンステータスの管理
 
-**テンプレート**:
-```html
-<!-- 試合カード -->
-<div class="bg-white rounded-lg shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <!-- 日時 -->
-        <div class="text-center sm:text-left sm:w-40">
-            <div class="text-lg font-bold text-gray-800">[月日（曜日）]</div>
-            <div class="text-2xl font-bold text-primary">[キックオフ時間]</div>
-        </div>
+`status`フィールドの値:
+- `"closed"`: チケット販売前（チケットボタン非表示）
+- `"open"`: チケット販売中（チケットボタン表示）
+- `"finished"`: シーズン終了
 
-        <!-- 試合情報 -->
-        <div class="flex-grow text-center sm:text-left">
-            <div class="text-xl font-bold text-gray-900 mb-1">[対戦相手]</div>
-            <div class="text-sm text-gray-600">[試合会場]</div>
-        </div>
-
-        <!-- アクションボタン -->
-        <div class="flex justify-center sm:justify-end gap-2">
-            <!-- 地図ボタン -->
-            <button onclick="openGoogleMaps('[試合会場]')" ...>
-            <!-- カレンダーボタン -->
-            <button onclick="addToGoogleCalendar('[日付]', '[時間]', '[対戦相手]', '[会場]')" ...>
-            <!-- チケットボタン -->
-            <a href="https://sports.banklives.com/events/clubtriax" ...>
-        </div>
-    </div>
-</div>
-```
-
-### 3. 動作確認
+### 4. 動作確認
 
 #### ローカル確認
 ```bash
 # HTTPサーバーを起動
-npx http-server ./docs -p 3000
+npx http-server -p 8888
 
 # ブラウザで確認
-open http://localhost:3000
+open http://localhost:8888/docs/index.html#schedule
 ```
 
 #### 確認項目チェックリスト
@@ -93,11 +113,11 @@ open http://localhost:3000
 - [ ] 会場名が正しい
 - [ ] 地図ボタンが正しい場所を開く
 - [ ] カレンダー登録が正しく動作する
-- [ ] チケットリンクが機能する
+- [ ] チケットボタンの表示/非表示が正しい
+- [ ] 試合結果（ある場合）が正しく表示される
 - [ ] モバイル表示が適切
-- [ ] PC表示で横位置が揃っている
 
-### 4. コミットとデプロイ
+### 5. コミットとデプロイ
 
 ```bash
 # 変更を確認
@@ -105,7 +125,7 @@ git status
 git diff
 
 # ステージング
-git add SCHEDULE_2025.md docs/index.html
+git add docs/assets/games/2025.json
 
 # コミット（日本語メッセージ）
 git commit -m "試合スケジュールを更新: [更新内容の要約]"
@@ -118,45 +138,42 @@ git push origin main
 
 新しい試合会場が追加された場合:
 
-### 1. Google Maps URLの確認
-1. Google Mapsで会場を検索
-2. 正確な場所を確認
-3. URLをコピー
-
-### 2. JavaScript関数の更新
-`docs/index.js`の`openGoogleMaps`関数を更新:
-
-```javascript
-const venueMap = {
-    '富士通スタジアム川崎': 'https://www.google.com/maps/search/富士通スタジアム川崎',
-    'アミノバイタルフィールド': 'https://www.google.com/maps/search/アミノバイタルフィールド',
-    // 新しい会場を追加
-    '新会場名': 'https://www.google.com/maps/search/新会場名'
-};
+### 1. JSONに追加
+```json
+{
+  "venue": {
+    "name": "新会場名",
+    "mapsQuery": "新会場名"  // Google Maps検索用
+  }
+}
 ```
+
+### 2. 動作確認
+地図ボタンをクリックして正しい場所が表示されることを確認
 
 ## トラブルシューティング
 
 ### よくある問題と対処法
 
-#### 1. カレンダー登録で時間がずれる
+#### 1. スケジュールが表示されない
+**原因**: JSONの構文エラー
+**対処**: JSONの妥当性を確認
+```bash
+# JSONの構文チェック
+cat docs/assets/games/2025.json | python3 -m json.tool
+```
+
+#### 2. カレンダー登録で時間がずれる
 **原因**: タイムゾーンの問題
-**対処**: `addToGoogleCalendar`関数でJSTを明示的に指定
+**対処**: `addToGoogleCalendar`関数でJSTを明示的に指定（実装済み）
 
-#### 2. 地図が開かない
-**原因**: 会場名の不一致
-**対処**: `venueMap`に正確なマッピングを追加
+#### 3. 地図が開かない
+**原因**: mapsQueryの不備
+**対処**: `venue.mapsQuery`に正確な検索クエリを設定
 
-#### 3. レイアウトが崩れる
-**原因**: 長いチーム名や会場名
-**対処**:
-- 必要に応じて改行を入れる
-- フォントサイズを調整
-- 省略表記を検討
-
-#### 4. モバイルで表示が切れる
-**原因**: 固定幅の設定
-**対処**: レスポンシブクラスを確認（`sm:`プレフィックス）
+#### 4. チケットボタンが表示されない
+**原因**: statusが"open"以外
+**対処**: `regularseason.status`を`"open"`に変更
 
 ## ベストプラクティス
 
@@ -181,32 +198,27 @@ const venueMap = {
 ## 年次更新作業
 
 ### シーズン終了後
-1. 現在のスケジュールファイルをアーカイブ
-   ```bash
-   cp SCHEDULE_2025.md archive/SCHEDULE_2025.md
-   ```
-
+1. 現在のJSONファイルをそのまま保持（アーカイブとして）
 2. 新シーズンのファイル作成
    ```bash
-   cp SCHEDULE_template.md SCHEDULE_2026.md
+   cp docs/assets/games/2025.json docs/assets/games/2026.json
    ```
-
-3. HTMLの年度表記更新
+3. schedule-loader.jsの読み込み年度を更新（必要な場合）
 4. 関連ドキュメントの更新
 
 ### シーズン開始前
 1. 全試合スケジュールの入力
 2. 新会場の追加確認
 3. チケット販売URLの更新確認
-4. 全機能のテスト
+4. statusを"open"に変更
+5. 全機能のテスト
 
 ## 緊急時対応
 
 ### 試合中止・延期の場合
-1. スケジュールに「【延期】」「【中止】」を追記
-2. 背景色を変更して視覚的に区別
-3. SNSで即座に告知
-4. 詳細情報へのリンクを追加
+1. 該当試合のデータを更新または削除
+2. SNSで即座に告知
+3. 詳細情報へのリンクを追加（必要に応じて）
 
 ### システム障害時
 1. GitHub Pagesのステータス確認
@@ -214,10 +226,11 @@ const venueMap = {
 3. 代替告知手段（SNS）の活用
 
 ## 関連ドキュメント
+- [schema.json](../../docs/assets/games/schema.json) - JSONスキーマ定義
 - [SCHEDULE.md](../01-requirements/functional/pages/SCHEDULE.md) - 機能仕様
 - [schedule-integration.md](../02-architecture/schedule-integration.md) - 技術仕様
 - [CLAUDE.md](../../CLAUDE.md) - プロジェクト全体のガイドライン
 
 ## 更新履歴
 - 2025-08-22: 初版作成
-- 2025-08-22: スケジュール管理機能実装に伴い作成
+- 2025-12-28: JSONベースの動的生成方式に更新

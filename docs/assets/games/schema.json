@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Season Games",
+  "description": "シーズンの試合情報スキーマ",
+  "type": "object",
+  "properties": {
+    "year": {
+      "type": "integer",
+      "description": "シーズン年"
+    },
+    "preseason": {
+      "$ref": "#/definitions/seasonBlock",
+      "description": "プレシーズン"
+    },
+    "regularseason": {
+      "$ref": "#/definitions/seasonBlock",
+      "description": "レギュラーシーズン"
+    },
+    "postseason": {
+      "$ref": "#/definitions/seasonBlock",
+      "description": "ポストシーズン"
+    }
+  },
+  "required": ["year"],
+  "definitions": {
+    "seasonBlock": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["closed", "open", "finished"],
+          "description": "closed=未公開, open=公開中, finished=終了"
+        },
+        "ticket": {
+          "type": ["string", "null"],
+          "description": "チケット購入URL"
+        },
+        "game": {
+          "$ref": "#/definitions/game",
+          "description": "単一試合（preseasonなど）"
+        },
+        "games": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/game" },
+          "description": "複数試合"
+        }
+      },
+      "required": ["status"]
+    },
+    "game": {
+      "type": ["object", "null"],
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "試合日 (YYYY-MM-DD)"
+        },
+        "dayOfWeek": {
+          "type": "string",
+          "description": "曜日"
+        },
+        "holiday": {
+          "type": "string",
+          "description": "祝日の場合のみ（例: 祝）"
+        },
+        "opponent": {
+          "type": "string",
+          "description": "対戦相手チーム名"
+        },
+        "kickoff": {
+          "type": "string",
+          "pattern": "^[0-9]{2}:[0-9]{2}$",
+          "description": "キックオフ時刻 (HH:MM)"
+        },
+        "endTime": {
+          "type": "string",
+          "pattern": "^[0-9]{2}:[0-9]{2}$",
+          "description": "終了予定時刻 (HH:MM) - kickoffから約2.5時間後"
+        },
+        "venue": {
+          "$ref": "#/definitions/venue"
+        },
+        "home": {
+          "type": "boolean",
+          "description": "true=ホーム, false=アウェイ"
+        },
+        "result": {
+          "$ref": "#/definitions/result"
+        },
+        "stats": {
+          "type": ["object", "null"],
+          "description": "試合スタッツ（試合前はnull）",
+          "properties": {
+            "url": { "type": "string", "format": "uri", "description": "スタッツページURL" }
+          }
+        }
+      },
+      "required": ["date", "dayOfWeek", "opponent", "kickoff", "endTime", "venue"]
+    },
+    "venue": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "会場名"
+        },
+        "mapsQuery": {
+          "type": "string",
+          "description": "Google Maps検索クエリ"
+        }
+      },
+      "required": ["name", "mapsQuery"]
+    },
+    "result": {
+      "type": ["object", "null"],
+      "description": "null=未決着",
+      "properties": {
+        "score": {
+          "type": "object",
+          "properties": {
+            "team": { "type": "integer", "description": "自チーム最終得点" },
+            "opponent": { "type": "integer", "description": "相手チーム最終得点" }
+          },
+          "required": ["team", "opponent"]
+        },
+        "quarters": {
+          "type": "object",
+          "properties": {
+            "Q1": { "$ref": "#/definitions/quarterScore" },
+            "Q2": { "$ref": "#/definitions/quarterScore" },
+            "Q3": { "$ref": "#/definitions/quarterScore" },
+            "Q4": { "$ref": "#/definitions/quarterScore" },
+            "OT": { "$ref": "#/definitions/quarterScore", "description": "延長戦（なければnull）" }
+          },
+          "required": ["Q1", "Q2", "Q3", "Q4"]
+        },
+        "win": {
+          "type": ["boolean", "null"],
+          "description": "true=勝ち, false=負け, null=引き分け"
+        }
+      },
+      "required": ["score", "quarters", "win"]
+    },
+    "quarterScore": {
+      "type": ["object", "null"],
+      "properties": {
+        "team": { "type": "integer" },
+        "opponent": { "type": "integer" }
+      },
+      "required": ["team", "opponent"]
+    }
+  }
+}
