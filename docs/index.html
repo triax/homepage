@@ -428,8 +428,76 @@
             </div>
         </div>
     </div>
+
+    <!-- メンバー募集ダイアログ -->
+    <div id="recruit-dialog" class="fixed inset-0 z-50 hidden">
+        <!-- 暗いオーバーレイ -->
+        <div class="absolute inset-0 bg-black bg-opacity-[0.8]"></div>
+
+        <!-- 中央コンテンツ -->
+        <div class="relative flex items-center justify-center min-h-screen p-8 h-full">
+            <div class="relative max-w-4xl w-full h-[90%] rounded-2xl overflow-hidden shadow-2xl">
+
+                <!-- 背景画像 -->
+                <div class="absolute inset-0">
+                    <img src="assets/recruit_banner/bg_raw.png"
+                         class="w-full h-full object-cover blur-[1px] brightness-[0.4]"
+                         alt="">
+                </div>
+
+                <!-- コンテンツ（前面） -->
+                <div class="relative p-4 flex items-center justify-center h-full shadow-xl">
+                    <div class="text-center text-white mx-auto">
+                        <h2 class="text-4xl md:text-6xl  font-bold mb-2">メンバー募集中！!</h2>
+                        <p class="text-gray-200 mb-6 text-shadow-lg/30 text-left text-sm leading-relaxed">
+                            TRIAXは「LIFE・WORK・PLAY」という理念を掲げています。<br/>
+                            私生活と仕事、そしてアメフト。この3つの相乗効果で、<br/>
+                            一人ひとりの人生をより豊かにしていくことを目指しているチームです。<br/>
+                            <br/>
+                            また、データ分析やAIなどのデジタル技術を積極的に取り入れ、<br/>
+                            選手のパフォーマンス向上だけでなく、<br/>
+                            観てくださる方にも新しいフットボールの楽しみ方を届けたいと考えています。<br/>
+                            <br/>
+                            そして何より、このチームは本当に「おもろい」ひとたちが集まっています。<br/>
+                            個性豊かなメンバーが揃っていて、毎回の練習が刺激的です。<br/>
+                            <br/>
+                            経験の有無は問いません。<br/>
+                            ぜひ一度、僕たちのチームを見に来てください！
+                        </p>
+
+                        <!-- ボタン -->
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeXfWv8uXq9uY-VpQgGOSj20gdPpnOBe_76G_42Z4D5gvULHA/viewform?usp=header"
+                        target="_blank"
+                        class="block w-full bg-red-600 text-white py-3 rounded-lg mb-3 hover:bg-red-700 font-semibold transition-colors">
+                            問い合わせへ
+                        </a>
+                        <button id="minimize-dialog-btn"
+                                class="block w-full border border-white text-white py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors">
+                            最小化
+                        </button>
+
+                        <!-- チェックボックス -->
+                        <label class="flex items-center justify-center mt-4 text-sm text-gray-300 cursor-pointer">
+                            <input type="checkbox" id="hide-dialog-checkbox" class="mr-2">
+                            もう表示しない
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- メンバー募集バッジ（最小化時に表示） -->
+    <div id="recruit-badge" class="fixed bottom-4 left-4 z-40 hidden">
+        <button class="bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 flex items-center gap-2 transition-colors">
+            <span>🏈</span>
+            <span class="font-semibold">メンバー募集中</span>
+        </button>
+    </div>
+
     <script src="./index.js" defer></script>
     <script src="./assets/sponsors/sponsor-loader.js" defer></script>
     <script src="./assets/games/schedule-loader.js" defer></script>
+    <script src="./assets/recruit_banner/recruit-dialog.js" defer></script>
 </body>
 </html>
