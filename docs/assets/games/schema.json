@@ -86,13 +86,6 @@
         },
         "result": {
           "$ref": "#/definitions/result"
-        },
-        "stats": {
-          "type": ["object", "null"],
-          "description": "試合スタッツ（試合前はnull）",
-          "properties": {
-            "url": { "type": "string", "format": "uri", "description": "スタッツページURL" }
-          }
         }
       },
       "required": ["date", "dayOfWeek", "opponent", "kickoff", "endTime", "venue"]
@@ -137,9 +130,17 @@
         "win": {
           "type": ["boolean", "null"],
           "description": "true=勝ち, false=負け, null=引き分け"
+        },
+        "stats": {
+          "type": "object",
+          "description": "試合スタッツ",
+          "properties": {
+            "url": { "type": "string", "format": "uri", "description": "スタッツページURL" }
+          },
+          "required": ["url"]
         }
       },
-      "required": ["score", "quarters", "win"]
+      "required": ["score", "win"]
     },
     "quarterScore": {
       "type": ["object", "null"],

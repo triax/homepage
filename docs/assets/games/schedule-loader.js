@@ -67,7 +67,7 @@ function createGameCard(game, ticketUrl, isOpen) {
             <div class="flex gap-2">
                 ${createMapButton(game.venue.mapsQuery)}
                 ${createCalendarButton(game)}
-                ${game.stats?.url ? createStatsButton(game.stats.url) : ''}
+                ${game.result?.stats?.url ? createStatsButton(game.result.stats.url) : ''}
                 ${!hasResult && isOpen && ticketUrl ? createTicketButton(ticketUrl) : ''}
             </div>
         </div>
