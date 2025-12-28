@@ -429,6 +429,45 @@
         </div>
     </div>
 
+    <!-- メンバー募集ダイアログ用アニメーション -->
+    <style>
+        /* ダイアログの基本トランジション */
+        #recruit-dialog {
+            transition: opacity 0.4s ease-out;
+        }
+        #recruit-dialog .dialog-content {
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+            transform-origin: bottom left;
+        }
+
+        /* 展開状態（通常表示） */
+        #recruit-dialog.dialog-visible {
+            opacity: 1;
+        }
+        #recruit-dialog.dialog-visible .dialog-content {
+            transform: scale(1) translate(0, 0);
+            opacity: 1;
+        }
+
+        /* 収束状態（最小化へ） */
+        #recruit-dialog.dialog-minimizing {
+            opacity: 0;
+        }
+        #recruit-dialog.dialog-minimizing .dialog-content {
+            transform: scale(0.1) translate(-80vw, 80vh);
+            opacity: 0;
+        }
+
+        /* 展開中（バッジから） */
+        #recruit-dialog.dialog-expanding {
+            opacity: 0;
+        }
+        #recruit-dialog.dialog-expanding .dialog-content {
+            transform: scale(0.1) translate(-80vw, 80vh);
+            opacity: 0;
+        }
+    </style>
+
     <!-- メンバー募集ダイアログ -->
     <div id="recruit-dialog" class="fixed inset-0 z-50 hidden">
         <!-- 暗いオーバーレイ -->
@@ -436,7 +475,7 @@
 
         <!-- 中央コンテンツ -->
         <div class="relative flex items-center justify-center min-h-screen p-8 h-full">
-            <div class="relative max-w-4xl w-full h-[90%] rounded-2xl overflow-hidden shadow-2xl">
+            <div class="dialog-content relative max-w-4xl w-full h-[90%] rounded-2xl overflow-hidden shadow-2xl">
 
                 <!-- 背景画像 -->
                 <div class="absolute inset-0">
