@@ -1,11 +1,13 @@
 {
   "year": 2025,
   "preseason": {
+    "title": "プレシーズン",
     "status": "closed",
     "ticket": "https://sports.banklives.com/events/clubtriax/155",
     "game": null
   },
   "regularseason": {
+    "title": "レギュラーシーズン",
     "status": "closed",
     "ticket": "https://sports.banklives.com/events/clubtriax/155",
     "games": [

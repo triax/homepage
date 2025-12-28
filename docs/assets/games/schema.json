@@ -26,6 +26,10 @@
     "seasonBlock": {
       "type": "object",
       "properties": {
+        "title": {
+          "type": "string",
+          "description": "シーズン表示名（例: プレシーズン, レギュラーシーズン）"
+        },
         "status": {
           "type": "string",
           "enum": ["closed", "open", "finished"],
@@ -45,7 +49,7 @@
           "description": "複数試合"
         }
       },
-      "required": ["status"]
+      "required": ["title", "status"]
     },
     "game": {
       "type": ["object", "null"],

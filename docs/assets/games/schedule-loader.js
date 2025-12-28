@@ -4,33 +4,54 @@ async function loadSchedule() {
         const response = await fetch('./assets/games/2025.json');
         const data = await response.json();
 
+        // タイトルを更新（例: "2025 SCHEDULE"）
+        const titleElement = document.getElementById('schedule-title');
+        if (titleElement && data.year) {
+            titleElement.textContent = `${data.year} SCHEDULE`;
+        }
+
         const container = document.getElementById('schedule-container');
         if (!container) return;
 
         container.innerHTML = '';
 
-        // レギュラーシーズンの試合を表示
-        if (data.regularseason && data.regularseason.games) {
-            const ticketUrl = data.regularseason.ticket;
-            const isOpen = data.regularseason.status === 'open';
+        // シーズンの順序を定義（表示したい順）
+        const seasons = ['preseason', 'regularseason', 'postseason'];
 
-            data.regularseason.games.forEach(game => {
+        seasons.forEach(seasonKey => {
+            const season = data[seasonKey];
+            if (!season) return;
+
+            // 試合データがあるか確認
+            const games = season.games || (season.game ? [season.game] : []);
+            if (games.length === 0) return;
+
+            // シーズンタイトルを追加
+            if (season.title) {
+                const sectionHeader = createSeasonHeader(season.title);
+                container.appendChild(sectionHeader);
+            }
+
+            // 試合カードを追加
+            const ticketUrl = season.ticket;
+            const isOpen = season.status === 'open';
+            games.forEach(game => {
                 const gameCard = createGameCard(game, ticketUrl, isOpen);
                 container.appendChild(gameCard);
             });
-        }
-
-        // プレシーズンの試合があれば表示
-        if (data.preseason && data.preseason.game) {
-            const ticketUrl = data.preseason.ticket;
-            const isOpen = data.preseason.status === 'open';
-            const gameCard = createGameCard(data.preseason.game, ticketUrl, isOpen);
-            container.insertBefore(gameCard, container.firstChild);
-        }
+        });
 
     } catch (error) {
         console.error('Failed to load schedule:', error);
     }
+}
+
+// シーズンヘッダーを作成
+function createSeasonHeader(title) {
+    const header = document.createElement('div');
+    header.className = 'text-lg font-semibold text-gray-700 text-center mb-4 mt-6 first:mt-0';
+    header.textContent = title;
+    return header;
 }
 
 // 試合カードを作成
@@ -83,12 +104,15 @@ function createResultDisplay(game) {
     const winLabel = result.win === true ? 'WIN' : result.win === false ? 'LOSE' : 'DRAW';
 
     return `
-        <div class="flex items-center gap-2">
-            <span class="font-bold text-xl">${result.score.team}</span>
-            <span class="text-gray-400">-</span>
-            <span class="font-bold text-xl">${result.score.opponent}</span>
-            <span class="font-semibold ${winClass} text-sm">${winLabel}</span>
-            <span class="text-gray-600">vs ${game.opponent}</span>
+        <div>
+            <div class="flex items-center justify-center sm:justify-start gap-1 sm:gap-2">
+                <span class="font-bold text-lg sm:text-xl w-6 sm:w-8 text-right tabular-nums">${result.score.team}</span>
+                <span class="text-gray-400">-</span>
+                <span class="font-bold text-lg sm:text-xl w-6 sm:w-8 text-left tabular-nums">${result.score.opponent}</span>
+                <span class="font-semibold ${winClass} text-xs sm:text-sm w-10 sm:w-12">${winLabel}</span>
+                <span class="hidden sm:inline text-gray-600">vs ${game.opponent}</span>
+            </div>
+            <p class="sm:hidden text-gray-600 text-sm text-center mt-0.5">vs ${game.opponent}</p>
         </div>
     `;
 }
