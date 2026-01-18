@@ -28,6 +28,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Save previous posts
+        id: save_prev
+        run: |
+          if [ -f docs/assets/instagram/posts.json ]; then
+            cp docs/assets/instagram/posts.json /tmp/prev_posts.json
+            echo "has_prev=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_prev=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Fetch Instagram posts
         env:
           # 新しい環境変数（推奨：Page Access Token は無期限）
@@ -39,6 +49,14 @@ jobs:
           INSTAGRAM_MEDIA_LIMIT: '6' # 最新6件を取得
         run: |
           npm run instagram:fetch
+
+      - name: Notify new posts to Slack
+        if: steps.save_prev.outputs.has_prev == 'true'
+        continue-on-error: true
+        env:
+          SLACK_BOT_OAUTH_TOKEN: ${{ secrets.SLACK_BOT_OAUTH_TOKEN }}
+          SLACK_INSTAGRAM_CHANNEL: '#instagram'
+        run: npm run instagram:notify-slack -- /tmp/prev_posts.json
 
       - name: Check for changes
         id: check_changes

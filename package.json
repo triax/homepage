@@ -12,6 +12,7 @@
     "instagram:refresh-token": "npx tsx scripts/refresh-instagram-token.ts",
     "instagram:exchange-slt2llt": "npx tsx scripts/exchange-short-to-long-token.ts",
     "instagram:get-page-token": "npx tsx scripts/get-page-access-token.ts",
+    "instagram:notify-slack": "npx tsx scripts/notify-slack-instagram.ts",
     "img:check": "npx tsx scripts/check-image-sync.ts",
     "img:download": "npx tsx scripts/download-all-images.ts",
     "img:cleanup": "npx tsx scripts/cleanup-unused-images.ts --force",
