@@ -10,7 +10,7 @@ async function loadSponsors() {
             goldContainer.innerHTML = '';
             sponsors.gold.forEach(sponsor => {
                 const div = document.createElement('div');
-                div.className = 'sponsor-t1 w-full p-8';
+                div.className = 'sponsor-t1 w-full max-w-lg p-8';
                 // リンクがある場合とない場合で分岐
                 if (sponsor.link) {
                     div.innerHTML = `

@@ -1,5 +1,10 @@
 {
-  "gold": [],
+  "gold": [
+    {
+      "logo": "assets/sponsors/gold/habing.jpg",
+      "link": "https://habing.co.jp/"
+    }
+  ],
   "silver": [
     {
       "logo": "assets/sponsors/silver/kenseikai.jpg",
