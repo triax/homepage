@@ -7,6 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "dev": "npx http-server -p 3000",
     "roster:download": "npx tsx scripts/download-roster.ts",
     "instagram:fetch": "npx tsx scripts/fetch-instagram.ts",
     "instagram:refresh-token": "npx tsx scripts/refresh-instagram-token.ts",
