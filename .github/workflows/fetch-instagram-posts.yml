@@ -58,6 +58,16 @@ jobs:
           SLACK_INSTAGRAM_CHANNEL: '#instagram'
         run: npm run instagram:notify-slack -- /tmp/prev_posts.json
 
+      - name: Post new posts to X
+        if: steps.save_prev.outputs.has_prev == 'true'
+        continue-on-error: true
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_KEY_SECRET: ${{ secrets.X_API_KEY_SECRET }}
+          X_BOT_ACCESS_TOKEN: ${{ secrets.X_BOT_ACCESS_TOKEN }}
+          X_BOT_ACCESS_TOKEN_SECRET: ${{ secrets.X_BOT_ACCESS_TOKEN_SECRET }}
+        run: npm run instagram:post-x -- /tmp/prev_posts.json
+
       - name: Check for changes
         id: check_changes
         run: |
