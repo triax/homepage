@@ -2,8 +2,10 @@
 // Node 20 + npx tsx で実行想定（fetch / FormData / Blob 標準搭載）
 // 必要なSecrets: X_API_KEY, X_API_KEY_SECRET, X_BOT_ACCESS_TOKEN, X_BOT_ACCESS_TOKEN_SECRET
 //
-// notify-slack-instagram.ts と同じ「前回posts.json と今回を id で diff → 新規分を処理」骨格。
-// 新規Instagram投稿をTRIAX公式Xアカウントへクロスポストする。
+// posts.json の各投稿に持たせた `twitter` フィールドを状態として扱い、
+// 「twitter==null（未投稿）」の投稿だけをTRIAX公式Xアカウントへクロスポストする。
+// 投稿成功のたびに posts.json へ状態を書き戻すため、途中失敗しても既成功分は永続化され、
+// 失敗分は次回run自動リトライされる（取りこぼしゼロ）。
 
 import { promises as fs } from 'fs';
 import * as path from 'path';
@@ -24,6 +26,13 @@ interface InstagramChild {
   id?: string;
 }
 
+// Xクロスポストの投稿済み状態。
+// null=未投稿（クロスポスト対象）、object=投稿済み（tweet_id=null はバックフィル抑制分）
+interface TwitterMeta {
+  tweet_id: string | null; // 実際にツイートしたID。バックフィル抑制分は null
+  posted_at: string; // ISO8601
+}
+
 interface InstagramPost {
   id: string;
   permalink: string;
@@ -33,6 +42,7 @@ interface InstagramPost {
   media_url: string | null;
   thumbnail_url: string | null;
   children: InstagramChild[] | null;
+  twitter: TwitterMeta | null;
 }
 
 interface PostsJson {
@@ -66,20 +76,10 @@ const X_CREDS_ENV = {
 
 // ========== Helper Functions ==========
 
-function parseArgs(): { previousPostsPath: string | null; dryRun: boolean } {
+function parseArgs(): { dryRun: boolean } {
   const args = process.argv.slice(2);
-  let previousPostsPath: string | null = null;
-  let dryRun = false;
-
-  for (const arg of args) {
-    if (arg === '--dry-run') {
-      dryRun = true;
-    } else if (!arg.startsWith('-')) {
-      previousPostsPath = arg;
-    }
-  }
-
-  return { previousPostsPath, dryRun };
+  const dryRun = args.includes('--dry-run');
+  return { dryRun };
 }
 
 async function readPostsJson(filePath: string): Promise<PostsJson | null> {
@@ -94,18 +94,12 @@ async function readPostsJson(filePath: string): Promise<PostsJson | null> {
   }
 }
 
-function findNewPosts(previous: PostsJson | null, current: PostsJson): InstagramPost[] {
-  if (!previous) {
-    // 前回データが無い（初回実行など）場合、全件を新規扱いにすると大量投稿になり危険。
-    // 安全策として、timestampが最も新しい1件のみを新規とみなす。
-    const sorted = [...current.posts].sort(
-      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
-    return sorted.slice(0, 1);
-  }
-
-  const previousIds = new Set(previous.posts.map((p) => p.id));
-  return current.posts.filter((p) => !previousIds.has(p.id));
+// twitter==null（未投稿）の投稿を、timestamp昇順（古い順）に抽出する。
+// 古い順にすることで、X上のタイムラインの時系列を保つ。
+function findUnpostedPosts(current: PostsJson): InstagramPost[] {
+  return current.posts
+    .filter((p) => p.twitter == null)
+    .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 }
 
 // 投稿に添付すべきメディア一覧を決定
@@ -202,8 +196,8 @@ async function uploadMediaTargets(
   return mediaIds;
 }
 
-// X API v2 /2/tweets へ投稿
-async function postTweet(creds: XOAuthCreds, text: string, mediaIds: string[]): Promise<void> {
+// X API v2 /2/tweets へ投稿し、投稿したtweet idを返す
+async function postTweet(creds: XOAuthCreds, text: string, mediaIds: string[]): Promise<string> {
   const url = new URL(TWEET_ENDPOINT);
   const authorization = buildOAuthHeader({
     method: 'POST',
@@ -237,6 +231,13 @@ async function postTweet(creds: XOAuthCreds, text: string, mediaIds: string[]): 
     throw new Error(`X投稿に失敗: HTTP ${res.status} ${JSON.stringify(body)}`);
   }
   console.log(`  投稿成功: tweet ${body.data.id}`);
+  return body.data.id;
+}
+
+// posts.json 全体を書き戻す（fetch と同じ整形）。
+// 投稿成功のたびに呼び、既成功分を都度永続化する。
+async function writePostsJson(filePath: string, data: PostsJson): Promise<void> {
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2) + '\n', 'utf8');
 }
 
 function sleep(ms: number): Promise<void> {
@@ -246,12 +247,7 @@ function sleep(ms: number): Promise<void> {
 // ========== Main ==========
 
 async function main() {
-  const { previousPostsPath, dryRun } = parseArgs();
-
-  if (!previousPostsPath) {
-    console.error('Usage: npx tsx scripts/post-instagram-to-x.ts <previous-posts.json> [--dry-run]');
-    process.exit(1);
-  }
+  const { dryRun } = parseArgs();
 
   // X認証情報チェック（dry-run時は不要）
   const creds = getXCreds();
@@ -262,32 +258,26 @@ async function main() {
     process.exit(0);
   }
 
-  // 前回・今回のposts.jsonを読み込み
-  const [previousPosts, currentPosts] = await Promise.all([
-    readPostsJson(previousPostsPath),
-    readPostsJson(CURRENT_POSTS_PATH),
-  ]);
+  // 現在のposts.jsonを読み込み
+  const currentPosts = await readPostsJson(CURRENT_POSTS_PATH);
 
   if (!currentPosts) {
     console.error(`Current posts file not found: ${CURRENT_POSTS_PATH}`);
     process.exit(1);
   }
 
-  // 新規投稿を抽出
-  const newPosts = findNewPosts(previousPosts, currentPosts);
+  // twitter==null（未投稿）の投稿を古い順に抽出
+  const unpostedPosts = findUnpostedPosts(currentPosts);
 
-  if (newPosts.length === 0) {
-    console.log('No new Instagram posts detected.');
+  if (unpostedPosts.length === 0) {
+    console.log('No unposted Instagram posts detected.');
     return;
   }
 
-  console.log(`Found ${newPosts.length} new post(s).`);
+  console.log(`Found ${unpostedPosts.length} unposted post(s).`);
 
-  // 古い順（timestamp昇順）に投稿して時系列を保つ
-  newPosts.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-
-  for (let i = 0; i < newPosts.length; i++) {
-    const post = newPosts[i];
+  for (let i = 0; i < unpostedPosts.length; i++) {
+    const post = unpostedPosts[i];
     const text = buildTweetText(post);
     const weight = calculateTwitterWeight(text);
     const targets = resolveMediaTargets(post);
@@ -311,14 +301,18 @@ async function main() {
       if (targets.length > 0 && mediaIds.length === 0) {
         console.warn('  全メディアのアップロードに失敗したため、テキストのみで投稿します。');
       }
-      await postTweet(creds as XOAuthCreds, text, mediaIds);
+      const tweetId = await postTweet(creds as XOAuthCreds, text, mediaIds);
+
+      // 投稿成功 → posts.json に状態を記録して都度書き戻す（途中失敗でも既成功分を永続化）
+      post.twitter = { tweet_id: tweetId, posted_at: new Date().toISOString() };
+      await writePostsJson(CURRENT_POSTS_PATH, currentPosts);
     } catch (error) {
-      // 個別投稿の失敗はワークフローを落とさず次へ
+      // 個別投稿の失敗はワークフローを落とさず次へ（twitterはnullのまま＝次回run自動リトライ）
       console.error(`  X投稿に失敗 (post ${post.id}):`, error);
     }
 
     // 次の投稿まで待機（rate limit対策）
-    if (i < newPosts.length - 1) {
+    if (i < unpostedPosts.length - 1) {
       await sleep(POST_INTERVAL_MS);
     }
   }

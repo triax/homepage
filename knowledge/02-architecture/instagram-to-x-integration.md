@@ -13,14 +13,31 @@ GitHub Actions (fetch-instagram-posts.yml, 12時間ごと)
   5. posts.json に差分があればコミット&プッシュ
 ```
 
-ステップ3（Slack通知）と4（X投稿）は同じ「`/tmp/prev_posts.json`（前回）と最新 posts.json を `id` で diff」方式。
+ステップ4（X投稿）は posts.json 内の `twitter` フィールドを状態として扱う方式、
+ステップ3（Slack通知）は従来どおり `/tmp/prev_posts.json` との id diff 方式（独立）。
 どちらも `continue-on-error: true` のため、失敗してもワークフロー本体（fetch & commit）は落ちない。
 
-## 新規投稿の検知（findNewPosts）
+## 投稿済み状態の管理（twitter フィールド）
 
-- 前回 posts.json の `id` 集合に存在しない投稿を新規とみなす。
-- 前回データが無い（初回など）場合は、全件投稿の暴発を防ぐため **最新1件のみ** を新規扱いにする安全策。
-- 新規が複数ある場合は **timestamp 昇順（古い順）** に投稿し、Instagram の時系列を保つ。
+posts.json の各投稿に「Xに投稿済みか」を状態として正規化する。
+
+```jsonc
+"twitter": { "tweet_id": "1799...", "posted_at": "2026-06-09T..." }  // 投稿済み
+"twitter": null                                                       // 未投稿（対象）
+```
+
+- **post-x**: `twitter == null` の投稿を timestamp 昇順（古い順）に投稿。成功するたびに
+  その投稿の `twitter` を `{ tweet_id, posted_at }` で埋めて posts.json を**書き戻す**。
+  失敗した投稿は `null` のまま残り、**次回run で自動リトライ**される（取りこぼしゼロ）。
+- **fetch**: posts.json を毎回 API から再生成するが、`loadTwitterState()` で既存の `twitter` を
+  `id` でマージして引き継ぐ（これが無いと再生成でフラグが消える）。新規投稿は `twitter: null`。
+- **commit**: post-x が書き戻した posts.json をワークフローがコミットし、状態が永続化される。
+- **バックフィル**: 機能導入時、既存投稿の連投を防ぐため最新1件のみ `twitter: null`、
+  残りは投稿済み（`tweet_id: null` で抑制）としてマークした。
+
+### prev-diff 方式からの改訂理由
+当初は Slack 通知と同じ prev-diff 方式だったが、X投稿が失敗しても posts.json はコミットされるため、
+失敗した投稿が二度と再投稿されない取りこぼしが起きうる弱点があった。状態を posts.json に正規化することで解消した。
 
 ## ツイート本文（buildTweetText）
 

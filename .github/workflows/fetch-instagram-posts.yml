@@ -66,7 +66,7 @@ jobs:
           X_API_KEY_SECRET: ${{ secrets.X_API_KEY_SECRET }}
           X_BOT_ACCESS_TOKEN: ${{ secrets.X_BOT_ACCESS_TOKEN }}
           X_BOT_ACCESS_TOKEN_SECRET: ${{ secrets.X_BOT_ACCESS_TOKEN_SECRET }}
-        run: npm run instagram:post-x -- /tmp/prev_posts.json
+        run: npm run instagram:post-x
 
       - name: Check for changes
         id: check_changes
