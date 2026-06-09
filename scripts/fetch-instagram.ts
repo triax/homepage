@@ -9,6 +9,13 @@ import * as dotenv from 'dotenv';
 // .envファイルを読み込み
 dotenv.config();
 
+// Xクロスポストの投稿済み状態。
+// null=未投稿（クロスポスト対象）、object=投稿済み（tweet_id=null はバックフィル抑制分）
+type TwitterMeta = {
+  tweet_id: string | null;
+  posted_at: string;
+};
+
 type InstagramChild = {
   media_type: string;
   permalink: string;
@@ -48,6 +55,26 @@ if (!instagramUserId || !instagramAccessToken) {
 async function ensureDir(filePath: string) {
   const dir = path.dirname(filePath);
   await fs.mkdir(dir, { recursive: true });
+}
+
+// 既存 posts.json から `id -> twitter` のMapを作る。
+// posts.json は毎回API結果で作り直すため、ここで投稿済み状態を引き継がないと
+// 次回fetchでフラグが消えてしまう（再投稿の原因になる）。
+// ファイルが無い／壊れている場合は空Mapで続行（初回でも落とさない）。
+async function loadTwitterState(filePath: string): Promise<Map<string, TwitterMeta | null>> {
+  try {
+    const content = await fs.readFile(filePath, 'utf8');
+    type ExistingPost = { id: string; twitter?: TwitterMeta | null };
+    const parsed = JSON.parse(content) as { posts?: ExistingPost[] };
+    const map = new Map<string, TwitterMeta | null>();
+    for (const post of parsed.posts ?? []) {
+      map.set(post.id, post.twitter ?? null);
+    }
+    return map;
+  } catch {
+    // ENOENT（初回）やJSON破損は握りつぶして空Mapで続行
+    return new Map();
+  }
 }
 
 async function fetchJson<T = any>(url: string, timeoutMs = 15000): Promise<T> {
@@ -109,7 +136,11 @@ async function main() {
     new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   );
 
+  // 既存 posts.json の投稿済み状態（twitter）を引き継ぐためのMapを読み込む
+  const twitterState = await loadTwitterState(OUT_JSON);
+
   // 投稿データのみ（fetched_atを含まない）を作成
+  // twitter は既存IDのものを引き継ぎ、新規投稿は null（クロスポスト対象）にする
   const postsData = items.map((m) => ({
     id: m.id,
     permalink: m.permalink,
@@ -119,6 +150,7 @@ async function main() {
     media_url: m.media_url ?? null,
     thumbnail_url: m.thumbnail_url ?? null,
     children: m.children?.data ?? null,
+    twitter: twitterState.get(m.id) ?? null,
   }));
 
   await ensureDir(OUT_JSON);
