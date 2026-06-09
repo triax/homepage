@@ -43,9 +43,11 @@ OAuth 1.0a（HMAC-SHA1）で投稿するため、以下4つが必要。GitHub Se
    権限変更後に必ず **Regenerate** すること。さもないと投稿時に `403 You are not permitted to perform this action` で失敗する。
 3. 表示された Access Token / Access Token Secret を控える
 
-### 5. 従量課金クレジットのチャージ
-- Developer Console（Billing / Usage）でクレジットを前払いチャージ
+### 5. 従量課金クレジットのチャージ ⚠️必須
+- **[console.x.com](https://console.x.com)** の Billing でクレジットを**前払いチャージ**
 - 投稿時に $0.01/件 が消費される
+- ⚠️ Pay-Per-Use を有効化しただけ（チャージ無し）では `402 CreditsDepleted` で投稿できない。
+  少額（数ドル＝数百件分）チャージすれば稼働する。
 
 ### 6. .env と GitHub Secrets に設定
 
@@ -73,9 +75,13 @@ npm run instagram:post-x -- /tmp/prev_posts.json
 
 | 症状 | 原因・対処 |
 |------|-----------|
-| `403 You are not permitted to perform this action` | 権限を Read/Write にした後にトークンを再発行していない（手順3→4）。文字数超過でも同エラーが出るため weight 検証も確認 |
+| `403 oauth1-permissions` | 権限を Read/Write にした後にトークンを再発行していない（手順3→4） |
+| `403 client-not-enrolled` | アプリが Pay-Per-Use 未登録、または Project に未紐付け。console.x.com で対応 |
+| `402 CreditsDepleted` | クレジット未チャージ（手順5）。console.x.com の Billing でチャージ |
+| `403 You are not permitted to perform this action` | 文字数が実際には超過。自前 weight 計算と X 実カウントのズレが原因で、`SAFETY_MARGIN`（実効上限260）で対応済み |
+| `400 $.media is missing but it is required` | メディアアップロードが command方式multipartで送られている。画像はJSON+base64のシンプルアップロードで送る（実装済み） |
 | `401 Unauthorized` | Consumer Key / Access Token の組み合わせ誤り、または署名生成ミス |
-| メディア添付されない | Instagram の `media_url` が期限切れ（fetch直後に投稿しているか確認）、または media upload のサイズ/形式制限超過 |
+| メディア添付されない | Instagram の `media_url` が期限切れ（fetch直後に投稿しているか確認）、または動画（chunked方式は未検証で400の可能性） |
 
 ## 関連
 - `.env.example` - 環境変数の一覧
