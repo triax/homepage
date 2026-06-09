@@ -191,9 +191,58 @@ async function waitForProcessing(
   throw new Error(`メディア処理がタイムアウトしました (media_id=${mediaId})`);
 }
 
+// 画像のシンプルアップロード（非chunked）。
+// v2 の /2/media/upload は command方式のmultipartを受け付けず、`media` フィールドを持つ
+// JSONボディ（base64）を要求する（エラー: "$.media is missing but it is required"）。
+// 画像は5MB以下に収まるためchunkedは不要で、1リクエストで media_id を得る。
+// OAuth 1.0a署名はメソッド+URL+クエリのみが対象でJSONボディは署名に含めないため、そのまま送れる。
+async function uploadImageSimple(
+  creds: XOAuthCreds,
+  bytes: Buffer,
+  mediaCategory: string
+): Promise<string> {
+  const url = new URL(UPLOAD_ENDPOINT);
+  const authorization = buildOAuthHeader(buildOAuthConfig('POST', url, creds));
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: authorization,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({ media: bytes.toString('base64'), media_category: mediaCategory }),
+  });
+
+  const body = (await res.json()) as UploadInitResponse & { id?: string; media_id_string?: string };
+  const mediaId = body.data?.id ?? body.id ?? body.media_id_string;
+  if (!res.ok || !mediaId) {
+    throw new Error(`画像アップロード失敗: HTTP ${res.status} ${JSON.stringify(body)}`);
+  }
+  return mediaId;
+}
+
+// 動画の chunked アップロード（INIT/APPEND/FINALIZE → 処理完了待ち）。
+async function uploadVideoChunked(
+  creds: XOAuthCreds,
+  bytes: Buffer,
+  mediaType: string,
+  mediaCategory: string
+): Promise<string> {
+  const mediaId = await initUpload(creds, bytes.length, mediaType, mediaCategory);
+  await appendUpload(creds, mediaId, bytes);
+  const processingInfo = await finalizeUpload(creds, mediaId);
+
+  if (processingInfo) {
+    await waitForProcessing(creds, mediaId, processingInfo);
+  }
+
+  return mediaId;
+}
+
 /**
  * 単一メディア（画像 or 動画）をX APIにアップロードし media_id_string を返す。
- * 画像・動画ともに chunked (INIT/APPEND/FINALIZE) で統一。動画はFINALIZE後の処理完了を待つ。
+ * 画像はシンプルアップロード（JSON+base64）、動画は chunked (INIT/APPEND/FINALIZE)。
  */
 export async function uploadMedia(
   creds: XOAuthCreds,
@@ -203,13 +252,8 @@ export async function uploadMedia(
   const { bytes, contentType } = await downloadMedia(mediaUrl);
   const meta = resolveMediaMeta(mediaType, contentType);
 
-  const mediaId = await initUpload(creds, bytes.length, meta.mediaType, meta.mediaCategory);
-  await appendUpload(creds, mediaId, bytes);
-  const processingInfo = await finalizeUpload(creds, mediaId);
-
-  if (processingInfo) {
-    await waitForProcessing(creds, mediaId, processingInfo);
+  if (mediaType === 'image') {
+    return uploadImageSimple(creds, bytes, meta.mediaCategory);
   }
-
-  return mediaId;
+  return uploadVideoChunked(creds, bytes, meta.mediaType, meta.mediaCategory);
 }
