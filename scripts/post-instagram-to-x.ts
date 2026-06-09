@@ -66,6 +66,11 @@ const POST_INTERVAL_MS = 1000; // 投稿間に1秒待機（rate limit対策）
 const MAX_IMAGES_PER_TWEET = 4; // Xの画像上限
 const HASHTAGS = '#TRIAX #調布 #アメフト'; // 本文末尾の固定ハッシュタグ
 const TRUNCATE_ELLIPSIS = '…';
+// 自前のweight計算とXの実カウントには差異があり（絵文字・特殊文字等）、
+// 280ぎりぎりだと 403「You are not permitted」で弾かれることがある。
+// 安全マージンを引いた実効上限でtruncateする。
+const SAFETY_MARGIN = 20;
+const EFFECTIVE_MAX_WEIGHT = MAX_TWEET_LENGTH - SAFETY_MARGIN;
 
 const X_CREDS_ENV = {
   consumerKey: 'X_API_KEY',
@@ -134,7 +139,7 @@ function buildTweetText(post: InstagramPost): string {
   // キャプションが空でも投稿は成立する（permalink + ハッシュタグのみ）
   const fixedWeight = calculateTwitterWeight(fixedTail);
   const ellipsisWeight = calculateTwitterWeight(TRUNCATE_ELLIPSIS);
-  const captionBudget = MAX_TWEET_LENGTH - fixedWeight;
+  const captionBudget = EFFECTIVE_MAX_WEIGHT - fixedWeight;
 
   if (captionBudget <= 0) {
     // 固定部分だけで上限に達する異常系。キャプション無しで返す。

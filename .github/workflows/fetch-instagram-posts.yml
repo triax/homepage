@@ -90,4 +90,7 @@ jobs:
 
           🤖 自動更新 by GitHub Actions
           最新のInstagram投稿を取得しました"
+          # 同時実行や手動pushでremoteが進んでいても、投稿済み状態(twitter)を
+          # 取りこぼさないよう、rebaseしてからpushする
+          git pull --rebase origin main
           git push
