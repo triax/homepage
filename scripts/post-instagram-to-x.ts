@@ -49,6 +49,7 @@ interface PostsJson {
   fetched_at: string;
   user_id: string;
   count: number;
+  metadata?: { x_crosspost_watermark?: string };
   posts: InstagramPost[];
 }
 
@@ -99,12 +100,81 @@ async function readPostsJson(filePath: string): Promise<PostsJson | null> {
   }
 }
 
-// twitter==null（未投稿）の投稿を、timestamp昇順（古い順）に抽出する。
-// 古い順にすることで、X上のタイムラインの時系列を保つ。
-function findUnpostedPosts(current: PostsJson): InstagramPost[] {
-  return current.posts
-    .filter((p) => p.twitter == null)
-    .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+// timestampをエポックms（getTime）に変換する小ヘルパ。
+// watermark比較・前進ロジックを一貫してgetTime()基準にするための要。
+function toTime(ts: string): number {
+  return new Date(ts).getTime();
+}
+
+// クロスポスト対象（eligible）= twitter==null かつ watermarkより「厳密に新しい」投稿。
+// timestamp昇順（古い順）に並べ、X上のタイムラインの時系列を保つ。
+// watermark以下（≦）の未投稿は stale-null として別扱いにし、ここには含めない。
+function findEligiblePosts(posts: InstagramPost[], watermark: string): InstagramPost[] {
+  const wm = toTime(watermark);
+  return posts
+    .filter((p) => p.twitter == null && toTime(p.timestamp) > wm)
+    .sort((a, b) => toTime(a.timestamp) - toTime(b.timestamp));
+}
+
+// 状態喪失して再登場した古い未投稿（stale-null）= twitter==null かつ watermark以下（≦）。
+// 一度Xへ投稿済みだったが posts.json の再生成で状態を失い、未投稿として復活した投稿を指す。
+// これらはXへ投稿せず抑制マークを書くことで、二重投稿を構造的に防ぐ。
+function findStaleNullPosts(posts: InstagramPost[], watermark: string): InstagramPost[] {
+  const wm = toTime(watermark);
+  return posts.filter((p) => p.twitter == null && toTime(p.timestamp) <= wm);
+}
+
+// run後の新しいwatermarkを算出する（単調非減少＝絶対に後退させない）。
+// newWatermark = max(旧watermark, twitter!=null の全投稿の timestamp の最大) を getTime()比較で求め、
+// その最大値を与える投稿の timestamp文字列をそのまま返す（旧watermarkの方が新しければ旧値を維持）。
+// 含意: クロスポストに失敗した eligible は twitter==null のまま残るので watermark を押し上げず、
+// ウィンドウ内に残る限り次回run で自動リトライされる。成功した最新まで watermark が前進する。
+function computeNextWatermark(posts: InstagramPost[], watermark: string): string {
+  let best = watermark;
+  let bestTime = toTime(watermark);
+  for (const p of posts) {
+    if (p.twitter == null) continue; // 未投稿（失敗含む）は前進に寄与させない
+    const t = toTime(p.timestamp);
+    if (t > bestTime) {
+      bestTime = t;
+      best = p.timestamp;
+    }
+  }
+  return best;
+}
+
+// ウィンドウ内の全投稿 timestamp の最大値（文字列）を返す。
+// watermark欠損時のベースライン確立に使う。
+function maxTimestamp(posts: InstagramPost[]): string | null {
+  let best: string | null = null;
+  let bestTime = -Infinity;
+  for (const p of posts) {
+    const t = toTime(p.timestamp);
+    if (t > bestTime) {
+      bestTime = t;
+      best = p.timestamp;
+    }
+  }
+  return best;
+}
+
+// dry-run用: eligibleが全て成功したと仮定したときの前進後watermarkを予測する。
+// 実投稿では成功した投稿のみが twitter!=null になるため、実際の前進値はこれ以下になりうる。
+function computeNextWatermarkAfterAllSuccess(posts: InstagramPost[], watermark: string): string {
+  const wm = toTime(watermark);
+  let best = watermark;
+  let bestTime = wm;
+  for (const p of posts) {
+    // 投稿済み（twitter!=null）か、eligible（watermarkより新しい未投稿）が前進に寄与する
+    const eligible = p.twitter == null && toTime(p.timestamp) > wm;
+    if (p.twitter == null && !eligible) continue; // stale-null は前進に寄与しない
+    const t = toTime(p.timestamp);
+    if (t > bestTime) {
+      bestTime = t;
+      best = p.timestamp;
+    }
+  }
+  return best;
 }
 
 // 投稿に添付すべきメディア一覧を決定
@@ -249,6 +319,40 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// ベースライン確立run（no-op投稿）。
+// watermarkが欠損しているときの安全網。1件もクロスポストせず、watermark=現ウィンドウの
+// timestamp最大 を確立し、twitter==null の全投稿に抑制マークを書く。
+// これにより初回や欠損時にバックログを一斉投稿する事故を防ぐ。次回run以降は
+// watermarkより新しい投稿だけが対象になる。
+async function runBaseline(current: PostsJson, dryRun: boolean): Promise<void> {
+  const baseline = maxTimestamp(current.posts);
+  if (!baseline) {
+    console.warn('watermark未設定かつ投稿が空のため、何もしません。');
+    return;
+  }
+
+  console.warn(
+    `watermark未設定のためベースライン確立runを実行（クロスポストはしません）: watermark=${baseline}`
+  );
+
+  for (const post of current.posts) {
+    if (post.twitter != null) continue;
+    console.warn(`  ベースライン抑制: post ${post.id} (timestamp ${post.timestamp})`);
+    if (!dryRun) {
+      post.twitter = { tweet_id: null, posted_at: new Date().toISOString() };
+    }
+  }
+
+  if (dryRun) {
+    console.log(`\n[DRY-RUN] baseline establish: eligible=0, newWatermark=${baseline}`);
+    return;
+  }
+
+  current.metadata = { ...current.metadata, x_crosspost_watermark: baseline };
+  await writePostsJson(CURRENT_POSTS_PATH, current);
+  console.log(`Baseline established. watermark=${baseline}`);
+}
+
 // ========== Main ==========
 
 async function main() {
@@ -271,18 +375,54 @@ async function main() {
     process.exit(1);
   }
 
-  // twitter==null（未投稿）の投稿を古い順に抽出
-  const unpostedPosts = findUnpostedPosts(currentPosts);
+  const watermark = currentPosts.metadata?.x_crosspost_watermark;
 
-  if (unpostedPosts.length === 0) {
-    console.log('No unposted Instagram posts detected.');
+  // ベースライン安全網: watermarkが読めない場合は今回1件もクロスポストせず、
+  // watermark=現ウィンドウのtimestamp最大 を確立し、twitter==null の全投稿に抑制マークを書く。
+  // これにより初回や欠損時にバックログを一斉投稿する事故を防ぐ。
+  if (!watermark) {
+    await runBaseline(currentPosts, dryRun);
     return;
   }
 
-  console.log(`Found ${unpostedPosts.length} unposted post(s).`);
+  // クロスポスト対象（eligible）と、状態喪失した古い未投稿（stale-null）を分離
+  const eligiblePosts = findEligiblePosts(currentPosts.posts, watermark);
+  const staleNullPosts = findStaleNullPosts(currentPosts.posts, watermark);
 
-  for (let i = 0; i < unpostedPosts.length; i++) {
-    const post = unpostedPosts[i];
+  // stale-null は X へ投稿せず抑制マークを書く（既存のバックフィル抑制と同じ表現で一貫性を保つ）
+  for (const post of staleNullPosts) {
+    console.warn(
+      `watermark(${watermark})より古い未投稿を検出 → 抑制（再投稿防止）: post ${post.id} (timestamp ${post.timestamp})`
+    );
+    if (!dryRun) {
+      post.twitter = { tweet_id: null, posted_at: new Date().toISOString() };
+    }
+  }
+
+  // 算出される新しいwatermarkを先に求めてログに出す（stale-null抑制を反映した状態で）
+  const nextWatermark = computeNextWatermark(currentPosts.posts, watermark);
+
+  if (eligiblePosts.length === 0) {
+    console.log('No eligible Instagram posts to cross-post.');
+    console.log(
+      `eligible=0, stale-null=${staleNullPosts.length}, newWatermark=${nextWatermark}` +
+        (nextWatermark === watermark ? ' (unchanged)' : '')
+    );
+    // stale-null抑制とwatermark前進をファイルへ反映（dry-run時は書かない）
+    if (!dryRun) {
+      currentPosts.metadata = { ...currentPosts.metadata, x_crosspost_watermark: nextWatermark };
+      await writePostsJson(CURRENT_POSTS_PATH, currentPosts);
+    }
+    return;
+  }
+
+  console.log(
+    `Found ${eligiblePosts.length} eligible post(s). ` +
+      `(stale-null suppressed: ${staleNullPosts.length})`
+  );
+
+  for (let i = 0; i < eligiblePosts.length; i++) {
+    const post = eligiblePosts[i];
     const text = buildTweetText(post);
     const weight = calculateTwitterWeight(text);
     const targets = resolveMediaTargets(post);
@@ -309,7 +449,12 @@ async function main() {
       const tweetId = await postTweet(creds as XOAuthCreds, text, mediaIds);
 
       // 投稿成功 → posts.json に状態を記録して都度書き戻す（途中失敗でも既成功分を永続化）
+      // watermarkも成功分まで前進させて書き戻す（途中失敗でも既成功分の前進が永続化される）
       post.twitter = { tweet_id: tweetId, posted_at: new Date().toISOString() };
+      currentPosts.metadata = {
+        ...currentPosts.metadata,
+        x_crosspost_watermark: computeNextWatermark(currentPosts.posts, watermark),
+      };
       await writePostsJson(CURRENT_POSTS_PATH, currentPosts);
     } catch (error) {
       // 個別投稿の失敗はワークフローを落とさず次へ（twitterはnullのまま＝次回run自動リトライ）
@@ -317,9 +462,20 @@ async function main() {
     }
 
     // 次の投稿まで待機（rate limit対策）
-    if (i < unpostedPosts.length - 1) {
+    if (i < eligiblePosts.length - 1) {
       await sleep(POST_INTERVAL_MS);
     }
+  }
+
+  if (dryRun) {
+    // dry-runではstale-null抑制を反映していないため、最終watermarkは
+    // 「全eligibleが成功した場合」の前進値を提示する（実投稿の最大ケース）。
+    const projected = computeNextWatermarkAfterAllSuccess(currentPosts.posts, watermark);
+    console.log(
+      `\n[DRY-RUN] eligible=${eligiblePosts.length}, stale-null=${staleNullPosts.length}, ` +
+        `newWatermark=${projected}` +
+        (projected === watermark ? ' (unchanged)' : '')
+    );
   }
 
   console.log('\nDone.');
