@@ -77,6 +77,22 @@ async function loadTwitterState(filePath: string): Promise<Map<string, TwitterMe
   }
 }
 
+// 既存 posts.json から X クロスポストの watermark（高水位点）を読み取って保持する。
+// posts.json は毎回作り直すため、ここで引き継がないと watermark が消え、状態を失った
+// 古い投稿の再投稿を防げなくなる。fetch側では watermark を計算せず保持のみ行う。
+// 既存値が無ければ undefined を返し、クロスポスト側のベースライン安全網に処理を委ねる。
+async function loadWatermark(filePath: string): Promise<string | undefined> {
+  try {
+    const content = await fs.readFile(filePath, 'utf8');
+    const parsed = JSON.parse(content) as {
+      metadata?: { x_crosspost_watermark?: string };
+    };
+    return parsed.metadata?.x_crosspost_watermark;
+  } catch {
+    return undefined;
+  }
+}
+
 async function fetchJson<T = any>(url: string, timeoutMs = 15000): Promise<T> {
   const ctrl = new AbortController();
   const to = setTimeout(() => ctrl.abort(), timeoutMs);
@@ -139,6 +155,9 @@ async function main() {
   // 既存 posts.json の投稿済み状態（twitter）を引き継ぐためのMapを読み込む
   const twitterState = await loadTwitterState(OUT_JSON);
 
+  // 既存 posts.json の X クロスポスト watermark を引き継ぐ（計算はせず保持のみ）
+  const watermark = await loadWatermark(OUT_JSON);
+
   // 投稿データのみ（fetched_atを含まない）を作成
   // twitter は既存IDのものを引き継ぎ、新規投稿は null（クロスポスト対象）にする
   const postsData = items.map((m) => ({
@@ -156,10 +175,12 @@ async function main() {
   await ensureDir(OUT_JSON);
 
   // 常に最新のデータで更新（media_urlの有効期限更新のため）
+  // metadata は既存 watermark を保持する（既存値が無ければ {}＝クロスポスト側で対応）
   const out = {
     fetched_at: new Date().toISOString(),
     user_id: instagramUserId,
     count: postsData.length,
+    metadata: watermark ? { x_crosspost_watermark: watermark } : {},
     posts: postsData,
   };
 
