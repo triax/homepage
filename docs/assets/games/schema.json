@@ -54,6 +54,10 @@
     "game": {
       "type": ["object", "null"],
       "properties": {
+        "round": {
+          "type": "string",
+          "description": "節（例: 第1節）"
+        },
         "date": {
           "type": "string",
           "format": "date",
@@ -87,6 +91,10 @@
         "home": {
           "type": "boolean",
           "description": "true=ホーム, false=アウェイ"
+        },
+        "ticket": {
+          "type": ["string", "null"],
+          "description": "試合個別のチケットURL。未指定ならシーズンのticketを使用"
         },
         "result": {
           "$ref": "#/definitions/result"

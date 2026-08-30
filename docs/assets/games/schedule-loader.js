@@ -1,7 +1,10 @@
+// 表示するシーズン年（シーズン切替はここを変更）
+const SEASON_YEAR = 2026;
+
 // 試合スケジュール情報を読み込んで表示する
 async function loadSchedule() {
     try {
-        const response = await fetch('./assets/games/2025.json');
+        const response = await fetch(`./assets/games/${SEASON_YEAR}.json`);
         const data = await response.json();
 
         // タイトルを更新（例: "2025 SCHEDULE"）
@@ -32,10 +35,10 @@ async function loadSchedule() {
                 container.appendChild(sectionHeader);
             }
 
-            // 試合カードを追加
-            const ticketUrl = season.ticket;
+            // 試合カードを追加（試合個別のチケットURLがあれば優先）
             const isOpen = season.status === 'open';
             games.forEach(game => {
+                const ticketUrl = game.ticket || season.ticket;
                 const gameCard = createGameCard(game, ticketUrl, isOpen);
                 container.appendChild(gameCard);
             });
@@ -77,6 +80,7 @@ function createGameCard(game, ticketUrl, isOpen) {
         <div class="flex flex-col sm:flex-row items-center p-4 gap-4">
             <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                 <div class="text-center sm:text-left sm:w-40">
+                    ${game.round ? `<p class="text-xs text-gray-500">${game.round}</p>` : ''}
                     <p class="font-bold text-lg">${month}/${day}(${dayLabel})</p>
                     <p class="text-sm text-gray-600">${game.kickoff} キックオフ</p>
                 </div>
