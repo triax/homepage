@@ -9,6 +9,18 @@
 - `member-management.md` - メンバー管理手順（作成予定）
 - `monitoring.md` - 監視・メトリクス（作成予定）
 - `backup-recovery.md` - バックアップ・リカバリ（作成予定）
+- `sponsor-management.md` - スポンサー管理
+- `gallery-management.md` - フォトギャラリー管理
+- `image-optimization.md` - 画像最適化
+- `ogp-image-management.md` - OGP画像管理
+- `schedule-management.md` - 試合スケジュール管理
+- `video-management.md` - プロモ動画（ヒーロー背景・フル尺）の生成と管理
+- `crowdfunding-banner.md` - クラウドファンディングバナーの運用
+- `custom-domain-setup.md` - カスタムドメイン設定
+- `github-actions-sync.md` - GitHub Actions による同期
+- `roster-api-setup-guide.md` / `roster-api-trigger.md` - Roster API 連携
+- `instagram-secrets-setup.md` / `instagram-token-exchange.md` / `instagram-token-refresh.md` - Instagram トークン管理
+- `x-secrets-setup.md` - X（Twitter）Secrets 設定
 
 ## 🚀 主要な運用タスク
 
@@ -53,6 +65,6 @@ git push origin main
 - [GitHub Actions](https://github.com/triax/homepage/actions)
 
 ## 📅 最終更新
-- 日付: 2025-01-21
+- 日付: 2026-08-30
 - 更新者: Claude
-- 変更内容: 初期作成
+- 変更内容: `video-management.md`・`crowdfunding-banner.md` を追加、既存手順書の一覧を更新

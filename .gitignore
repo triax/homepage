@@ -6,3 +6,7 @@ node_modules
 .env.backup.*
 
 knowledge/plans
+
+# プロモ動画の元素材（リポジトリ直下）
+/*.mp4
+/*.mov

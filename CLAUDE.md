@@ -59,7 +59,9 @@ mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロ�
 │   └── ogp/         # Open Graph Protocol画像
 ├── docs/
 │   ├── assets/
-│   │   └── members/ # メンバー画像（Google Drive IDをファイル名に使用）
+│   │   ├── members/      # メンバー画像（Google Drive IDをファイル名に使用）
+│   │   ├── videos/       # プロモ動画（ヒーロー背景・フル尺）とポスター画像
+│   │   └── crowdfunding/ # クラウドファンディングバナー（index.json・JS・サムネイル）
 │   └── index.html   # GitHub Pages用HTMLファイル
 ├── scripts/         # 管理用TypeScriptスクリプト
 │   ├── download-all-images.ts    # 画像ダウンロード・同期
@@ -68,7 +70,8 @@ mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロ�
 │   ├── create-image-mapping.ts   # 画像マッピング作成
 │   ├── check-missing-images.ts   # 画像表示チェック（要Playwright）
 │   ├── fetch-instagram.ts        # Instagram投稿取得
-│   └── refresh-instagram-token.ts # Instagram Access Token更新
+│   ├── refresh-instagram-token.ts # Instagram Access Token更新
+│   └── encode-promo-videos.sh    # プロモ動画エンコード（要ffmpeg）
 └── specs/           # デザイン仕様と要件
     ├── pages/       # 個別ページ仕様
     └── *.md         # 各種仕様書
@@ -238,29 +241,35 @@ docs/assets/sponsors/
 ### ディレクトリ構造
 ```
 docs/assets/games/
-├── 2025.json           # 2025年シーズンの試合データ
+├── 2025.json           # 2025年シーズンの試合データ（アーカイブ）
+├── 2026.json           # 2026年シーズンの試合データ
 ├── schema.json         # JSONスキーマ（構造のドキュメント）
 └── schedule-loader.js  # 動的ローダースクリプト
 ```
 
-### データ構造（2025.json）
+表示するシーズンは `schedule-loader.js` 先頭の `SEASON_YEAR` 定数で切り替える。
+データソース: X League公式 X1 日程 https://xleague-nfa.jp/x1x2x3/x1_date/
+
+### データ構造（2026.json）
 ```json
 {
-  "year": 2025,
-  "preseason": { "status": "closed", "ticket": "...", "game": null },
+  "year": 2026,
+  "preseason": { "status": "closed", "ticket": null, "game": null },
   "regularseason": {
     "status": "open",  // closed=非公開, open=公開中, finished=終了
-    "ticket": "チケットURL",
+    "ticket": "シーズン共通チケットURL",  // 試合個別のticketが無い場合のフォールバック
     "games": [
       {
-        "date": "2025-09-07",
-        "dayOfWeek": "日",
+        "round": "第1節",          // 節（任意。日付の上に小さく表示）
+        "date": "2026-09-05",
+        "dayOfWeek": "土",
         "holiday": "祝",           // 祝日の場合のみ
         "opponent": "対戦相手",
-        "kickoff": "15:15",
-        "endTime": "17:45",        // Google Calendar用（kickoff+2.5h）
+        "kickoff": "13:30",
+        "endTime": "16:00",        // Google Calendar用（kickoff+2.5h）
         "venue": { "name": "会場名", "mapsQuery": "検索クエリ" },
         "home": null,              // true=ホーム, false=アウェイ, null=未設定
+        "ticket": "試合個別のチケットURL",  // 任意。指定するとシーズンのticketより優先
         "result": null,            // 試合結果（未決着ならnull）
         "stats": null              // スタッツURL（試合前はnull）
       }
@@ -296,7 +305,7 @@ docs/assets/games/
 - **スタッツリンク**: stats.urlがある場合はボタン表示
 
 ### 更新手順
-1. `docs/assets/games/2025.json` を編集
+1. `docs/assets/games/2026.json` を編集（新シーズンは新ファイルを作成し `SEASON_YEAR` を更新）
 2. 動作確認後、コミット・プッシュ（HTMLの編集は不要）
 
 詳細は以下のドキュメントを参照：
@@ -304,6 +313,42 @@ docs/assets/games/
 - `knowledge/01-requirements/functional/pages/SCHEDULE.md` - 機能仕様
 - `knowledge/02-architecture/schedule-integration.md` - 技術仕様
 - `knowledge/04-operations/schedule-management.md` - 運用手順
+
+## プロモーション動画
+
+ヒーロー背景のショート動画と、MOVIEセクションのフル尺プロモを管理。元動画から `scripts/encode-promo-videos.sh` で再生成する。
+
+### 生成物（`docs/assets/videos/`）
+- `hero-landscape.mp4` / `hero-portrait.mp4`: ヒーロー背景（PC横 / モバイル縦、無音ループ、約4MB）
+- `promo-full.mp4` / `promo-full-portrait.mp4`: フル尺プロモ（横版 720p / 縦版、音声あり、`preload="none"`）。MOVIE セクションはサムネイルのみで、クリックすると少し余白のあるモーダル（`#video-modal`）で再生（全デバイス共通）。縦画面では縦版、横画面では横版を `<source media>` で選ぶ
+- `promo-full-poster.jpg` / `promo-full-portrait-poster.jpg`: フル尺プロモのポスター画像（横版 / 縦版。モーダルを開く時に向きで切替）
+
+### 再生成フロー
+```bash
+# 元動画（nohin0814.mp4 / nohin0814_tate+.mp4）をリポジトリ直下に配置（Gitには含めない）
+./scripts/encode-promo-videos.sh            # すべて生成
+./scripts/encode-promo-videos.sh --dry-run  # コマンド確認のみ
+./scripts/encode-promo-videos.sh --only=hero  # hero | hero-landscape | hero-portrait | promo-full | poster
+```
+
+### 技術仕様
+- **配信方式**: Progressive MP4 + faststart（HLS・YouTube埋め込みは現時点では不採用）
+- **ヒーロー動画**: 元動画の27秒〜末尾を切り出し。縦横の振り分けは HTML の `<source media="(orientation: portrait)">`。`<video>` は `preload="none"`（`autoplay`/`poster` なし）で、`index.js` の `setupHeroVideo` が reduced-motion / saveData なら動画を外して静止画のまま、それ以外は `window` の `load` 後に `play()` する
+
+詳細は `knowledge/04-operations/video-management.md`、決定経緯は `knowledge/06-decisions/008-hero-video-and-section-order.md` を参照。
+
+## クラウドファンディングバナー
+
+トップページ右下に固定表示するクラウドファンディング（スポチュニティ）告知カード。
+これに伴い「メンバー募集」フローティングダイアログは**撤去済み**（マークアップ・`docs/assets/recruit_banner/` とも削除。復活時はコミット `b5fedf6` から復元、手順はADR-007参照）。
+
+### 管理方法
+- 設定は `docs/assets/crowdfunding/index.json` に集約。`crowdfunding-banner.js` が fetch して描画するため HTML・JS の編集は不要
+- `url`: リンク先（計測用リンク受領後に差し替え）
+- `endsAt`: 表示終了日（`"YYYY-MM-DD"`、過ぎると自動非表示）
+- 「×」で閉じるとそのセッション中は非表示（`sessionStorage`）
+
+詳細は `knowledge/04-operations/crowdfunding-banner.md`、決定経緯は `knowledge/06-decisions/007-remove-recruit-banner-add-crowdfunding.md` を参照。
 
 ## Instagram連携
 

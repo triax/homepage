@@ -53,10 +53,11 @@
                 </button>
                 <div class="hidden md:flex space-x-8">
                     <a href="#hero" class="hover:text-primary transition-colors">TOP</a>
+                    <a href="#schedule" class="hover:text-primary transition-colors">SCHEDULE</a>
                     <a href="#news" class="hover:text-primary transition-colors">NEWS</a>
                     <a href="#members" class="hover:text-primary transition-colors">MEMBERS</a>
-                    <a href="#schedule" class="hover:text-primary transition-colors">SCHEDULE</a>
                     <a href="#about" class="hover:text-primary transition-colors">ABOUT</a>
+                    <a href="#movie" class="hover:text-primary transition-colors">MOVIE</a>
                     <a href="#contact" class="hover:text-primary transition-colors">CONTACT</a>
                 </div>
             </div>
@@ -65,10 +66,11 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
             <div class="px-4 py-2 space-y-2">
                 <a href="#hero" class="block py-2 hover:text-primary">TOP</a>
+                <a href="#schedule" class="block py-2 hover:text-primary">SCHEDULE</a>
                 <a href="#news" class="block py-2 hover:text-primary">NEWS</a>
                 <a href="#members" class="block py-2 hover:text-primary">MEMBERS</a>
-                <a href="#schedule" class="block py-2 hover:text-primary">SCHEDULE</a>
                 <a href="#about" class="block py-2 hover:text-primary">ABOUT</a>
+                <a href="#movie" class="block py-2 hover:text-primary">MOVIE</a>
                 <a href="#contact" class="block py-2 hover:text-primary">CONTACT</a>
             </div>
         </div>
@@ -76,9 +78,14 @@
 
     <!-- Hero Section -->
     <section id="hero" class="h-screen relative overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('assets/headers/TOP.jpg')">
-            <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-        </div>
+        <!-- 静止画（動画が再生できない環境のフォールバック） -->
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('assets/headers/TOP.jpg')"></div>
+        <!-- 背景動画（preload=none にして index.js のゲート通過後・window load 後に play() する。再生開始時にフェードイン） -->
+        <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000" muted loop playsinline preload="none" aria-hidden="true">
+            <source src="assets/videos/hero-portrait.mp4" type="video/mp4" media="(orientation: portrait)">
+            <source src="assets/videos/hero-landscape.mp4" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
         <div class="relative z-10 flex flex-col items-center justify-center h-full text-white px-4">
             <div id="triax-loves-who" style="display:flex; align-items:center; justify-content:center; gap: 0.4rem;" class="mb-2">
                 <div id="team-logo-container" class="flex items-center justify-center">
@@ -99,14 +106,35 @@
                 <div id="pickup-info-label"></div>
                 <h1 id="pickup-info-value" class="text-4xl md:text-5xl font-bold mb-4 text-center"></h1>
             </div>
-            <button onclick="document.getElementById('news').scrollIntoView({behavior: 'smooth'})" class="mt-8 px-8 py-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors">
-                最新情報を見る
-            </button>
+            <a href="#schedule" class="mt-8 inline-block px-8 py-3 bg-red-600 hover:bg-red-700 rounded-full transition-colors">
+                試合日程を見る
+            </a>
+        </div>
+    </section>
+
+    <!-- SCHEDULE Section -->
+    <section id="schedule" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 id="schedule-title" class="text-4xl font-bold text-center mb-12 fade-in">SCHEDULE</h2>
+            <!-- 試合スケジュールはJavaScriptで動的に生成 -->
+            <div id="schedule-container" class="max-w-3xl mx-auto space-y-3 mb-8">
+                <!-- Loading placeholder -->
+                <div class="text-center py-8 text-gray-500">読み込み中...</div>
+            </div>
+            <div class="text-center">
+                <a href="#" class="inline-flex items-center text-primary hover:text-primary font-medium">
+                    全スケジュールを見る
+                    <!-- Heroicons: arrow-right -->
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
+                    </svg>
+                </a>
+            </div>
         </div>
     </section>
 
     <!-- NEWS Section -->
-    <section id="news" class="py-20 bg-gray-50">
+    <section id="news" class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12 fade-in">NEWS</h2>
             <!-- モバイル: 横スクロール形式、デスクトップ: グリッド形式 -->
@@ -157,46 +185,25 @@
         </div>
     </section>
 
-    <!-- SCHEDULE Section -->
-    <section id="schedule" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <h2 id="schedule-title" class="text-4xl font-bold text-center mb-12 fade-in">SCHEDULE</h2>
-            <!-- 試合スケジュールはJavaScriptで動的に生成 -->
-            <div id="schedule-container" class="max-w-3xl mx-auto space-y-3 mb-8">
-                <!-- Loading placeholder -->
-                <div class="text-center py-8 text-gray-500">読み込み中...</div>
-            </div>
-            <div class="text-center">
-                <a href="#" class="inline-flex items-center text-primary hover:text-primary font-medium">
-                    全スケジュールを見る
-                    <!-- Heroicons: arrow-right -->
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"></path>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </section>
-
     <!-- ABOUT Section -->
-    <section id="about" class="py-20">
+    <section id="about" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4 max-w-4xl">
-            <h2 class="text-white text-4xl font-bold text-center mb-12 fade-in">ABOUT TRIAX</h2>
+            <h2 class="text-4xl font-bold text-center mb-12 fade-in">ABOUT TRIAX</h2>
             <div class="text-center mb-8 fade-in">
-                <p class="text-white text-lg leading-relaxed mb-4">
+                <p class="text-gray-700 text-lg leading-relaxed mb-4">
                     TRIAXは日本社会人アメリカンフットボールリーグ「Xリーグ」に所属するクラブチームです。
                 </p>
-                <p class="text-white text-lg leading-relaxed mb-4">
-                    私たちは「LIF・WORK・PLAY」のチーム理念のもと、社会人として家庭や仕事とアメフトの相乗効果を追求しながら、心からアメフトを楽しんでいます。
+                <p class="text-gray-700 text-lg leading-relaxed mb-4">
+                    私たちは「LIFE・WORK・PLAY」のチーム理念のもと、社会人として家庭や仕事とアメフトの相乗効果を追求しながら、心からアメフトを楽しんでいます。
                 </p>
-                <p class="text-white text-lg leading-relaxed mb-4s">
+                <p class="text-gray-700 text-lg leading-relaxed mb-4">
                     会社、出身校、年齢も様々なメンバーが集まっています。
                     2017年よりX2に昇格、2021年にはX1Area昇格を達成しました。今年も台風の目となってリーグを盛り上げます。
                     ぜひ皆さんも私たちと一緒にアメフトを楽しみましょう！
                 </p>
             </div>
             <div class="grid md:grid-cols-2 gap-8 fade-in">
-                <div class="bg-gray-50 rounded-lg p-6">
+                <div class="bg-white rounded-lg p-6 shadow">
                     <h3 class="font-bold text-lg mb-4">チーム情報</h3>
                     <dl class="space-y-2">
                         <div class="flex justify-between">
@@ -213,7 +220,7 @@
                         </div>
                     </dl>
                 </div>
-                <div class="bg-gray-50 rounded-lg p-6">
+                <div class="bg-white rounded-lg p-6 shadow">
                     <h3 class="font-bold text-lg mb-4">活動情報</h3>
                     <dl class="space-y-2">
                         <div class="flex justify-between">
@@ -234,6 +241,25 @@
                     </dl>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- MOVIE Section -->
+    <section id="movie" class="py-16">
+        <div class="container mx-auto px-4">
+            <!-- サムネイルをクリックすると #video-modal で再生（index.js の initVideoModal） -->
+            <button id="video-thumbnail" type="button" aria-label="プロモーションムービーを再生"
+                    class="group relative block w-full max-w-3xl mx-auto rounded-lg shadow-lg overflow-hidden fade-in">
+                <img src="assets/videos/promo-full-poster.jpg" alt="" class="w-full aspect-video object-cover">
+                <span class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-colors">
+                    <span class="flex items-center justify-center w-20 h-20 rounded-full bg-white bg-opacity-90 shadow-lg transition-transform group-hover:scale-110">
+                        <!-- Heroicons: play (solid) -->
+                        <svg class="w-10 h-10 text-red-600 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                    </span>
+                </span>
+            </button>
         </div>
     </section>
 
@@ -399,143 +425,50 @@
     <!-- Member Detail Modal -->
     <div id="member-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <div class="p-6 pb-4">
-                    <div id="modal-content">
-                        <!-- モーダルコンテンツはJavaScriptで動的に生成 -->
-                    </div>
-                    <div class="mt-6 flex justify-center items-center gap-6">
-                        <!-- バツボタン（閉じる） -->
-                        <button id="close-modal" class="w-16 h-16 bg-white border-2 border-gray-300 hover:border-red-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all group">
-                            <svg class="w-8 h-8 text-red-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                        <!-- マイナスボタン（中立） -->
-                        <button id="neutral-modal" class="w-16 h-16 bg-white border-2 border-gray-300 hover:border-gray-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all group">
-                            <svg class="w-8 h-8 text-gray-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12h14"></path>
-                            </svg>
-                        </button>
-                        <!-- ハートボタン（いいね） -->
-                        <button id="like-modal" class="w-16 h-16 bg-white border-2 border-gray-300 hover:border-green-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all group">
-                            <svg class="w-8 h-8 text-green-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
-                        </button>
-                    </div>
+            <div id="member-modal-card" class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+                <!-- スクロールする本文 -->
+                <div id="modal-content" class="flex-1 min-h-0 overflow-y-auto p-6">
+                    <!-- モーダルコンテンツはJavaScriptで動的に生成 -->
+                </div>
+                <!-- 常に見える固定フッター（アクションボタン） -->
+                <div class="flex-shrink-0 flex justify-center items-center gap-6 px-6 py-3 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.06)]">
+                    <!-- バツボタン（閉じる） -->
+                    <button id="close-modal" class="w-14 h-14 sm:w-16 sm:h-16 bg-white border-2 border-gray-300 hover:border-red-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all group">
+                        <svg class="w-8 h-8 text-red-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                    <!-- マイナスボタン（中立） -->
+                    <button id="neutral-modal" class="w-14 h-14 sm:w-16 sm:h-16 bg-white border-2 border-gray-300 hover:border-gray-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all group">
+                        <svg class="w-8 h-8 text-gray-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 12h14"></path>
+                        </svg>
+                    </button>
+                    <!-- ハートボタン（いいね） -->
+                    <button id="like-modal" class="w-14 h-14 sm:w-16 sm:h-16 bg-white border-2 border-gray-300 hover:border-green-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all group">
+                        <svg class="w-8 h-8 text-green-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- メンバー募集ダイアログ用アニメーション -->
-    <style>
-        /* ダイアログの基本トランジション */
-        #recruit-dialog {
-            transition: opacity 0.4s ease-out;
-        }
-        #recruit-dialog .dialog-content {
-            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
-            transform-origin: bottom left;
-        }
-
-        /* 展開状態（通常表示） */
-        #recruit-dialog.dialog-visible {
-            opacity: 1;
-        }
-        #recruit-dialog.dialog-visible .dialog-content {
-            transform: scale(1) translate(0, 0);
-            opacity: 1;
-        }
-
-        /* 収束状態（最小化へ） */
-        #recruit-dialog.dialog-minimizing {
-            opacity: 0;
-        }
-        #recruit-dialog.dialog-minimizing .dialog-content {
-            transform: scale(0.1) translate(-80vw, 80vh);
-            opacity: 0;
-        }
-
-        /* 展開中（バッジから） */
-        #recruit-dialog.dialog-expanding {
-            opacity: 0;
-        }
-        #recruit-dialog.dialog-expanding .dialog-content {
-            transform: scale(0.1) translate(-80vw, 80vh);
-            opacity: 0;
-        }
-    </style>
-
-    <!-- メンバー募集ダイアログ -->
-    <div id="recruit-dialog" class="fixed inset-0 z-50 hidden">
-        <!-- 暗いオーバーレイ -->
-        <div class="absolute inset-0 bg-black bg-opacity-[0.8]"></div>
-
-        <!-- 中央コンテンツ -->
-        <div class="relative flex items-center justify-center min-h-screen p-4 sm:p-8 h-full">
-            <div class="dialog-content relative max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-
-                <!-- 背景画像 -->
-                <div class="absolute inset-0">
-                    <img src="assets/recruit_banner/bg_raw.png"
-                         class="w-full h-full object-cover blur-[1px] brightness-[0.4]"
-                         alt="">
-                </div>
-
-                <!-- コンテンツ（前面） -->
-                <div class="relative p-4 sm:p-6 flex-1 overflow-y-auto shadow-xl">
-                    <div class="text-center text-white mx-auto">
-                        <h2 class="text-2xl sm:text-4xl md:text-6xl font-bold mb-2">メンバー募集中！!</h2>
-                        <p class="text-gray-200 mb-4 sm:mb-6 text-shadow-lg/30 text-left text-xs sm:text-sm leading-relaxed">
-                            TRIAXは「LIFE・WORK・PLAY」という理念を掲げています。<br/>
-                            私生活と仕事、そしてアメフト。この3つの相乗効果で、<br/>
-                            一人ひとりの人生をより豊かにしていくことを目指しているチームです。<br/>
-                            <br/>
-                            また、データ分析やAIなどのデジタル技術を積極的に取り入れ、<br/>
-                            選手のパフォーマンス向上だけでなく、<br/>
-                            観てくださる方にも新しいフットボールの楽しみ方を届けたいと考えています。<br/>
-                            <br/>
-                            そして何より、このチームは本当に「おもろい」ひとたちが集まっています。<br/>
-                            個性豊かなメンバーが揃っていて、毎回の練習が刺激的です。<br/>
-                            <br/>
-                            ぜひ一度、僕たちのチームを見に来てください！
-                        </p>
-
-                        <!-- ボタン -->
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeXfWv8uXq9uY-VpQgGOSj20gdPpnOBe_76G_42Z4D5gvULHA/viewform?usp=header"
-                        target="_blank"
-                        class="block w-full bg-red-600 text-white py-2 sm:py-3 rounded-lg mb-2 sm:mb-3 hover:bg-red-700 font-semibold transition-colors text-sm sm:text-base">
-                            問い合わせへ
-                        </a>
-                        <button id="minimize-dialog-btn"
-                                class="block w-full border border-white text-white py-2 sm:py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors text-sm sm:text-base">
-                            最小化
-                        </button>
-
-                        <!-- チェックボックス -->
-                        <label class="flex items-center justify-center mt-3 sm:mt-4 text-xs sm:text-sm text-gray-300 cursor-pointer">
-                            <input type="checkbox" id="hide-dialog-checkbox" class="mr-2">
-                            もう表示しない
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- メンバー募集バッジ（最小化時に表示） -->
-    <div id="recruit-badge" class="fixed bottom-4 left-4 z-40 hidden">
-        <button class="bg-red-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-red-700 flex items-center gap-2 transition-colors">
-            <span>🏈</span>
-            <span class="font-semibold">メンバー募集中</span>
-        </button>
+    <!-- Video Modal（プロモーションムービー。開閉と poster の縦横切替は index.js の initVideoModal） -->
+    <!-- h-[100dvh] はモバイル横向きでアドレスバー分の隙間を出さないため。縦画面では縦版、横画面では横版を <source media> で選ぶ -->
+    <div id="video-modal" class="fixed inset-0 h-[100dvh] bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4 sm:p-8">
+        <button id="close-video-modal" class="absolute top-3 right-3 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 text-white text-2xl hover:text-gray-300" aria-label="閉じる">&times;</button>
+        <!-- aspect-video / portrait:aspect-[9/16] はメタデータ読込前（intrinsic 300x150）の見た目崩れ防止 -->
+        <video id="video-modal-player" controls playsinline preload="none" class="max-w-full max-h-full w-auto h-auto aspect-video portrait:aspect-[9/16] rounded-lg shadow-2xl object-contain">
+            <source src="assets/videos/promo-full-portrait.mp4" type="video/mp4" media="(orientation: portrait)">
+            <source src="assets/videos/promo-full.mp4" type="video/mp4">
+        </video>
     </div>
 
     <script src="./index.js" defer></script>
     <script src="./assets/sponsors/sponsor-loader.js" defer></script>
     <script src="./assets/games/schedule-loader.js" defer></script>
-    <script src="./assets/recruit_banner/recruit-dialog.js" defer></script>
+    <script src="./assets/crowdfunding/crowdfunding-banner.js" defer></script>
 </body>
 </html>
