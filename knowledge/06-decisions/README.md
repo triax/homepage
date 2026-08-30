@@ -8,6 +8,13 @@
 - `001-static-site.md` - 静的サイト選定理由（作成予定）
 - `002-tailwind-css.md` - Tailwind CSS採用理由（作成予定）
 - `003-image-storage.md` - 画像ストレージ戦略（作成予定）
+- `003-sponsor-section-layout.md` - スポンサーセクションのレイアウト設計
+- `004-gallery-lightbox-device-strategy.md` - ギャラリーLightboxのデバイス戦略
+- `005-image-optimization-strategy.md` - 画像最適化戦略
+- `006-x-crosspost-watermark-guard.md` - Instagram→Xクロスポストのwatermarkガード
+- `007-remove-recruit-banner-add-crowdfunding.md` - 「メンバー募集」フローティングの撤去とクラウドファンディングカードの追加
+- `008-hero-video-and-section-order.md` - ヒーロー背景動画・プロモ動画の配信方式とセクション順序
+- `instagram-integration-decisions.md` - Instagram連携に関する決定事項
 
 ## 📝 ADRとは
 Architecture Decision Record（ADR）は、アーキテクチャに関する重要な決定を文書化したものです。
@@ -59,6 +66,6 @@ Architecture Decision Record（ADR）は、アーキテクチャに関する重�
 - [ADRについて](https://adr.github.io/)
 
 ## 📅 最終更新
-- 日付: 2025-01-21
+- 日付: 2026-08-30
 - 更新者: Claude
-- 変更内容: 初期作成
+- 変更内容: ADR-007（募集フローティング撤去・クラファンカード追加）、ADR-008（ヒーロー動画・セクション順序）を追加、既存ADRの一覧を更新

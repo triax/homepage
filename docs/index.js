@@ -249,6 +249,16 @@ function createMemberCard(member) {
     return card;
 }
 
+// メンバーモーダルが開いているか
+function isMemberModalOpen() {
+    return !document.getElementById('member-modal').classList.contains('hidden');
+}
+
+// メンバーモーダルを閉じる（×・−・♥ボタン、背景クリック、Escキー共通）
+function closeMemberModal() {
+    document.getElementById('member-modal').classList.add('hidden');
+}
+
 // メンバー詳細モーダル表示
 function showMemberDetail(member) {
     const modalContent = document.getElementById('modal-content');
@@ -455,35 +465,6 @@ function showMemberDetail(member) {
                     }
                 }
             }
-
-            // キーボードナビゲーション（モーダルが開いている時のみ）
-            function handleKeyPress(e) {
-                if (!document.getElementById('member-modal').classList.contains('hidden')) {
-                    if (e.key === 'ArrowLeft') {
-                        const newIndex = currentPhotoIndex === 0 ? allPhotos.length - 1 : currentPhotoIndex - 1;
-                        updateCarouselImage(newIndex);
-                    } else if (e.key === 'ArrowRight') {
-                        const newIndex = currentPhotoIndex === allPhotos.length - 1 ? 0 : currentPhotoIndex + 1;
-                        updateCarouselImage(newIndex);
-                    }
-                }
-            }
-
-            document.addEventListener('keydown', handleKeyPress);
-
-            // モーダルが閉じられたときにイベントリスナーを削除
-            const modal = document.getElementById('member-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-            const removeKeyListener = () => {
-                document.removeEventListener('keydown', handleKeyPress);
-            };
-
-            closeModalBtn.addEventListener('click', removeKeyListener, { once: true });
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    removeKeyListener();
-                }
-            }, { once: true });
         }, 0);
     }
 
@@ -558,17 +539,31 @@ function initLazyLoad() {
 }
 
 // フェードインアニメーション
+// 既存の .fade-in に加え、後から追加される要素（スケジュールの試合カードなど）も自動で監視対象にする
 function initFadeIn() {
-    const elements = document.querySelectorAll('.fade-in');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1 });
 
-    elements.forEach(el => observer.observe(el));
+    const observeWithin = (root) => {
+        root.querySelectorAll('.fade-in:not(.visible)').forEach(el => observer.observe(el));
+    };
+    observeWithin(document);
+
+    new MutationObserver((mutations) => {
+        mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType !== Node.ELEMENT_NODE) return;
+                if (node.matches('.fade-in:not(.visible)')) observer.observe(node);
+                observeWithin(node);
+            });
+        });
+    }).observe(document.body, { childList: true, subtree: true });
 }
 
 // flip用のinterval IDを保存
@@ -738,8 +733,28 @@ function displayRandomMemberPickup(members) {
     }
 }
 
+// ヒーロー背景動画: 省データ・動きの抑制設定なら静止画のまま。それ以外はページ読み込み完了後に再生を開始する
+// （縦横の動画選択は HTML 側の <source media> で行う）
+function setupHeroVideo() {
+    const video = document.getElementById('hero-video');
+    if (!video) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion || navigator.connection?.saveData) {
+        video.remove();
+        return;
+    }
+
+    // 再生が始まってからフェードインし、静止画との切り替えを滑らかにする
+    video.addEventListener('playing', () => video.classList.remove('opacity-0'), { once: true });
+    window.addEventListener('load', () => video.play().catch(() => {}), { once: true });
+}
+
 // 初期化
 document.addEventListener('DOMContentLoaded', async function () {
+    setupHeroVideo();
+    // 静的セクションのフェードインはロスター取得を待たずに開始する
+    initFadeIn();
     // 画像マッピングを最初に読み込む
     await loadImageMapping();
     // メニュートグル
@@ -754,15 +769,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     });
 
-    // モーダル閉じる
-    document.getElementById('close-modal').addEventListener('click', function () {
-        document.getElementById('member-modal').classList.add('hidden');
+    // メンバーモーダルの操作（×・−ボタン、背景クリック、Esc で閉じる／←→ で写真送り）
+    document.getElementById('close-modal').addEventListener('click', closeMemberModal);
+    document.getElementById('neutral-modal').addEventListener('click', closeMemberModal);
+    document.getElementById('member-modal').addEventListener('click', function (e) {
+        // カードの外側（背景）をクリックしたときのみ閉じる
+        if (!e.target.closest('#member-modal-card')) {
+            closeMemberModal();
+        }
     });
-
-    // マイナスボタン（中立）のアクション
-    document.getElementById('neutral-modal').addEventListener('click', function () {
-        // シンプルにモーダルを閉じる
-        document.getElementById('member-modal').classList.add('hidden');
+    document.addEventListener('keydown', function (e) {
+        if (!isMemberModalOpen()) return;
+        if (e.key === 'Escape') {
+            closeMemberModal();
+        } else if (e.key === 'ArrowLeft') {
+            document.getElementById('carousel-prev')?.click();
+        } else if (e.key === 'ArrowRight') {
+            document.getElementById('carousel-next')?.click();
+        }
     });
 
     // ハートボタン（いいね）のアクション
@@ -778,18 +802,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // 少し待ってからモーダルを閉じる
         setTimeout(() => {
-            document.getElementById('member-modal').classList.add('hidden');
+            closeMemberModal();
             // 元の状態に戻す
             button.classList.remove('animate-pulse');
             svg.classList.remove('text-red-500');
             svg.classList.add('text-green-500');
         }, 500);
-    });
-
-    document.getElementById('member-modal').addEventListener('click', function (e) {
-        if (e.target === this) {
-            this.classList.add('hidden');
-        }
     });
 
     // ポジションフィルター
@@ -814,9 +832,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 `;
     }
 
-    // アニメーション初期化
-    initFadeIn();
-
     // ランダムflipアニメーション開始（3秒後）
     setTimeout(() => {
         startRandomFlips();
@@ -825,8 +840,59 @@ document.addEventListener('DOMContentLoaded', async function () {
     // ギャラリー機能を初期化
     initGallery();
 
+    // プロモーションムービーのモーダル再生
+    initVideoModal();
+
     initInstagram();
 });
+
+// プロモーションムービーのモーダル再生
+// サムネイルクリックで開いて再生し、×・背景クリック・Esc で停止して閉じる（ギャラリーのライトボックスと同じ流儀）
+function initVideoModal() {
+    const modal = document.getElementById('video-modal');
+    const player = document.getElementById('video-modal-player');
+    const thumbnail = document.getElementById('video-thumbnail');
+    if (!modal || !player || !thumbnail) return;
+
+    const POSTERS = {
+        portrait: 'assets/videos/promo-full-portrait-poster.jpg',
+        landscape: 'assets/videos/promo-full-poster.jpg',
+    };
+
+    const isOpen = () => modal.classList.contains('flex');
+
+    const openModal = () => {
+        // <source media> と同じ条件で縦横を判定し、poster も切り替える（poster 属性は media で切り替えられない）
+        const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+        player.poster = isPortrait ? POSTERS.portrait : POSTERS.landscape;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.classList.add('overflow-hidden');
+        player.play().catch(() => {});
+    };
+
+    const closeModal = () => {
+        player.pause();
+        player.currentTime = 0;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.classList.remove('overflow-hidden');
+    };
+
+    thumbnail.addEventListener('click', openModal);
+    document.getElementById('close-video-modal').addEventListener('click', closeModal);
+    // 余白（モーダル自身）のクリックで閉じる。動画内のクリックはブラウザ標準動作のまま
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen()) {
+            closeModal();
+        }
+    });
+}
 
 async function initInstagram() {
     const response = await fetch("./assets/instagram/posts.json");

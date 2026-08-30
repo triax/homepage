@@ -1,0 +1,123 @@
+{
+  "year": 2026,
+  "preseason": {
+    "title": "プレシーズン",
+    "status": "closed",
+    "ticket": null,
+    "game": null
+  },
+  "regularseason": {
+    "title": "レギュラーシーズン",
+    "status": "open",
+    "ticket": "https://xleague-nfa.jp/ticket/",
+    "games": [
+      {
+        "round": "第1節",
+        "date": "2026-09-05",
+        "dayOfWeek": "土",
+        "opponent": "市川BLUE THUNDERS",
+        "kickoff": "13:30",
+        "endTime": "16:00",
+        "venue": {
+          "name": "国府台スタジアム",
+          "mapsQuery": "国府台スタジアム 市川"
+        },
+        "home": false,
+        "ticket": "https://r10.to/h5g9fr",
+        "result": null
+      },
+      {
+        "round": "第2節",
+        "date": "2026-09-21",
+        "dayOfWeek": "月",
+        "holiday": "祝",
+        "opponent": "電通キャタピラーズ",
+        "kickoff": "13:30",
+        "endTime": "16:00",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": false,
+        "ticket": "https://r10.to/hYdQaZ",
+        "result": null
+      },
+      {
+        "round": "第3節",
+        "date": "2026-10-10",
+        "dayOfWeek": "土",
+        "opponent": "警視庁イーグルス",
+        "kickoff": "13:30",
+        "endTime": "16:00",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": false,
+        "ticket": "https://r10.to/hYv4HL",
+        "result": null
+      },
+      {
+        "round": "第4節",
+        "date": "2026-10-24",
+        "dayOfWeek": "土",
+        "opponent": "SAITAMA BULLSフットボールクラブ",
+        "kickoff": "13:30",
+        "endTime": "16:00",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": true,
+        "ticket": "https://r10.to/h5tcZx",
+        "result": null
+      },
+      {
+        "round": "第5節",
+        "date": "2026-11-08",
+        "dayOfWeek": "日",
+        "opponent": "胎内DEERS",
+        "kickoff": "13:30",
+        "endTime": "16:00",
+        "venue": {
+          "name": "富士通スタジアム川崎",
+          "mapsQuery": "富士通スタジアム川崎"
+        },
+        "home": false,
+        "ticket": "https://r10.to/hgzR1T",
+        "result": null
+      },
+      {
+        "round": "第6節",
+        "date": "2026-11-23",
+        "dayOfWeek": "月",
+        "holiday": "祝",
+        "opponent": "PentaOceanパイレーツ",
+        "kickoff": "14:45",
+        "endTime": "17:15",
+        "venue": {
+          "name": "アミノバイタルフィールド",
+          "mapsQuery": "アミノバイタルフィールド"
+        },
+        "home": true,
+        "ticket": "https://r10.to/h5AoRS",
+        "result": null
+      },
+      {
+        "round": "第7節",
+        "date": "2026-12-06",
+        "dayOfWeek": "日",
+        "opponent": "品川CC ブルザイズ",
+        "kickoff": "13:45",
+        "endTime": "16:15",
+        "venue": {
+          "name": "アミノバイタルフィールド",
+          "mapsQuery": "アミノバイタルフィールド"
+        },
+        "home": true,
+        "ticket": "https://r10.to/h5RK2I",
+        "result": null
+      }
+    ]
+  }
+}

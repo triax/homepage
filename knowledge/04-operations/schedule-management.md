@@ -7,10 +7,18 @@ JSONファイルで管理し、JavaScriptで動的に表示する。
 ## ファイル構成
 ```
 docs/assets/games/
-├── 2025.json           # 2025年シーズンの試合データ
+├── 2025.json           # 2025年シーズンの試合データ（アーカイブ）
+├── 2026.json           # 2026年シーズンの試合データ
 ├── schema.json         # JSONスキーマ（構造のドキュメント）
 └── schedule-loader.js  # 動的ローダースクリプト
 ```
+
+表示するシーズンは `schedule-loader.js` 先頭の `SEASON_YEAR` 定数で切り替える（例: `const SEASON_YEAR = 2026;`）。
+
+## データソース
+- X League公式 X1 日程: https://xleague-nfa.jp/x1x2x3/x1_date/
+  - 表は「ホーム × ビジター」の並び。Club TRIAXが左（ホーム）なら `home: true`
+  - 各行の「チケット購入」リンク（r10.to）を試合個別の `ticket` に設定
 
 ## 更新タイミング
 
@@ -31,30 +39,31 @@ docs/assets/games/
 #### JSONファイルを編集
 ```bash
 # ファイルを開く
-code docs/assets/games/2025.json
+code docs/assets/games/2026.json
 ```
 
 #### データ形式
 ```json
 {
-  "year": 2025,
+  "year": 2026,
   "regularseason": {
     "status": "open",
-    "ticket": "https://sports.banklives.com/events/clubtriax/155",
+    "ticket": "https://xleague-nfa.jp/ticket/",
     "games": [
       {
-        "date": "2025-09-07",
-        "dayOfWeek": "日",
-        "opponent": "ペンタオーシャン パイレーツ",
-        "kickoff": "15:15",
-        "endTime": "17:45",
+        "round": "第1節",
+        "date": "2026-09-05",
+        "dayOfWeek": "土",
+        "opponent": "市川BLUE THUNDERS",
+        "kickoff": "13:30",
+        "endTime": "16:00",
         "venue": {
-          "name": "富士通スタジアム川崎",
-          "mapsQuery": "富士通スタジアム川崎"
+          "name": "国府台スタジアム",
+          "mapsQuery": "国府台スタジアム 市川"
         },
-        "home": null,
-        "result": null,
-        "stats": null
+        "home": false,
+        "ticket": "https://r10.to/h5g9fr",
+        "result": null
       }
     ]
   }
@@ -67,6 +76,8 @@ code docs/assets/games/2025.json
 - endTime: キックオフから2.5時間後
 - 会場名: 正式名称を使用
 - holiday: 祝日の場合のみ追加（例: `"holiday": "祝"`）
+- round: 節（例: `"round": "第1節"`）。指定すると日付の上に小さく表示
+- ticket（試合ごと）: 試合個別のチケットURL。未指定ならシーズンの `ticket` を使用
 
 ### 2. 試合結果の記録
 
@@ -203,7 +214,7 @@ cat docs/assets/games/2025.json | python3 -m json.tool
    ```bash
    cp docs/assets/games/2025.json docs/assets/games/2026.json
    ```
-3. schedule-loader.jsの読み込み年度を更新（必要な場合）
+3. schedule-loader.jsの `SEASON_YEAR` を新シーズン年に更新
 4. 関連ドキュメントの更新
 
 ### シーズン開始前
