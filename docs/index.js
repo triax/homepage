@@ -1,8 +1,15 @@
 // グローバル変数
 let allMembers = [];
 let currentPosition = 'ALL';
-let extensionAttempts = {};
-let imageMapping = {};
+
+// 画像が読み込めなかったときに表示するプレースホルダー
+const NO_IMAGE_PLACEHOLDER = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23e5e7eb%22 width=%22100%22 height=%22100%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22 font-family=%22sans-serif%22 font-size=%2216%22>No Image</text></svg>';
+
+// 画像の読み込みに失敗したらプレースホルダーへ差し替える
+function showNoImage(img) {
+    img.onerror = null;
+    img.src = NO_IMAGE_PLACEHOLDER;
+}
 
 // Google Maps リンクを開く
 function openGoogleMaps(venue) {
@@ -49,170 +56,69 @@ function addToGoogleCalendar(date, time, opponent, venue) {
     window.open(url, '_blank');
 }
 
-// 画像マッピングを読み込む
-async function loadImageMapping() {
-    try {
-        const response = await fetch('image-mapping.json');
-        if (response.ok) {
-            imageMapping = await response.json();
-            console.log('Image mapping loaded:', Object.keys(imageMapping).length, 'entries');
-        }
-    } catch (error) {
-        console.warn('Could not load image mapping:', error);
-    }
-}
-
-// Google Drive IDを抽出
-function extractGoogleDriveId(url) {
-    const match = url.match(/id=([^&]+)/);
-    return match ? match[1] : null;
-}
-
-// 画像エラーハンドリング
-function handleImageError(img) {
-    const googleDriveId = img.dataset.googleDriveId;
-    if (!googleDriveId) {
-        img.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23e5e7eb%22 width=%22100%22 height=%22100%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22 font-family=%22sans-serif%22 font-size=%2216%22>No Image</text></svg>';
-        return;
-    }
-
-    // 試した拡張子を記録
-    if (!extensionAttempts[googleDriveId]) {
-        extensionAttempts[googleDriveId] = [];
-    }
-
-    const extensions = ['jpg', 'png', 'gif', 'webp', 'heif', 'heic'];
-    const currentSrc = img.src;
-    const currentExt = currentSrc.split('.').pop();
-
-    extensionAttempts[googleDriveId].push(currentExt);
-
-    // 次の拡張子を試す
-    const nextExt = extensions.find(ext => !extensionAttempts[googleDriveId].includes(ext));
-    if (nextExt) {
-        img.src = `assets/members/${googleDriveId}.${nextExt}`;
-    } else {
-        // すべての拡張子を試した場合はプレースホルダー
-        img.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23e5e7eb%22 width=%22100%22 height=%22100%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22 font-family=%22sans-serif%22 font-size=%2216%22>No Image</text></svg>';
-    }
-}
-
-// MIMEタイプから拡張子を取得
-function getExtensionFromMimeType(mimeType) {
-    const mimeToExt = {
-        'image/jpeg': 'jpg',
-        'image/jpg': 'jpg',
-        'image/png': 'png',
-        'image/gif': 'gif',
-        'image/webp': 'webp',
-        'image/svg+xml': 'svg',
-        'image/heif': 'heif',
-        'image/heic': 'heic'
-    };
-    return mimeToExt[mimeType] || 'jpg';
-}
-
-// Google Drive URLを画像表示用に変換（新しいAPI形式対応）
-function convertGoogleDriveUrl(urlOrObject) {
-    // 新しいAPI形式（オブジェクト）の場合
-    if (typeof urlOrObject === 'object' && urlOrObject.url) {
-        const googleDriveId = extractGoogleDriveId(urlOrObject.url);
-        if (googleDriveId) {
-            const extension = getExtensionFromMimeType(urlOrObject.mime_type);
-            return `assets/members/${googleDriveId}.${extension}`;
-        }
-        return urlOrObject.url;
-    }
-
-    // 旧形式（文字列URL）の場合
-    const googleDriveId = extractGoogleDriveId(urlOrObject);
-    if (googleDriveId && imageMapping[googleDriveId]) {
-        // マッピングから正しいファイル名を取得
-        return `assets/members/${imageMapping[googleDriveId]}`;
-    } else if (googleDriveId) {
-        // マッピングがない場合はデフォルトでjpgを試す
-        return `assets/members/${googleDriveId}.jpg`;
-    }
-    return urlOrObject;
-}
-
-// メンバーデータ取得
+// メンバーデータ取得（hub 公開 API からビルド時に生成された roster.json を読む）
 async function fetchRoster() {
     try {
         const response = await fetch('assets/roster.json');
-        const data = await response.json();
-
-        // 画像URLを変換
-        if (data && data.members) {
-            data.members.forEach(member => {
-                if (member.photos) {
-                    if (member.photos.serious) {
-                        member.photos.serious = convertGoogleDriveUrl(member.photos.serious);
-                    }
-                    if (member.photos.casual && Array.isArray(member.photos.casual)) {
-                        member.photos.casual = member.photos.casual.map(photo =>
-                            convertGoogleDriveUrl(photo)
-                        );
-                    }
-                }
-            });
-        }
-
-        return data;
+        return await response.json();
     } catch (error) {
         console.error('Failed to fetch roster:', error);
         return null;
     }
 }
 
+// メンバーの写真を表示順（正面写真 → カジュアル写真）に並べる
+// 正面写真が未登録でもカジュアル写真があれば、それが先頭＝カードの表面になる
+function collectMemberPhotos(member) {
+    const photos = member.photos || {};
+    const casual = Array.isArray(photos.casual) ? photos.casual : [];
+    return [photos.formal, ...casual].filter(Boolean);
+}
+
 // メンバーカード作成
 function createMemberCard(member) {
     const card = document.createElement('div');
-    const hasCasualPhotos = member.photos.casual && member.photos.casual.length > 0;
-    card.className = `member-card bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow fade-in ${hasCasualPhotos ? 'flip-card' : ''}`;
-    // member.photos.seriousは既に文字列に変換されている
-    const seriousPhotoUrl = member.photos.serious;
-    const googleDriveId = extractGoogleDriveId(seriousPhotoUrl);
+    const photos = collectMemberPhotos(member);
+    const frontPhoto = photos[0] || NO_IMAGE_PLACEHOLDER;
+    const backPhotos = photos.slice(1);
+    const hasBackPhoto = backPhotos.length > 0;
+    card.className = `member-card bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow fade-in ${hasBackPhoto ? 'flip-card' : ''}`;
 
-    if (hasCasualPhotos) {
-        // casual写真がある場合はflip対応カード（写真部分のみflip）
-        const casualPhoto = member.photos.casual[Math.floor(Math.random() * member.photos.casual.length)];
-        // casualPhotoは既に文字列に変換されている
-        const casualPhotoUrl = casualPhoto;
-        const casualGoogleDriveId = extractGoogleDriveId(casualPhotoUrl);
+    const jersey = member.number ? `<div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm z-10">
+                            #${member.number}
+                        </div>` : '';
+    const info = `
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">${member.name.default}</h3>
+                        <p class="text-primary font-semibold">${member.position}</p>
+                        ${member.role ? `<p class="text-sm text-gray-600 mt-1">${member.role}</p>` : ''}
+                    </div>`;
+
+    if (hasBackPhoto) {
+        // 2枚目以降の写真がある場合はflip対応カード（写真部分のみflip）
+        const backPhoto = backPhotos[Math.floor(Math.random() * backPhotos.length)];
 
         card.innerHTML = `
                     <!-- 写真部分（flip対象） -->
                     <div class="aspect-square bg-gray-200 relative overflow-hidden flip-container">
                         <div class="flip-card-inner">
-                            <!-- 表面: serious写真 -->
+                            <!-- 表面 -->
                             <div class="flip-card-front">
-                                <img data-src="${member.photos.serious}"
-                                     data-google-drive-id="${googleDriveId || ''}"
+                                <img data-src="${frontPhoto}"
                                      alt="${member.name.default}"
-                                     class="lazy-load w-full h-full object-cover member-image"
-                                     onerror="handleImageError(this)">
+                                     class="lazy-load w-full h-full object-cover member-image">
                             </div>
-                            <!-- 裏面: casual写真 -->
+                            <!-- 裏面 -->
                             <div class="flip-card-back">
-                                <img data-src="${casualPhoto}"
-                                     data-google-drive-id="${casualGoogleDriveId || ''}"
+                                <img data-src="${backPhoto}"
                                      alt="${member.name.default} casual"
-                                     class="lazy-load w-full h-full object-cover member-image"
-                                     onerror="handleImageError(this)">
+                                     class="lazy-load w-full h-full object-cover member-image">
                             </div>
                         </div>
                         <!-- 背番号（flipの外側に配置） -->
-                        ${member.jersey ? `<div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm z-10">
-                            #${member.jersey}
-                        </div>` : ''}
+                        ${jersey}
                     </div>
-                    <!-- 情報部分（常に表示） -->
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-1">${member.name.default}</h3>
-                        <p class="text-primary font-semibold">${member.position}</p>
-                        ${member.role ? `<p class="text-sm text-gray-600 mt-1">${member.role}</p>` : ''}
-                    </div>
+                    <!-- 情報部分（常に表示） -->${info}
                 `;
 
         // flip対応カードは詳細モーダルを別途処理
@@ -223,23 +129,14 @@ function createMemberCard(member) {
             }
         });
     } else {
-        // casual写真がない場合は従来のカード
+        // 写真が1枚以下の場合は従来のカード
         card.innerHTML = `
                     <div class="aspect-square bg-gray-200 relative overflow-hidden">
-                        <img data-src="${member.photos.serious}"
-                             data-google-drive-id="${googleDriveId || ''}"
+                        <img data-src="${frontPhoto}"
                              alt="${member.name.default}"
-                             class="lazy-load w-full h-full object-cover member-image"
-                             onerror="handleImageError(this)">
-                        ${member.jersey ? `<div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
-                            #${member.jersey}
-                        </div>` : ''}
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-1">${member.name.default}</h3>
-                        <p class="text-primary font-semibold">${member.position}</p>
-                        ${member.role ? `<p class="text-sm text-gray-600 mt-1">${member.role}</p>` : ''}
-                    </div>
+                             class="lazy-load w-full h-full object-cover member-image">
+                        ${jersey}
+                    </div>${info}
                 `;
 
         // クリックイベント
@@ -259,18 +156,26 @@ function closeMemberModal() {
     document.getElementById('member-modal').classList.add('hidden');
 }
 
+// モーダルの定義リスト1行分（値が空の項目は行ごと出さない）
+function memberDetailRow(label, value) {
+    if (!value) return '';
+    return `
+                            <div>
+                                <dt class="font-semibold text-gray-700">${label}</dt>
+                                <dd>${value}</dd>
+                            </div>`;
+}
+
 // メンバー詳細モーダル表示
 function showMemberDetail(member) {
     const modalContent = document.getElementById('modal-content');
 
-    // すべての画像を統合（serious + casual）
-    let allPhotos = [];
-    if (member.photos.serious) {
-        allPhotos.push(member.photos.serious);
-    }
-    if (member.photos.casual && Array.isArray(member.photos.casual)) {
-        allPhotos = allPhotos.concat(member.photos.casual);
-    }
+    const photos = collectMemberPhotos(member);
+    const allPhotos = photos.length > 0 ? photos : [NO_IMAGE_PLACEHOLDER];
+    const physique = [
+        member.height ? `${member.height}cm` : '',
+        member.weight ? `${member.weight}kg` : ''
+    ].filter(Boolean).join(' / ');
 
     // カルーセル用の変数
     let currentPhotoIndex = 0;
@@ -286,10 +191,9 @@ function showMemberDetail(member) {
                             <div class="relative overflow-hidden rounded-lg bg-gray-200">
                                 <img id="carousel-image"
                                      src="${allPhotos[0]}"
-                                     data-google-drive-id="${extractGoogleDriveId(allPhotos[0]) || ''}"
                                      alt="${member.name.default}"
                                      class="w-full h-full object-cover transition-opacity duration-300"
-                                     onerror="handleImageError(this)">
+                                     onerror="showNoImage(this)">
 
                                 ${hasMultiplePhotos ? `
                                     <!-- ナビゲーションボタン -->
@@ -323,52 +227,26 @@ function showMemberDetail(member) {
                     </div>
                     <div>
                         <h3 class="text-2xl font-bold mb-2">${member.name.default}</h3>
-                        ${member.name.hiragana ? `<p class="text-gray-600 mb-1">${member.name.hiragana}</p>` : ''}
+                        ${member.name.kana ? `<p class="text-gray-600 mb-1">${member.name.kana}</p>` : ''}
                         ${member.name.alphabet ? `<p class="text-gray-600 mb-4">${member.name.alphabet}</p>` : ''}
 
                         <div class="flex items-center gap-4 mb-6">
-                            ${member.jersey ? `<span class="bg-red-600 text-white px-3 py-1 rounded-full font-bold">#${member.jersey}</span>` : ''}
+                            ${member.number ? `<span class="bg-red-600 text-white px-3 py-1 rounded-full font-bold">#${member.number}</span>` : ''}
                             <span class="font-semibold text-lg">${member.position}</span>
                             ${member.role ? `<span class="text-gray-600">${member.role}</span>` : ''}
                         </div>
 
                         <dl class="space-y-3">
-                            ${member.university ? `
-                                <div>
-                                    <dt class="font-semibold text-gray-700">出身大学</dt>
-                                    <dd>${member.university}</dd>
-                                </div>
-                            ` : ''}
-                            ${member.enthusiasm ? `
-                                <div>
-                                    <dt class="font-semibold text-gray-700">意気込み</dt>
-                                    <dd>${member.enthusiasm}</dd>
-                                </div>
-                            ` : ''}
-                            ${member.watchme ? `
-                                <div>
-                                    <dt class="font-semibold text-gray-700">注目ポイント</dt>
-                                    <dd>${member.watchme}</dd>
-                                </div>
-                            ` : ''}
-                            ${member.hobbies ? `
-                                <div>
-                                    <dt class="font-semibold text-gray-700">趣味</dt>
-                                    <dd>${member.hobbies}</dd>
-                                </div>
-                            ` : ''}
-                            ${member.favorite ? `
-                                <div>
-                                    <dt class="font-semibold text-gray-700">最近の推し</dt>
-                                    <dd>${member.favorite}</dd>
-                                </div>
-                            ` : ''}
-                            ${member.what_i_like_about_triax ? `
-                                <div>
-                                    <dt class="font-semibold text-gray-700">TRIAXの好きなところ</dt>
-                                    <dd>${member.what_i_like_about_triax}</dd>
-                                </div>
-                            ` : ''}
+                            ${memberDetailRow('身長 / 体重', physique)}
+                            ${memberDetailRow('出身地', member.hometown)}
+                            ${memberDetailRow('出身校', member.school)}
+                            ${memberDetailRow('ひとこと', member.bio)}
+                            ${memberDetailRow('意気込み', member.enthusiasm)}
+                            ${memberDetailRow('注目ポイント', member.watchme)}
+                            ${memberDetailRow('趣味', member.hobbies)}
+                            ${memberDetailRow('最近の推し', member.favorite)}
+                            ${memberDetailRow('TRIAXの好きなところ', member.what_i_like_about_triax)}
+                            ${(member.custom_fields || []).map(f => memberDetailRow(f.key, f.value)).join('')}
                         </dl>
                     </div>
                 </div>
@@ -387,7 +265,6 @@ function showMemberDetail(member) {
             image.style.opacity = '0';
             setTimeout(() => {
                 image.src = allPhotos[index];
-                image.dataset.googleDriveId = extractGoogleDriveId(allPhotos[index]) || '';
                 image.style.opacity = '1';
             }, 150);
 
@@ -492,7 +369,7 @@ function displayMembers() {
     container.innerHTML = '';
     const filteredMembers = currentPosition === 'ALL'
         ? allMembers
-        : allMembers.filter(m => m.position === currentPosition);
+        : allMembers.filter(m => (m.position || '').toUpperCase() === currentPosition);
     filteredMembers.forEach(member => {
         const card = createMemberCard(member);
         // フィルター時にもvisibleクラスを追加して表示されるようにする
@@ -524,8 +401,7 @@ function initLazyLoad() {
                 // エラーハンドリングを追加
                 img.onerror = function () {
                     console.error(`Failed to load image: ${img.dataset.src}`);
-                    this.onerror = null;
-                    this.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23e5e7eb%22 width=%22100%22 height=%22100%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22 font-family=%22sans-serif%22 font-size=%2216%22>No Image</text></svg>';
+                    showNoImage(this);
                     // エラーの場合もloadedクラスを追加（プレースホルダーを表示）
                     img.classList.add('loaded');
                 };
@@ -607,33 +483,23 @@ function displayRandomMemberPickup(members) {
     // ランダムにメンバーを選択
     const randomMember = members[Math.floor(Math.random() * members.length)];
 
-    // そのメンバーの写真を集める（serious + casual）
-    let allPhotos = [];
-    if (randomMember.photos) {
-        if (randomMember.photos.serious) {
-            allPhotos.push(randomMember.photos.serious);
-        }
-        if (randomMember.photos.casual && Array.isArray(randomMember.photos.casual)) {
-            allPhotos = allPhotos.concat(randomMember.photos.casual);
-        }
-    }
+    // そのメンバーの写真を集める（正面写真 + カジュアル写真）
+    const allPhotos = collectMemberPhotos(randomMember);
 
     // 写真がない場合は何も表示しない
     if (allPhotos.length === 0) return;
 
     // ランダムに写真を選択
     const randomPhoto = allPhotos[Math.floor(Math.random() * allPhotos.length)];
-    const googleDriveId = extractGoogleDriveId(randomPhoto);
 
     // 画像を表示（円形でクリック可能）
     container.innerHTML = `
         <div class="pickup-member cursor-pointer hover:scale-105 transition-transform">
             <img src="${randomPhoto}"
-                 data-google-drive-id="${googleDriveId || ''}"
                  alt="${randomMember.name.default}"
                  class="w-40 h-40 md:w-64 md:h-64 rounded-full object-cover border-2 border-white shadow-lg"
-                 onerror="handleImageError(this)"
-                 title="${randomMember.name.default} #${randomMember.jersey || ''} ${randomMember.position}">
+                 onerror="showNoImage(this)"
+                 title="${randomMember.name.default} #${randomMember.number || ''} ${randomMember.position}">
         </div>
     `;
 
@@ -755,8 +621,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     setupHeroVideo();
     // 静的セクションのフェードインはロスター取得を待たずに開始する
     initFadeIn();
-    // 画像マッピングを最初に読み込む
-    await loadImageMapping();
     // メニュートグル
     document.getElementById('menu-toggle').addEventListener('click', function () {
         document.getElementById('mobile-menu').classList.toggle('hidden');
