@@ -31,9 +31,9 @@ npx http-server
 
 ブラウザで http://localhost:8080 にアクセスしてください。
 
-## 📸 画像管理
+## 📸 メンバー情報・画像
 
-メンバー画像は [Roster API](https://github.com/triax/roster-api) と同期して管理されています。
+メンバーのプロフィールと写真は [hub](https://hub.triax.football/) で各自が編集し、GitHub Pages のビルド時に公開 API から取得します。`docs/assets/roster.json` と `docs/assets/members/` はビルド生成物のためリポジトリには含まれません。
 
 ## 🤝 スポンサー
 
@@ -72,34 +72,13 @@ pnpm instagram:fetch
 ### よく使うコマンド
 
 ```bash
-# 同期状態をチェック
-npm run img:check
-
-# 画像をダウンロード
-npm run img:download
-
-# 不要な画像をクリーンアップ
-npm run img:cleanup        # dry-run（確認のみ）
-npm run img:cleanup:force  # 実際に削除
-
-# 完全同期（ダウンロード＋クリーンアップ）
-npm run img:sync
+# hub からメンバー情報・写真を取得して生成物を作る
+HUB_API_KEY=<key> npm run build:members
 ```
 
-### スクリプト一覧
+`HUB_API_KEY` は hub の公開 API キー。GitHub Actions では `secrets.HUB_API_KEY` から注入されます。取得できなかった場合はビルドを失敗させ、空のメンバー一覧で公開を上書きしません。
 
-| スクリプト | 説明 |
-|-----------|------|
-| `img:check` | APIと実際のファイルの同期状態を確認 |
-| `img:download` | 不足している画像をダウンロード |
-| `img:download:force` | すべての画像を再ダウンロード |
-| `img:sync` | ダウンロードと不要ファイル削除を実行 |
-| `img:sync:dry` | 同期のシミュレーション |
-| `img:cleanup` | 削除対象を確認（dry-run） |
-| `img:cleanup:force` | 不要な画像を削除 |
-| `img:cleanup:interactive` | 対話形式で削除 |
-
-詳細は各スクリプトファイル冒頭のコメントを参照してください。
+詳細は [hub-members-sync.md](knowledge/04-operations/hub-members-sync.md) を参照してください。
 
 ## 📁 プロジェクト構造
 
@@ -107,7 +86,7 @@ npm run img:sync
 /
 ├── docs/              # GitHub Pages用ファイル
 │   ├── assets/
-│   │   └── members/   # メンバー画像
+│   │   └── members/   # メンバー画像（ビルド生成物・git管理外）
 │   └── index.html     # メインページ
 ├── scripts/           # 管理用スクリプト
 ├── specs/             # デザイン仕様書
@@ -117,9 +96,9 @@ npm run img:sync
 ## 🔧 技術スタック
 
 - **フロントエンド**: HTML5, Tailwind CSS (CDN), jQuery
-- **ホスティング**: GitHub Pages (カスタムドメイン: www.triax.football)
-- **画像管理**: Node.js スクリプト
-- **データソース**: [Roster API](https://github.com/triax/roster-api)
+- **ホスティング**: GitHub Pages (カスタムドメイン: www.triax.football / GitHub Actions ビルド配信)
+- **画像管理**: Node.js スクリプト + sharp
+- **メンバーデータ**: [hub](https://hub.triax.football/) の公開 API（ビルド時取得）
 - **DNS/SSL**: Squarespace Domains + GitHub Pages自動SSL証明書
 
 ## 📝 開発ガイドライン

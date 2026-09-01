@@ -15,17 +15,16 @@
 **症状**: メンバー画像が404エラー
 
 **原因**:
-- Google Drive IDの不一致
-- 画像ファイルの同期漏れ
+- `npm run build:members` を実行していない（生成物は git 管理外のため、clone 直後は存在しない）
+- hub 側で写真が未登録（この場合は "No Image" プレースホルダが出るのが正常）
 
 **解決方法**:
 ```bash
-# 同期状態を確認
-npm run img:check
-
-# 画像を再同期
-npm run img:sync
+# hub からメンバー情報・写真を取得し直す
+HUB_API_KEY=<key> npm run build:members
 ```
+
+詳細は [hub-members-sync.md](/knowledge/04-operations/hub-members-sync.md) の「障害時の見方」を参照。
 
 ### GitHub Pages更新されない
 **症状**: pushしても変更が反映されない

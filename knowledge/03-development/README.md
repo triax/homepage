@@ -13,7 +13,7 @@
   - `image-handling.md` - 画像処理方法（作成予定）
 - `scripts/` - スクリプト使用方法
   - `image-management.md` - 画像管理スクリプト（作成予定）
-  - `roster-sync.md` - メンバー情報同期（作成予定）
+  - メンバー情報同期 → [hub-members-sync.md](/knowledge/04-operations/hub-members-sync.md)
 
 ## 🚀 クイックスタート
 
@@ -32,14 +32,8 @@ npx http-server docs -p 3000
 
 ### 主要コマンド
 ```bash
-# メンバー情報更新
-npm run roster:download
-
-# 画像管理
-npm run img:check    # 同期状態確認
-npm run img:download # 画像ダウンロード
-npm run img:cleanup  # 不要画像削除
-npm run img:sync     # 完全同期
+# メンバー情報・写真を hub から取得（生成物は git 管理外）
+HUB_API_KEY=<key> npm run build:members
 
 # コード品質
 npm run lint         # ESLint実行

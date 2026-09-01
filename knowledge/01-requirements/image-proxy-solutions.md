@@ -1,5 +1,10 @@
 # Google Drive 画像表示問題の解決策
 
+> **【廃止】このドキュメントは roster-api（Google Form / Google Drive）時代の記録です。**
+> メンバー写真は hub のストレージからビルド時に取得する方式へ移行し、Google Drive は経路から外れました。
+> 現行の仕組みは [hub-members-sync.md](/knowledge/04-operations/hub-members-sync.md) と
+> [ADR-009](/knowledge/06-decisions/009-members-from-hub.md) を参照してください。
+
 ## 問題
 - Google Driveの画像URLが403エラーを返す
 - CORS制限により、ブラウザから直接アクセスできない
