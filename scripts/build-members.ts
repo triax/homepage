@@ -14,13 +14,20 @@
  *   HUB_API_KEY  必須。hub の公開 API キー（X-API-Key ヘッダに載せる）
  *   HUB_API_URL  任意。取得先の上書き（既定は hub 本番の公開 API）
  *
+ * 必要な外部コマンド:
+ *   ImageMagick（`magick` または `convert`）。写真のリサイズに使う
+ *
  * hub が落ちている・キーが無い・公開対象が 0 件などの異常時は、生成物を一切書き換えずに
  * 終了コード 1 で失敗する（空のメンバー一覧で本番を上書きしないため）。
  */
 
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
-import sharp from 'sharp';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+
+const execFileAsync = promisify(execFile);
 
 const DEFAULT_HUB_API_URL = 'https://hub.triax.football/api/1/public/members';
 const HUB_API_URL = process.env.HUB_API_URL || DEFAULT_HUB_API_URL;
@@ -105,10 +112,10 @@ interface RosterMember {
   custom_fields: CustomField[];
 }
 
-/** ダウンロード済み・変換済みの写真。全件揃ってから一括で書き出す */
+/** 変換済みの写真。全件揃ってから一括で書き出す（作業ファイルは一時ディレクトリに置く） */
 interface PendingPhoto {
   filename: string;
-  data: Buffer;
+  tempPath: string;
 }
 
 function fail(message: string): never {
@@ -172,6 +179,35 @@ function alphabetName(profile: HubProfile): string {
     .join(' ');
 }
 
+let tempDir: string | null = null;
+
+/** 変換の作業ディレクトリ。プロセス終了時に片付ける */
+function getTempDir(): string {
+  if (!tempDir) {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'triax-members-'));
+    process.on('exit', () => fs.rmSync(dir, { recursive: true, force: true }));
+    tempDir = dir;
+  }
+  return tempDir;
+}
+
+let imageMagick: string | null = null;
+
+/** ImageMagick の実行コマンドを解決する（7.x は magick、6.x は convert） */
+async function getImageMagick(): Promise<string> {
+  if (imageMagick) return imageMagick;
+  for (const candidate of ['magick', 'convert']) {
+    try {
+      await execFileAsync(candidate, ['-version']);
+      imageMagick = candidate;
+      return candidate;
+    } catch {
+      // 次の候補を試す
+    }
+  }
+  return fail('ImageMagick が見つかりません（magick または convert が必要です）');
+}
+
 /**
  * 写真を 1 枚ダウンロードし、長辺 PHOTO_MAX_EDGE の JPEG に変換する。
  * 元画像は PNG も混在するため、透過は白背景に落としてから JPEG 化する。
@@ -189,24 +225,29 @@ async function downloadPhoto(url: string, filename: string): Promise<PendingPhot
     return fail(`写真のダウンロードに失敗しました (${filename}): ${response.status}`);
   }
 
-  const source = Buffer.from(await response.arrayBuffer());
+  const dir = getTempDir();
+  const sourcePath = path.join(dir, `source-${filename}`);
+  const tempPath = path.join(dir, filename);
+  fs.writeFileSync(sourcePath, Buffer.from(await response.arrayBuffer()));
+
+  const magick = await getImageMagick();
   try {
-    const data = await sharp(source)
-      .rotate()
-      .resize({
-        width: PHOTO_MAX_EDGE,
-        height: PHOTO_MAX_EDGE,
-        fit: 'inside',
-        withoutEnlargement: true,
-      })
-      .flatten({ background: '#ffffff' })
-      .jpeg({ quality: PHOTO_QUALITY })
-      .toBuffer();
-    return { filename, data };
+    await execFileAsync(magick, [
+      sourcePath,
+      '-auto-orient',
+      '-resize', `${PHOTO_MAX_EDGE}x${PHOTO_MAX_EDGE}>`,
+      '-background', 'white',
+      '-flatten',
+      '-quality', String(PHOTO_QUALITY),
+      '-interlace', 'Plane',
+      '-strip',
+      tempPath,
+    ]);
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error);
     return fail(`写真の変換に失敗しました (${filename}): ${reason}`);
   }
+  return { filename, tempPath };
 }
 
 /**
@@ -274,7 +315,7 @@ function writePhotos(photos: PendingPhoto[]) {
   fs.rmSync(PHOTO_DIR, { recursive: true, force: true });
   fs.mkdirSync(PHOTO_DIR, { recursive: true });
   for (const photo of photos) {
-    fs.writeFileSync(path.join(PHOTO_DIR, photo.filename), photo.data);
+    fs.copyFileSync(photo.tempPath, path.join(PHOTO_DIR, photo.filename));
   }
 }
 
@@ -298,7 +339,7 @@ async function buildMembers() {
     fail('掲載対象のメンバーが 0 名でした（空の一覧で生成物を上書きしません）');
   }
 
-  // stellar:debt(perf) 毎ビルドで全写真を再取得・再変換し、メモリ上に貯めてから書き出す前提。
+  // stellar:debt(perf) 毎ビルドで全写真を再取得し、1枚ずつ ImageMagick を起動して変換する前提。
   // upgrade: 掲載枚数が増えたら URL の更新時刻で差分判定するか actions/cache でキャッシュする
   const pending: PendingPhoto[] = [];
   const members: RosterMember[] = [];

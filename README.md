@@ -97,7 +97,7 @@ HUB_API_KEY=<key> npm run build:members
 
 - **フロントエンド**: HTML5, Tailwind CSS (CDN), jQuery
 - **ホスティング**: GitHub Pages (カスタムドメイン: www.triax.football / GitHub Actions ビルド配信)
-- **画像管理**: Node.js スクリプト + sharp
+- **画像管理**: Node.js スクリプト + ImageMagick
 - **メンバーデータ**: [hub](https://hub.triax.football/) の公開 API（ビルド時取得）
 - **DNS/SSL**: Squarespace Domains + GitHub Pages自動SSL証明書
 

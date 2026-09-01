@@ -49,6 +49,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # 写真のリサイズに使う。ubuntu-latest には通常同梱されているが、無い場合に備える
+      - name: Ensure ImageMagick
+        run: |
+          command -v magick || command -v convert || \
+            (sudo apt-get update && sudo apt-get install -y imagemagick)
+
       - name: Build members data from hub
         env:
           HUB_API_KEY: ${{ secrets.HUB_API_KEY }}

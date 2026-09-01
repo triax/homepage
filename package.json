@@ -36,7 +36,6 @@
     "eslint": "^9.33.0",
     "libsodium-wrappers": "^0.7.15",
     "playwright": "^1.54.2",
-    "sharp": "^0.34.4",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2"
   }

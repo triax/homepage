@@ -48,6 +48,9 @@ hub の公開 API は `X-API-Key` ヘッダが必須。`Cache-Control: private` 
 
 ### ローカルでの実行
 
+写真のリサイズに **ImageMagick**（`magick` または `convert`）を使う。未インストールなら
+`brew install imagemagick`（macOS）／`apt-get install imagemagick`（Debian系）を先に実行する。
+
 ```bash
 HUB_API_KEY=$(cat ~/.secrets/triax-hub/hub-api-key.prod.txt) npm run build:members
 npm run dev   # http://127.0.0.1:3000/docs/index.html
@@ -105,5 +108,6 @@ npm run dev   # http://127.0.0.1:3000/docs/index.html
 | `hub API が 401 を返しました` | キーが不正・失効、hub 側で削除された | ローテーション手順でキーを再設定 |
 | `hub API に到達できませんでした` | hub がダウン、ネットワーク断 | hub の稼働を確認して再実行 |
 | `掲載対象のメンバーが 0 名でした` | hub 側の公開制御・データ不整合 | hub のデータを確認。復旧までサイトは前回のデプロイ内容のまま |
+| `ImageMagick が見つかりません` | 実行環境に `magick` / `convert` が無い | ローカルなら ImageMagick を入れる。CI は「Ensure ImageMagick」ステップが入れる |
 
 いずれの場合もデプロイは失敗し、**公開中のサイトは直前の状態のまま**残る。

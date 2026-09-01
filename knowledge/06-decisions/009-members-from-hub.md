@@ -36,7 +36,8 @@
 - 空のメンバー一覧で本番を上書きする事故を、実装レベルで起こせなくすることを優先した
 
 ### 5. 写真は JPEG に正規化する
-- hub の写真はリサイズなし・最大 10MB で、`.jpg` と `.png` が混在する。`sharp` で長辺 800px・品質 85 の JPEG に正規化し、PNG の透過は白背景に落とす（既存の `optimize-images.sh --target=docs/assets/members` と同等の仕様）
+- hub の写真はリサイズなし・最大 10MB で、`.jpg` と `.png` が混在する。長辺 800px・品質 85 の JPEG に正規化し、PNG の透過は白背景に落とす（既存の `optimize-images.sh` と同等の仕様）
+- 変換は **ImageMagick（`magick` / `convert`）へのシェルアウト**で行い、npm 依存は増やさない。`optimize-images.sh` が既に ImageMagick を前提にしており、リポジトリとして道具が増えない。`sharp` も候補だったが、ネイティブ依存と `package-lock.json` の更新を伴うため見送った
 - ファイル名は `{slack_id}-formal.jpg` / `{slack_id}-casual.jpg` / `{slack_id}-additional-{n}.jpg`。拡張子を固定することで、旧実装の「拡張子総当たり」を再発させない
 
 ### 6. API キーは Actions secret 1 箇所に置く
