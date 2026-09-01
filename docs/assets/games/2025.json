@@ -23,15 +23,32 @@
         },
         "home": false,
         "result": {
-          "score": { "team": 0, "opponent": 6 },
+          "score": {
+            "team": 0,
+            "opponent": 6
+          },
           "quarters": {
-            "Q1": { "team": 0, "opponent": 0 },
-            "Q2": { "team": 0, "opponent": 3 },
-            "Q3": { "team": 0, "opponent": 3 },
-            "Q4": { "team": 0, "opponent": 0 }
+            "Q1": {
+              "team": 0,
+              "opponent": 0
+            },
+            "Q2": {
+              "team": 0,
+              "opponent": 3
+            },
+            "Q3": {
+              "team": 0,
+              "opponent": 3
+            },
+            "Q4": {
+              "team": 0,
+              "opponent": 0
+            }
           },
           "win": false,
-          "stats": { "url": "https://xleague.jp/score/51295" }
+          "stats": {
+            "url": "https://xleague.jp/score/51295"
+          }
         }
       },
       {
@@ -47,15 +64,32 @@
         },
         "home": false,
         "result": {
-          "score": { "team": 3, "opponent": 20 },
+          "score": {
+            "team": 3,
+            "opponent": 20
+          },
           "quarters": {
-            "Q1": { "team": 0, "opponent": 7 },
-            "Q2": { "team": 3, "opponent": 3 },
-            "Q3": { "team": 0, "opponent": 0 },
-            "Q4": { "team": 0, "opponent": 10 }
+            "Q1": {
+              "team": 0,
+              "opponent": 7
+            },
+            "Q2": {
+              "team": 3,
+              "opponent": 3
+            },
+            "Q3": {
+              "team": 0,
+              "opponent": 0
+            },
+            "Q4": {
+              "team": 0,
+              "opponent": 10
+            }
           },
           "win": false,
-          "stats": { "url": "https://xleague.jp/score/51299" }
+          "stats": {
+            "url": "https://xleague.jp/score/51299"
+          }
         }
       },
       {
@@ -70,15 +104,32 @@
         },
         "home": true,
         "result": {
-          "score": { "team": 14, "opponent": 13 },
+          "score": {
+            "team": 14,
+            "opponent": 13
+          },
           "quarters": {
-            "Q1": { "team": 0, "opponent": 0 },
-            "Q2": { "team": 7, "opponent": 7 },
-            "Q3": { "team": 0, "opponent": 6 },
-            "Q4": { "team": 7, "opponent": 0 }
+            "Q1": {
+              "team": 0,
+              "opponent": 0
+            },
+            "Q2": {
+              "team": 7,
+              "opponent": 7
+            },
+            "Q3": {
+              "team": 0,
+              "opponent": 6
+            },
+            "Q4": {
+              "team": 7,
+              "opponent": 0
+            }
           },
           "win": true,
-          "stats": { "url": "https://xleague.jp/score/51306" }
+          "stats": {
+            "url": "https://xleague.jp/score/51306"
+          }
         }
       },
       {
@@ -93,15 +144,32 @@
         },
         "home": true,
         "result": {
-          "score": { "team": 13, "opponent": 7 },
+          "score": {
+            "team": 13,
+            "opponent": 7
+          },
           "quarters": {
-            "Q1": { "team": 0, "opponent": 0 },
-            "Q2": { "team": 6, "opponent": 0 },
-            "Q3": { "team": 7, "opponent": 0 },
-            "Q4": { "team": 0, "opponent": 7 }
+            "Q1": {
+              "team": 0,
+              "opponent": 0
+            },
+            "Q2": {
+              "team": 6,
+              "opponent": 0
+            },
+            "Q3": {
+              "team": 7,
+              "opponent": 0
+            },
+            "Q4": {
+              "team": 0,
+              "opponent": 7
+            }
           },
           "win": true,
-          "stats": { "url": "https://xleague.jp/score/51311" }
+          "stats": {
+            "url": "https://xleague.jp/score/51311"
+          }
         }
       },
       {
@@ -117,15 +185,32 @@
         },
         "home": false,
         "result": {
-          "score": { "team": 7, "opponent": 10 },
+          "score": {
+            "team": 7,
+            "opponent": 10
+          },
           "quarters": {
-            "Q1": { "team": 7, "opponent": 0 },
-            "Q2": { "team": 0, "opponent": 7 },
-            "Q3": { "team": 0, "opponent": 0 },
-            "Q4": { "team": 0, "opponent": 3 }
+            "Q1": {
+              "team": 7,
+              "opponent": 0
+            },
+            "Q2": {
+              "team": 0,
+              "opponent": 7
+            },
+            "Q3": {
+              "team": 0,
+              "opponent": 0
+            },
+            "Q4": {
+              "team": 0,
+              "opponent": 3
+            }
           },
           "win": false,
-          "stats": { "url": "https://xleague.jp/score/51318" }
+          "stats": {
+            "url": "https://xleague.jp/score/51318"
+          }
         }
       },
       {
@@ -140,15 +225,32 @@
         },
         "home": true,
         "result": {
-          "score": { "team": 34, "opponent": 24 },
+          "score": {
+            "team": 34,
+            "opponent": 24
+          },
           "quarters": {
-            "Q1": { "team": 14, "opponent": 0 },
-            "Q2": { "team": 13, "opponent": 0 },
-            "Q3": { "team": 7, "opponent": 12 },
-            "Q4": { "team": 0, "opponent": 12 }
+            "Q1": {
+              "team": 14,
+              "opponent": 0
+            },
+            "Q2": {
+              "team": 13,
+              "opponent": 0
+            },
+            "Q3": {
+              "team": 7,
+              "opponent": 12
+            },
+            "Q4": {
+              "team": 0,
+              "opponent": 12
+            }
           },
           "win": true,
-          "stats": { "url": "https://xleague.jp/score/51327" }
+          "stats": {
+            "url": "https://xleague.jp/score/51327"
+          }
         }
       }
     ]

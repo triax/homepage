@@ -21,7 +21,9 @@
       "description": "ポストシーズン"
     }
   },
-  "required": ["year"],
+  "required": [
+    "year"
+  ],
   "definitions": {
     "seasonBlock": {
       "type": "object",
@@ -32,11 +34,18 @@
         },
         "status": {
           "type": "string",
-          "enum": ["closed", "open", "finished"],
+          "enum": [
+            "closed",
+            "open",
+            "finished"
+          ],
           "description": "closed=未公開, open=公開中, finished=終了"
         },
         "ticket": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "チケット購入URL"
         },
         "game": {
@@ -45,14 +54,22 @@
         },
         "games": {
           "type": "array",
-          "items": { "$ref": "#/definitions/game" },
+          "items": {
+            "$ref": "#/definitions/game"
+          },
           "description": "複数試合"
         }
       },
-      "required": ["title", "status"]
+      "required": [
+        "title",
+        "status"
+      ]
     },
     "game": {
-      "type": ["object", "null"],
+      "type": [
+        "object",
+        "null"
+      ],
       "properties": {
         "round": {
           "type": "string",
@@ -93,14 +110,24 @@
           "description": "true=ホーム, false=アウェイ"
         },
         "ticket": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "試合個別のチケットURL。未指定ならシーズンのticketを使用"
         },
         "result": {
           "$ref": "#/definitions/result"
         }
       },
-      "required": ["date", "dayOfWeek", "opponent", "kickoff", "endTime", "venue"]
+      "required": [
+        "date",
+        "dayOfWeek",
+        "opponent",
+        "kickoff",
+        "endTime",
+        "venue"
+      ]
     },
     "venue": {
       "type": "object",
@@ -114,53 +141,106 @@
           "description": "Google Maps検索クエリ"
         }
       },
-      "required": ["name", "mapsQuery"]
+      "required": [
+        "name",
+        "mapsQuery"
+      ]
     },
     "result": {
-      "type": ["object", "null"],
+      "type": [
+        "object",
+        "null"
+      ],
       "description": "null=未決着",
       "properties": {
         "score": {
           "type": "object",
           "properties": {
-            "team": { "type": "integer", "description": "自チーム最終得点" },
-            "opponent": { "type": "integer", "description": "相手チーム最終得点" }
+            "team": {
+              "type": "integer",
+              "description": "自チーム最終得点"
+            },
+            "opponent": {
+              "type": "integer",
+              "description": "相手チーム最終得点"
+            }
           },
-          "required": ["team", "opponent"]
+          "required": [
+            "team",
+            "opponent"
+          ]
         },
         "quarters": {
           "type": "object",
           "properties": {
-            "Q1": { "$ref": "#/definitions/quarterScore" },
-            "Q2": { "$ref": "#/definitions/quarterScore" },
-            "Q3": { "$ref": "#/definitions/quarterScore" },
-            "Q4": { "$ref": "#/definitions/quarterScore" },
-            "OT": { "$ref": "#/definitions/quarterScore", "description": "延長戦（なければnull）" }
+            "Q1": {
+              "$ref": "#/definitions/quarterScore"
+            },
+            "Q2": {
+              "$ref": "#/definitions/quarterScore"
+            },
+            "Q3": {
+              "$ref": "#/definitions/quarterScore"
+            },
+            "Q4": {
+              "$ref": "#/definitions/quarterScore"
+            },
+            "OT": {
+              "$ref": "#/definitions/quarterScore",
+              "description": "延長戦（なければnull）"
+            }
           },
-          "required": ["Q1", "Q2", "Q3", "Q4"]
+          "required": [
+            "Q1",
+            "Q2",
+            "Q3",
+            "Q4"
+          ]
         },
         "win": {
-          "type": ["boolean", "null"],
+          "type": [
+            "boolean",
+            "null"
+          ],
           "description": "true=勝ち, false=負け, null=引き分け"
         },
         "stats": {
           "type": "object",
           "description": "試合スタッツ",
           "properties": {
-            "url": { "type": "string", "format": "uri", "description": "スタッツページURL" }
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "スタッツページURL"
+            }
           },
-          "required": ["url"]
+          "required": [
+            "url"
+          ]
         }
       },
-      "required": ["score", "win"]
+      "required": [
+        "score",
+        "win"
+      ]
     },
     "quarterScore": {
-      "type": ["object", "null"],
+      "type": [
+        "object",
+        "null"
+      ],
       "properties": {
-        "team": { "type": "integer" },
-        "opponent": { "type": "integer" }
+        "team": {
+          "type": "integer"
+        },
+        "opponent": {
+          "type": "integer"
+        }
       },
-      "required": ["team", "opponent"]
+      "required": [
+        "team",
+        "opponent"
+      ]
     }
   }
 }

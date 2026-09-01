@@ -17,32 +17,24 @@
 - `video-management.md` - プロモ動画（ヒーロー背景・フル尺）の生成と管理
 - `crowdfunding-banner.md` - クラウドファンディングバナーの運用
 - `custom-domain-setup.md` - カスタムドメイン設定
-- `github-actions-sync.md` - GitHub Actions による同期
-- `roster-api-setup-guide.md` / `roster-api-trigger.md` - Roster API 連携
+- `hub-members-sync.md` - メンバー情報の hub 連携（ビルド時取得・APIキー運用）
 - `instagram-secrets-setup.md` / `instagram-token-exchange.md` / `instagram-token-refresh.md` - Instagram トークン管理
 - `x-secrets-setup.md` - X（Twitter）Secrets 設定
 
 ## 🚀 主要な運用タスク
 
 ### デプロイ
-GitHub Pagesへの自動デプロイ：
-1. mainブランチへプッシュ
-2. GitHub Actionsが自動的にデプロイ
-3. https://triax.github.io/homepage/ で確認
+GitHub Pagesへの自動デプロイ（`.github/workflows/deploy-pages.yml`）：
+1. mainブランチへプッシュ（ほかに Instagram 取得完了時・毎日03:00 JST・手動実行でも走る）
+2. ビルド時に hub の公開APIからメンバー情報を取得して `docs/` に生成物を作る
+3. https://www.triax.football/ で確認
 
 ### メンバー情報更新
-```bash
-# 1. roster情報を取得
-npm run roster:download
+メンバー本人が `https://hub.triax.football/members/{slack_id}` で編集すれば、
+次のデプロイで自動的に反映される。運営側の作業は不要。
 
-# 2. 画像を同期
-npm run img:sync
-
-# 3. 変更をコミット
-git add .
-git commit -m "メンバー情報を更新"
-git push origin main
-```
+即時反映したい場合は Actions から「Deploy to GitHub Pages」を手動実行する。
+手順の詳細は [hub-members-sync.md](hub-members-sync.md) を参照。
 
 ### コンテンツ更新
 1. `docs/index.html` を編集

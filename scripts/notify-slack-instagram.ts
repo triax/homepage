@@ -233,13 +233,13 @@ async function main() {
       try {
         const success = await sendSlackMessage(blocks);
         if (success) {
-          console.log(`  Successfully sent notification.`);
+          console.log('  Successfully sent notification.');
         } else {
-          console.error(`  Failed to send notification (API returned error).`);
+          console.error('  Failed to send notification (API returned error).');
           // Don't fail the workflow for API errors
         }
       } catch (error) {
-        console.error(`  Failed to send notification:`, error);
+        console.error('  Failed to send notification:', error);
         // Don't fail the workflow for network/auth errors
       }
 

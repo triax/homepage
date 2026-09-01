@@ -46,7 +46,9 @@ Following knowledge should be stored under `./knowledge` folder:
 playwright mcp などを利用して、上記のHTTPサーバに訪問し、デザインなどをdebugしてください。
 
 ### デプロイメント
-mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロイされます。
+`.github/workflows/deploy-pages.yml` が GitHub Pages へデプロイします（Pages の Source は **GitHub Actions**）。
+mainブランチへのプッシュのほか、Instagram取得ワークフローの完了時・毎日03:00 JST・手動実行でも走ります。
+デプロイ時に hub の公開APIからメンバー情報を取得して `docs/` に生成物を作るため、生成物はコミットしません。
 
 ## プロジェクト構造
 
@@ -59,18 +61,16 @@ mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロ�
 │   └── ogp/         # Open Graph Protocol画像
 ├── docs/
 │   ├── assets/
-│   │   ├── members/      # メンバー画像（Google Drive IDをファイル名に使用）
+│   │   ├── roster.json   # メンバーデータ（ビルド生成物・git管理外）
+│   │   ├── members/      # メンバー画像（ビルド生成物・git管理外）
 │   │   ├── videos/       # プロモ動画（ヒーロー背景・フル尺）とポスター画像
 │   │   └── crowdfunding/ # クラウドファンディングバナー（index.json・JS・サムネイル）
 │   └── index.html   # GitHub Pages用HTMLファイル
 ├── scripts/         # 管理用TypeScriptスクリプト
-│   ├── download-all-images.ts    # 画像ダウンロード・同期
-│   ├── check-image-sync.ts       # 同期状態チェック
-│   ├── cleanup-unused-images.ts  # 不要画像削除
-│   ├── create-image-mapping.ts   # 画像マッピング作成
-│   ├── check-missing-images.ts   # 画像表示チェック（要Playwright）
+│   ├── build-members.ts          # hub公開APIからメンバーデータ・写真を生成
 │   ├── fetch-instagram.ts        # Instagram投稿取得
 │   ├── refresh-instagram-token.ts # Instagram Access Token更新
+│   ├── optimize-images.sh        # 画像最適化（ギャラリー・ヘッダー等）
 │   └── encode-promo-videos.sh    # プロモ動画エンコード（要ffmpeg）
 └── specs/           # デザイン仕様と要件
     ├── pages/       # 個別ページ仕様
@@ -94,38 +94,42 @@ mainブランチへのプッシュ時に、GitHub Pagesへ自動的にデプロ�
 7. **バージョン管理**: mainブランチがデプロイに使用されます。GitHub Pagesで公開される前に必ず変更をコミットしてください。
    - **コミットメッセージ**: 日本語でコミットメッセージを作成してください。明確で簡潔な説明を心がけてください。
 
-## 画像管理スクリプト
+## メンバー情報（hub連携）
 
-メンバー画像の管理を自動化するためのTypeScriptスクリプトが用意されています。
-（注：tsxを使用して直接実行するため、事前のトランスパイルは不要です）
+メンバーのプロフィールと写真は hub（`https://hub.triax.football/members/{slack_id}`）で本人が編集し、
+ホームページはビルド時に hub の公開APIから取得します。運営による年次のデータ更新作業は不要です。
 
-### 主要コマンド
-
-#### 画像同期コマンド
+### コマンド
 
 ```bash
-# 画像の同期状態をチェック
-npm run img:check
-
-# 不足している画像をダウンロード
-npm run img:download
-
-# 不要な画像を削除（確認モード）
-npm run img:cleanup
-
-# 不要な画像を削除（実行）
-npm run img:cleanup:force
-
-# ダウンロードと削除を同時に実行（完全同期）
-npm run img:sync
+# hubからメンバー情報・写真を取得して生成物を作る
+HUB_API_KEY=<key> npm run build:members
 ```
+
+- 生成物: `docs/assets/roster.json`（v2スキーマ）と `docs/assets/members/{slack_id}-{formal|casual|additional-N}.jpg`
+- 写真は長辺800px・品質85のJPEGに正規化（PNGは白背景でflatten）
+- **どちらもgit管理外**（`.gitignore` 済み）。GitHub Actions のデプロイ時に毎回生成する
+- 取得失敗（キー未設定・401・到達不能・掲載対象0名）時は生成物を書き換えず終了コード1で失敗する
+
+### API キー
+
+hub の公開API `GET /api/1/public/members` は `X-API-Key` ヘッダが必須（CORSヘッダなし・`Cache-Control: private` のため**ビルド時取得のみ**）。
+
+| 環境変数 | 説明 |
+|----------|------|
+| `HUB_API_KEY` | hub の公開APIキー。GitHub Actions secret `HUB_API_KEY` から注入 |
+| `HUB_API_URL` | 任意。取得先の上書き（既定は hub 本番） |
+
+キー値はリポジトリ・生成物・ログに出さないこと。詳細とローテーション手順は
+`knowledge/04-operations/hub-members-sync.md`、決定経緯は `knowledge/06-decisions/009-members-from-hub.md` を参照。
+
+## 画像管理スクリプト
+
+（注：tsxを使用して直接実行するため、事前のトランスパイルは不要です）
 
 #### 画像最適化コマンド
 
 ```bash
-# メンバー画像の最適化（800px, 85%品質）
-./scripts/optimize-images.sh --target=docs/assets/members
-
 # ギャラリー画像の最適化（1920px, 85%品質, 連番リネーム）
 ./scripts/optimize-images.sh --target=docs/assets/gallery
 
@@ -136,39 +140,10 @@ npm run img:sync
 ./scripts/optimize-images.sh --target=docs/assets/sponsors
 
 # 変更をプレビュー（dry-runモード）
-./scripts/optimize-images.sh --target=docs/assets/members --dry-run
+./scripts/optimize-images.sh --target=docs/assets/gallery --dry-run
 ```
 
-### スクリプトの詳細
-
-1. **download-all-images.ts**
-   - Roster API から画像をダウンロード
-   - 既存ファイルのスキップ機能
-   - 同期モード（--sync）で不要ファイルも削除
-
-2. **check-image-sync.ts**
-   - APIと実際のファイルを比較
-   - 不足/余分な画像を特定
-   - 同期率を表示
-
-3. **cleanup-unused-images.ts**
-   - APIに存在しない画像を削除
-   - デフォルトはdry-runモード
-   - --forceで実際に削除
-
-4. **create-image-mapping.ts**
-   - Google Drive IDとファイル名のマッピングを作成
-   - docs/image-mapping.json に出力
-
-5. **check-missing-images.ts**
-   - ブラウザで実際の表示をチェック（要Playwright）
-   - ローカルサーバー起動が必要
-
-### 画像ファイルの命名規則
-
-- ファイル名: `{Google Drive ID}.{拡張子}`
-- 例: `1RkyEPOq0CELzOCIICoanFWrFYnWD_bZ5.jpg`
-- Google Drive IDはRoster APIから取得
+※ メンバー画像は `build-members.ts` が取得時にリサイズするため、このスクリプトの対象外です。
 
 ## 主要なデザイン仕様
 
@@ -185,7 +160,7 @@ npm run img:sync
 
 ### Tier構成
 - **Gold Tier**: 最大サイズ（1段1社）- プラチナスポンサー
-- **Silver Tier**: 中サイズ（1段最大2社）- ゴールドスポンサー  
+- **Silver Tier**: 中サイズ（1段最大2社）- ゴールドスポンサー
 - **Bronze Tier**: 小サイズ（1段最大3社）- シルバースポンサー
 
 ### ディレクトリ構造

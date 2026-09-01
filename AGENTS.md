@@ -9,13 +9,12 @@
 ## ビルド・テスト・開発コマンド / Build, Test, and Development Commands
 - `npm install` で tsx・ESLint・Playwright など開発依存を取得します。
 - `npx http-server docs -p 3000` でローカルプレビュー環境を起動できます。別ポートが必要な場合は `-p` を調整してください。
-- `npm run roster:download` は Roster API からメンバーデータを再取得します。公開前の差分確認に必須です。
-- `npm run img:check` `img:download` `img:cleanup` `img:sync` は画像同期ワークフローです。まず `img:check` を実行し、削除対象を確認してから `img:cleanup` を走らせてください。
+- `HUB_API_KEY=<key> npm run build:members` は hub の公開 API からメンバーデータと写真を取得し、`docs/assets/roster.json` と `docs/assets/members/` を生成します。どちらもビルド生成物で git 管理外です。取得に失敗した場合は生成物を書き換えずに終了コード 1 で失敗します。
 - `npm run instagram:fetch` と `npm run instagram:refresh-token` は Instagram フィードを管理します。トークン更新は 24 時間以内に繰り返さないよう注意します。
 - `npm run lint` は ESLint と整形確認を一括実行します。修正は `npm run lint:fix` や `npm run format:fix` で適用してください。
 
 ## コーディング規約 / Coding Style & Naming Conventions
-- TypeScript は `scripts/**/*.ts` に配置し、ファイル名は `download-roster.ts` のように kebab-case を使用します。シェルスクリプトも同じ規則です。
+- TypeScript は `scripts/**/*.ts` に配置し、ファイル名は `build-members.ts` のように kebab-case を使用します。シェルスクリプトも同じ規則です。
 - ESLint 設定で 2 スペースインデント・シングルクォート・セミコロン必須・最大 100 文字/行が求められます。意図的に未使用の変数は `_example` のようにアンダースコア接頭で警告を回避します。
 - `docs/` 内の HTML/CSS を編集後は `npm run format` で末尾スペースを削除し、Pages デプロイ前の差分をクリーンに保ってください。
 - このプロジェクトの公用語は日本語です。コミットメッセージ、PR 説明、ドキュメントは原則として日本語で統一し、必要に応じて英語訳を補ってください。

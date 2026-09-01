@@ -7,6 +7,13 @@ node_modules
 
 knowledge/plans
 
+# git worktree（/tackle などが Issue ごとに作る作業ディレクトリ）
+.worktrees
+
+# メンバー情報のビルド生成物（scripts/build-members.ts が hub 公開 API から生成する）
+docs/assets/roster.json
+docs/assets/members/
+
 # プロモ動画の元素材（リポジトリ直下）
 /*.mp4
 /*.mov

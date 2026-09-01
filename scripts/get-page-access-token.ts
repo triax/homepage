@@ -66,9 +66,9 @@ async function debugToken(token: string): Promise<TokenDebugInfo | null> {
 // ユーザーが管理するページ一覧を取得
 async function getPages(userToken: string): Promise<PageData[]> {
   // instagram_business_accountフィールドも取得
-  const url = `https://graph.facebook.com/v22.0/me/accounts?fields=id,name,access_token,instagram_business_account&access_token=${encodeURIComponent(
-    userToken
-  )}`;
+  const fields = 'id,name,access_token,instagram_business_account';
+  const url = 'https://graph.facebook.com/v22.0/me/accounts'
+    + `?fields=${fields}&access_token=${encodeURIComponent(userToken)}`;
 
   const response = await fetch(url);
   const data = (await response.json()) as any;
@@ -150,7 +150,7 @@ async function main() {
     if (page.instagram_business_account) {
       console.log(`       Instagram Business Account: ${page.instagram_business_account.id} ✓`);
     } else {
-      console.log(`       Instagram Business Account: なし`);
+      console.log('       Instagram Business Account: なし');
     }
   }
 

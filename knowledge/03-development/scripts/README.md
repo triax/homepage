@@ -5,12 +5,8 @@
 
 ## スクリプト一覧
 
-### メンバー画像管理
-- `download-all-images.ts` - Roster APIから画像をダウンロード
-- `check-image-sync.ts` - 画像の同期状態をチェック
-- `cleanup-unused-images.ts` - 不要な画像を削除
-- `create-image-mapping.ts` - 画像マッピングファイル作成
-- `check-missing-images.ts` - 画像表示チェック（要Playwright）
+### メンバー情報・画像
+- `build-members.ts` - hub の公開APIからメンバーデータと写真を取得し、`docs/assets/roster.json` と `docs/assets/members/` を生成する（生成物は git 管理外）
 
 ### ギャラリー管理
 - `optimize-gallery.sh` - ギャラリー画像の最適化とリネーム
@@ -177,4 +173,4 @@ NODE_ENV=development node scripts/script-name.js
 
 ## 関連ドキュメント
 - [gallery-management.md](/knowledge/04-operations/gallery-management.md)
-- [roster-api-setup-guide.md](/knowledge/04-operations/roster-api-setup-guide.md)
+- [hub-members-sync.md](/knowledge/04-operations/hub-members-sync.md)
