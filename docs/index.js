@@ -67,6 +67,12 @@ async function fetchRoster() {
     }
 }
 
+// 背番号の有無を判定する
+// 背番号 0 は有効な番号なので truthy 判定は使えない（0 は falsy）
+function hasNumber(member) {
+    return member.number != null;
+}
+
 // メンバーの写真を表示順（正面写真 → カジュアル写真）に並べる
 // 正面写真が未登録でもカジュアル写真があれば、それが先頭＝カードの表面になる
 function collectMemberPhotos(member) {
@@ -84,7 +90,7 @@ function createMemberCard(member) {
     const hasBackPhoto = backPhotos.length > 0;
     card.className = `member-card bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow fade-in ${hasBackPhoto ? 'flip-card' : ''}`;
 
-    const jersey = member.number ? `<div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm z-10">
+    const jersey = hasNumber(member) ? `<div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm z-10">
                             #${member.number}
                         </div>` : '';
     const info = `
@@ -231,7 +237,7 @@ function showMemberDetail(member) {
                         ${member.name.alphabet ? `<p class="text-gray-600 mb-4">${member.name.alphabet}</p>` : ''}
 
                         <div class="flex items-center gap-4 mb-6">
-                            ${member.number ? `<span class="bg-red-600 text-white px-3 py-1 rounded-full font-bold">#${member.number}</span>` : ''}
+                            ${hasNumber(member) ? `<span class="bg-red-600 text-white px-3 py-1 rounded-full font-bold">#${member.number}</span>` : ''}
                             <span class="font-semibold text-lg">${member.position}</span>
                             ${member.role ? `<span class="text-gray-600">${member.role}</span>` : ''}
                         </div>
@@ -492,6 +498,8 @@ function displayRandomMemberPickup(members) {
     // ランダムに写真を選択
     const randomPhoto = allPhotos[Math.floor(Math.random() * allPhotos.length)];
 
+    const numberLabel = hasNumber(randomMember) ? ` #${randomMember.number}` : '';
+
     // 画像を表示（円形でクリック可能）
     container.innerHTML = `
         <div class="pickup-member cursor-pointer hover:scale-105 transition-transform">
@@ -499,7 +507,7 @@ function displayRandomMemberPickup(members) {
                  alt="${randomMember.name.default}"
                  class="w-40 h-40 md:w-64 md:h-64 rounded-full object-cover border-2 border-white shadow-lg"
                  onerror="showNoImage(this)"
-                 title="${randomMember.name.default} #${randomMember.number || ''} ${randomMember.position}">
+                 title="${randomMember.name.default}${numberLabel} ${randomMember.position}">
         </div>
     `;
 
