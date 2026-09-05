@@ -14,6 +14,8 @@
 - `006-x-crosspost-watermark-guard.md` - Instagram→Xクロスポストのwatermarkガード
 - `007-remove-recruit-banner-add-crowdfunding.md` - 「メンバー募集」フローティングの撤去とクラウドファンディングカードの追加
 - `008-hero-video-and-section-order.md` - ヒーロー背景動画・プロモ動画の配信方式とセクション順序
+- `009-members-from-hub.md` - メンバーデータを hub 公開 API からビルド時取得へ移行（roster-api 廃止）
+- `010-member-photo-placeholder.md` - 写真未登録メンバーのプレースホルダーを TRIAX ロゴ透かし画像にする
 - `instagram-integration-decisions.md` - Instagram連携に関する決定事項
 
 ## 📝 ADRとは

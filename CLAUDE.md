@@ -110,6 +110,7 @@ HUB_API_KEY=<key> npm run build:members
 - 写真は長辺800px・品質85のJPEGに正規化（PNGは白背景でflatten）
 - **どちらもgit管理外**（`.gitignore` 済み）。GitHub Actions のデプロイ時に毎回生成する
 - 取得失敗（キー未設定・401・到達不能・掲載対象0名）時は生成物を書き換えず終了コード1で失敗する
+- 写真未登録メンバーは `docs/assets/member-placeholder.jpg`（ロゴ透かし・git管理）を表示。再生成は `./scripts/generate-member-placeholder.sh --production`（ADR-010）
 
 ### API キー
 
