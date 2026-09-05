@@ -85,24 +85,8 @@ class FormatChecker {
   private async checkYamlFiles() {
     console.log('📄 Checking YAML files...');
 
-    const yamlFiles = [
-      '.github/workflows/*.yml',
-      '*.yml',
-      '*.yaml'
-    ];
-
-    for (const pattern of yamlFiles) {
-      try {
-        const cmd = `find . -name "${pattern}" -type f 2>/dev/null`;
-        const { stdout } = await execAsync(`${cmd} | grep -v node_modules`);
-        const files = stdout.trim().split('\n').filter(Boolean);
-
-        for (const file of files) {
-          await this.checkTrailingSpaces(file);
-        }
-      } catch {
-        // No files found
-      }
+    for (const file of await this.listFiles('*.yml', '*.yaml')) {
+      await this.checkTrailingSpaces(file);
     }
   }
 
@@ -127,53 +111,61 @@ class FormatChecker {
   private async checkMarkdownFiles() {
     console.log('📚 Checking Markdown files...');
 
-    try {
-      const { stdout } = await execAsync('find . -name "*.md" -type f | grep -v node_modules');
-      const files = stdout.trim().split('\n').filter(Boolean);
-
-      for (const file of files) {
-        await this.checkTrailingSpaces(file);
-      }
-    } catch {
-      // No files found
+    for (const file of await this.listFiles('*.md')) {
+      await this.checkTrailingSpaces(file);
     }
   }
 
   private async checkJsonFiles() {
     console.log('📦 Checking JSON files...');
 
-    try {
-      const { stdout } = await execAsync('find . -name "*.json" -type f | grep -v node_modules | grep -v package-lock.json');
-      const files = stdout.trim().split('\n').filter(Boolean);
+    // package-lock.json は npm が生成するため対象外
+    const files = (await this.listFiles('*.json'))
+      .filter(file => file !== 'package-lock.json');
 
-      for (const file of files) {
-        try {
-          const content = await fs.readFile(file, 'utf8');
-          JSON.parse(content); // Check if valid JSON
+    for (const file of files) {
+      try {
+        const content = await fs.readFile(file, 'utf8');
+        JSON.parse(content); // Check if valid JSON
 
-          // Check formatting
-          const formatted = JSON.stringify(JSON.parse(content), null, 2);
-          if (content !== formatted && content !== formatted + '\n') {
-            if (this.isFixMode) {
-              await fs.writeFile(file, formatted + '\n', 'utf8');
-              this.fixed.push(file);
-            } else {
-              this.issues.push({
-                file,
-                issue: 'JSON formatting inconsistent'
-              });
-            }
+        // Check formatting
+        const formatted = JSON.stringify(JSON.parse(content), null, 2);
+        if (content !== formatted && content !== formatted + '\n') {
+          if (this.isFixMode) {
+            await fs.writeFile(file, formatted + '\n', 'utf8');
+            this.fixed.push(file);
+          } else {
+            this.issues.push({
+              file,
+              issue: 'JSON formatting inconsistent'
+            });
           }
-        } catch {
-          this.issues.push({
-            file,
-            issue: 'Invalid JSON'
-          });
         }
+      } catch {
+        this.issues.push({
+          file,
+          issue: 'Invalid JSON'
+        });
       }
-    } catch {
-      // No files found
     }
+  }
+
+  // 検査対象のファイルを git の pathspec で列挙する。
+  // find ではなく git ls-files を使うことで、.gitignore 対象（.claude/ や
+  // node_modules など）を自動的に除外し、除外ルールを .gitignore と整合させる。
+  // --others で未追跡ファイルも含めるが、--exclude-standard で ignore 対象は除く。
+  private async listFiles(...patterns: string[]): Promise<string[]> {
+    const args = patterns.map(pattern => `'${pattern}'`).join(' ');
+    const { stdout } = await execAsync(
+      `git ls-files --cached --others --exclude-standard -z -- ${args}`
+    );
+    const files = stdout.split('\0').filter(Boolean);
+
+    // 削除済みだが index に残っているファイルは除く
+    const existing = await Promise.all(
+      files.map(file => fs.access(file).then(() => file, () => null))
+    );
+    return existing.filter((file): file is string => file !== null);
   }
 
   private async checkTrailingSpaces(file: string) {
