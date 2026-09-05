@@ -98,6 +98,20 @@ npm run dev   # http://127.0.0.1:3000/docs/index.html
 - 写真は `{slack_id}-formal.jpg` / `{slack_id}-casual.jpg` / `{slack_id}-additional-{n}.jpg`。
   正面写真が未登録でもカジュアル写真があればカードの表面に使われる
 
+## 写真未登録メンバーの表示
+
+写真が 1 枚も登録されていないメンバーは、カード表面・詳細モーダル・ピックアップの 3 箇所とも
+`docs/assets/member-placeholder.jpg`（TRIAX ロゴの透かし画像、git 管理）を表示する。画像の読み込みに
+失敗したときも同じ画像に差し替わる。hub 側で写真を登録すれば次のデプロイで置き換わり、運営側の作業は不要。
+
+デザインを変えるときは `scripts/generate-member-placeholder.sh` 先頭の `ADOPTED_*` を直して再生成する。
+
+```bash
+./scripts/generate-member-placeholder.sh --production   # docs/assets/member-placeholder.jpg を書き出す
+```
+
+決定経緯は [010-member-photo-placeholder.md](../06-decisions/010-member-photo-placeholder.md) を参照。
+
 ## 障害時の見方
 
 ビルドは fail-fast で、失敗時は生成物を一切書き換えない（空のメンバー一覧で公開を上書きしないため）。

@@ -2,13 +2,20 @@
 let allMembers = [];
 let currentPosition = 'ALL';
 
-// 画像が読み込めなかったときに表示するプレースホルダー
-const NO_IMAGE_PLACEHOLDER = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23e5e7eb%22 width=%22100%22 height=%22100%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22 font-family=%22sans-serif%22 font-size=%2216%22>No Image</text></svg>';
+// 写真未登録・読み込み失敗時に表示するプレースホルダー（TRIAX ロゴの透かし画像）
+// 再生成: ./scripts/generate-member-placeholder.sh --production（ADR-010）
+const PLACEHOLDER_PHOTO = 'assets/member-placeholder.jpg';
 
 // 画像の読み込みに失敗したらプレースホルダーへ差し替える
+// onerror を先に外すので、プレースホルダー自体が読めなくてもループしない
 function showNoImage(img) {
     img.onerror = null;
-    img.src = NO_IMAGE_PLACEHOLDER;
+    img.src = PLACEHOLDER_PHOTO;
+}
+
+// 写真の alt テキスト。プレースホルダー表示時は写真準備中であることを伝える
+function photoAlt(member, photo) {
+    return photo === PLACEHOLDER_PHOTO ? `${member.name.default}（写真準備中）` : member.name.default;
 }
 
 // Google Maps リンクを開く
@@ -85,7 +92,7 @@ function collectMemberPhotos(member) {
 function createMemberCard(member) {
     const card = document.createElement('div');
     const photos = collectMemberPhotos(member);
-    const frontPhoto = photos[0] || NO_IMAGE_PLACEHOLDER;
+    const frontPhoto = photos[0] || PLACEHOLDER_PHOTO;
     const backPhotos = photos.slice(1);
     const hasBackPhoto = backPhotos.length > 0;
     card.className = `member-card bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow fade-in ${hasBackPhoto ? 'flip-card' : ''}`;
@@ -111,7 +118,7 @@ function createMemberCard(member) {
                             <!-- 表面 -->
                             <div class="flip-card-front">
                                 <img data-src="${frontPhoto}"
-                                     alt="${member.name.default}"
+                                     alt="${photoAlt(member, frontPhoto)}"
                                      class="lazy-load w-full h-full object-cover member-image">
                             </div>
                             <!-- 裏面 -->
@@ -139,7 +146,7 @@ function createMemberCard(member) {
         card.innerHTML = `
                     <div class="aspect-square bg-gray-200 relative overflow-hidden">
                         <img data-src="${frontPhoto}"
-                             alt="${member.name.default}"
+                             alt="${photoAlt(member, frontPhoto)}"
                              class="lazy-load w-full h-full object-cover member-image">
                         ${jersey}
                     </div>${info}
@@ -177,7 +184,7 @@ function showMemberDetail(member) {
     const modalContent = document.getElementById('modal-content');
 
     const photos = collectMemberPhotos(member);
-    const allPhotos = photos.length > 0 ? photos : [NO_IMAGE_PLACEHOLDER];
+    const allPhotos = photos.length > 0 ? photos : [PLACEHOLDER_PHOTO];
     const physique = [
         member.height ? `${member.height}cm` : '',
         member.weight ? `${member.weight}kg` : ''
@@ -197,7 +204,7 @@ function showMemberDetail(member) {
                             <div class="relative overflow-hidden rounded-lg bg-gray-200">
                                 <img id="carousel-image"
                                      src="${allPhotos[0]}"
-                                     alt="${member.name.default}"
+                                     alt="${photoAlt(member, allPhotos[0])}"
                                      class="w-full h-full object-cover transition-opacity duration-300"
                                      onerror="showNoImage(this)">
 
@@ -492,11 +499,10 @@ function displayRandomMemberPickup(members) {
     // そのメンバーの写真を集める（正面写真 + カジュアル写真）
     const allPhotos = collectMemberPhotos(randomMember);
 
-    // 写真がない場合は何も表示しない
-    if (allPhotos.length === 0) return;
-
-    // ランダムに写真を選択
-    const randomPhoto = allPhotos[Math.floor(Math.random() * allPhotos.length)];
+    // ランダムに写真を選択（写真がなければプレースホルダーを直接使う。onerror 頼みにしない）
+    const randomPhoto = allPhotos.length > 0
+        ? allPhotos[Math.floor(Math.random() * allPhotos.length)]
+        : PLACEHOLDER_PHOTO;
 
     const numberLabel = hasNumber(randomMember) ? ` #${randomMember.number}` : '';
 
@@ -504,7 +510,7 @@ function displayRandomMemberPickup(members) {
     container.innerHTML = `
         <div class="pickup-member cursor-pointer hover:scale-105 transition-transform">
             <img src="${randomPhoto}"
-                 alt="${randomMember.name.default}"
+                 alt="${photoAlt(randomMember, randomPhoto)}"
                  class="w-40 h-40 md:w-64 md:h-64 rounded-full object-cover border-2 border-white shadow-lg"
                  onerror="showNoImage(this)"
                  title="${randomMember.name.default}${numberLabel} ${randomMember.position}">
