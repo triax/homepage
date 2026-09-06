@@ -18,6 +18,7 @@
 - `008-hero-video-and-section-order.md` - ヒーロー背景動画・プロモ動画の配信方式とセクション順序
 - `009-members-from-hub.md` - メンバーデータを hub 公開 API からビルド時取得へ移行（roster-api 廃止）
 - `010-member-photo-placeholder.md` - 写真未登録メンバーのプレースホルダーを TRIAX ロゴ透かし画像にする
+- `011-pnpm-and-prettier.md` - パッケージマネージャを pnpm に一本化し、整形を Prettier + editorconfig-checker に委ねる
 - `instagram-integration-decisions.md` - Instagram連携に関する決定事項
 
 ## 📝 ADRとは
