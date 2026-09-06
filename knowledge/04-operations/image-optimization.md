@@ -38,7 +38,7 @@
 
 ### ギャラリー画像 (`docs/assets/gallery`)
 
-- **最大幅**: 1920px
+- **長辺**: 1920px以下（縦位置の写真も長辺基準でリサイズ）
 - **品質**: 85%
 - **リネーム**: 連番（01.jpg, 02.jpg, ...）
 - **用途**: フォトギャラリーセクション
@@ -69,7 +69,7 @@
 ```bash
 magick "$file" \
     -auto-orient \           # EXIF情報を適用して物理的に回転
-    -resize "${MAX_WIDTH}>" \
+    -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \  # 長辺基準でリサイズ（正方形の枠に収める）
     -quality $QUALITY \
     -interlace Plane \       # プログレッシブJPEG
     -strip \                 # メタデータ削除
