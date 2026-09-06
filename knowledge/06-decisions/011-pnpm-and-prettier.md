@@ -39,7 +39,12 @@ Node 20 は既にサポートが終わっているため、CI は Node 24 に統
 - Prettier は `.editorconfig` の indent 設定を読むので、`.prettierrc` は置かない。
   整形規則の正は `.editorconfig` ひとつに保つ
 - editorconfig-checker は改行・末尾空白・最終行改行・文字コードだけを見る。
-  インデント幅の検査は Prettier と二重管理になるため無効化する
+  インデント幅の検査は Prettier と二重管理になるため無効化する。
+  無効化と除外は `.editorconfig-checker.json` に置き、コマンドラインに特例を持ち込まない
+- editorconfig-checker の npm パッケージは実行時に Go バイナリを取得する。
+  既定が `latest` で再現性がないため、`EC_VERSION` でバージョンを固定する
+- `engines` で Node と pnpm の下限を宣言する。`allowBuilds` は pnpm 11 のキーで、
+  古い pnpm では黙って無視されるため、バージョン不一致は導入時に弾く
 
 ### 4. 所有権の線引き
 
