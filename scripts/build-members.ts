@@ -8,7 +8,7 @@
  *   - docs/assets/members/*.jpg  長辺 800px に縮小した JPEG 写真
  *
  * 使用方法:
- *   HUB_API_KEY=<key> npm run build:members
+ *   HUB_API_KEY=<key> pnpm build:members
  *
  * 環境変数:
  *   HUB_API_KEY  必須。hub の公開 API キー（X-API-Key ヘッダに載せる）

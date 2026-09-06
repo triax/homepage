@@ -103,7 +103,7 @@ mainブランチへのプッシュのほか、Instagram取得ワークフロー�
 
 ```bash
 # hubからメンバー情報・写真を取得して生成物を作る
-HUB_API_KEY=<key> npm run build:members
+HUB_API_KEY=<key> pnpm build:members
 ```
 
 - 生成物: `docs/assets/roster.json`（v2スキーマ）と `docs/assets/members/{slack_id}-{formal|casual|additional-N}.jpg`

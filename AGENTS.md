@@ -7,21 +7,21 @@
 - ルートの `package.json` `eslint.config.mjs` `tsconfig.json` がツールチェーンの基準値です。依存追加やターゲット変更時は三点セットで整合性を保ってください。
 
 ## ビルド・テスト・開発コマンド / Build, Test, and Development Commands
-- `npm install` で tsx・ESLint・Playwright など開発依存を取得します。
-- `npx http-server docs -p 3000` でローカルプレビュー環境を起動できます。別ポートが必要な場合は `-p` を調整してください。
-- `HUB_API_KEY=<key> npm run build:members` は hub の公開 API からメンバーデータと写真を取得し、`docs/assets/roster.json` と `docs/assets/members/` を生成します。どちらもビルド生成物で git 管理外です。取得に失敗した場合は生成物を書き換えずに終了コード 1 で失敗します。
-- `npm run instagram:fetch` と `npm run instagram:refresh-token` は Instagram フィードを管理します。トークン更新は 24 時間以内に繰り返さないよう注意します。
-- `npm run lint` は ESLint と整形確認を一括実行します。修正は `npm run lint:fix` や `npm run format:fix` で適用してください。
+- `pnpm install` で tsx・ESLint・Playwright など開発依存を取得します。パッケージマネージャは pnpm に固定されており、他のツールでのインストールは `preinstall` で弾かれます。
+- `pnpm dev` でローカルプレビュー環境（http://localhost:3000）を起動できます。別ポートが必要な場合は `pnpm exec http-server -p <port> -c-1` を使ってください。
+- `HUB_API_KEY=<key> pnpm build:members` は hub の公開 API からメンバーデータと写真を取得し、`docs/assets/roster.json` と `docs/assets/members/` を生成します。どちらもビルド生成物で git 管理外です。取得に失敗した場合は生成物を書き換えずに終了コード 1 で失敗します。
+- `pnpm instagram:fetch` と `pnpm instagram:refresh-token` は Instagram フィードを管理します。トークン更新は 24 時間以内に繰り返さないよう注意します。
+- `pnpm lint` は ESLint と整形確認を一括実行します。修正は `pnpm lint:fix` や `pnpm format:fix` で適用してください。
 
 ## コーディング規約 / Coding Style & Naming Conventions
 - TypeScript は `scripts/**/*.ts` に配置し、ファイル名は `build-members.ts` のように kebab-case を使用します。シェルスクリプトも同じ規則です。
 - ESLint 設定で 2 スペースインデント・シングルクォート・セミコロン必須・最大 100 文字/行が求められます。意図的に未使用の変数は `_example` のようにアンダースコア接頭で警告を回避します。
-- `docs/` 内の HTML/CSS を編集後は `npm run format` で末尾スペースを削除し、Pages デプロイ前の差分をクリーンに保ってください。
+- `docs/` 内の HTML/CSS を編集後は `pnpm format` で末尾スペースを削除し、Pages デプロイ前の差分をクリーンに保ってください。
 - このプロジェクトの公用語は日本語です。コミットメッセージ、PR 説明、ドキュメントは原則として日本語で統一し、必要に応じて英語訳を補ってください。
 
 ## テスト方針 / Testing Guidelines
-- UI オートメーションは Playwright を想定しています。初回は `npx playwright install` でブラウザバイナリを導入してください。
-- PR 前には最低限 `npm run lint` と該当する画像・ロスターコマンドを実行し、動的セクション（Instagram フィードやロスターカード）を変更した場合は簡易 Playwright チェックを追加するのが理想です。
+- UI オートメーションは Playwright を想定しています。初回は `pnpm exec playwright install` でブラウザバイナリを導入してください。
+- PR 前には最低限 `pnpm lint` と該当する画像・ロスターコマンドを実行し、動的セクション（Instagram フィードやロスターカード）を変更した場合は簡易 Playwright チェックを追加するのが理想です。
 
 ## コミットと PR / Commit & Pull Request Guidelines
 - コミットメッセージは「Roster同期ワークフローを改善」「Instagram投稿データを更新」のように対象と目的を一行で記述します。データ更新単位でまとめ、雑多な差分は極力スクワッシュしてください。

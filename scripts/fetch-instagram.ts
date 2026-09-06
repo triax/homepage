@@ -1,5 +1,5 @@
 // scripts/fetch-instagram.ts
-// Node 20 + npx tsx で実行想定（fetch標準搭載）
+// Node 24 + tsx で実行想定（fetch標準搭載）
 // 必要なSecrets: INSTAGRAM_USER_ID, FACEBOOK_ACCESS_TOKEN
 
 import { promises as fs } from 'fs';
