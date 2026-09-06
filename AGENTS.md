@@ -16,7 +16,7 @@
 ## コーディング規約 / Coding Style & Naming Conventions
 - TypeScript は `scripts/**/*.ts` に配置し、ファイル名は `build-members.ts` のように kebab-case を使用します。シェルスクリプトも同じ規則です。
 - ESLint 設定で 2 スペースインデント・シングルクォート・セミコロン必須・最大 100 文字/行が求められます。意図的に未使用の変数は `_example` のようにアンダースコア接頭で警告を回避します。
-- `docs/` 内の HTML/CSS を編集後は `pnpm format` で末尾スペースを削除し、Pages デプロイ前の差分をクリーンに保ってください。
+- 整形は Prettier が担当します。`pnpm format:fix` で JSON/YAML/Markdown/HTML/CSS/JS を一括整形し、Prettier が扱わないファイル（シェルスクリプト等）の改行・末尾空白は `pnpm lint:editorconfig` が `.editorconfig` に基づいて検査します。
 - このプロジェクトの公用語は日本語です。コミットメッセージ、PR 説明、ドキュメントは原則として日本語で統一し、必要に応じて英語訳を補ってください。
 
 ## テスト方針 / Testing Guidelines

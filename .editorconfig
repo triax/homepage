@@ -30,9 +30,16 @@ indent_size = 2
 indent_size = 2
 
 # Markdown files
+# 行末の空白は Markdown では改行の意味を持つため保持する。
+# EditorConfig は値の後ろの行内コメントを解釈しないので、コメントは行頭に置く。
 [*.md]
-trim_trailing_whitespace = false  # Preserve trailing spaces in markdown (they have meaning)
+trim_trailing_whitespace = false
 
 # YAML files
 [*.{yml,yaml}]
 indent_size = 2
+
+# Shell scripts
+# 継続行の桁揃えを許すため、インデント幅の検査は行わない。
+[*.sh]
+indent_size = unset

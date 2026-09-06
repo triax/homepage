@@ -1,0 +1,17 @@
+# Prettier の対象外。
+# .gitignore は Prettier が既定で参照するため、node_modules や
+# docs/assets/roster.json・docs/assets/members/ などのビルド生成物は
+# ここに書かなくても除外される。
+
+# ロックファイル（パッケージマネージャが生成・管理する）
+pnpm-lock.yaml
+
+# CI が JSON.stringify(..., null, 2) で機械生成するデータ。
+# Prettier は短い配列を 1 行に畳むため、生成結果と衝突しうる。
+# 整形の契約は生成スクリプト側にあるので Prettier は触らない。
+docs/assets/instagram/posts.json
+
+# TypeScript と ESLint 設定は ESLint がスタイルの所有者。
+# Prettier 既定（ダブルクォート・printWidth 80）と規則が衝突するため除外する。
+scripts/**/*.ts
+eslint.config.mjs

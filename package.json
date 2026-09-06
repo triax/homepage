@@ -18,12 +18,12 @@
     "instagram:notify-slack": "tsx scripts/notify-slack-instagram.ts",
     "instagram:post-x": "tsx scripts/post-instagram-to-x.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "pnpm run lint:eslint && pnpm run format:check",
+    "lint": "pnpm run lint:eslint && pnpm run format:check && pnpm run lint:editorconfig",
     "lint:eslint": "eslint scripts/**/*.ts",
+    "lint:editorconfig": "editorconfig-checker",
     "lint:fix": "pnpm run lint:eslint -- --fix && pnpm run format:fix",
-    "format": "sed -i '' 's/[[:space:]]*$//' docs/index.html docs/index.css",
-    "format:check": "tsx scripts/format-check.ts",
-    "format:fix": "tsx scripts/format-check.ts --fix"
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "author": "otiai10",
   "license": "MIT",
@@ -35,10 +35,12 @@
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
     "dotenv": "^17.2.1",
+    "editorconfig-checker": "^7.0.0",
     "eslint": "^9.33.0",
     "http-server": "^14.1.1",
     "libsodium-wrappers": "^0.7.15",
     "playwright": "^1.54.2",
+    "prettier": "^3.9.6",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2"
   }
