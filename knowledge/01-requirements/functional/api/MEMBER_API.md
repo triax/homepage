@@ -66,16 +66,16 @@ X-API-Key: <HUB_API_KEY>
 
 ### 実装上の注意（実測ベース）
 
-| 項目 | 内容 |
-|---|---|
-| `updated_at` | 一度も保存されていないプロフィールでは**キーごと省略される**（hub 側 omitzero）。欠落を許容すること |
-| `position` | hub 側で正規化済み。`QB RB WR TE OL DL LB DB K P Staff Coach` または**空文字**。空文字は入力済みメンバーにも残るため、homepage 側の除外条件として使う |
-| 未入力メンバー | hub 側で除外済み。homepage 側でも防御的にフィルタする |
-| `hide_from_hp` / `hidden_fields` | hub 側の `PublicView()` が非掲載メンバーを除外し、非掲載フィールドを空値化する。homepage 側は「空なら表示しない」で足りる |
-| `custom_fields` / `additional_photo_urls` | 未設定時は `[]` ではなく `null` が返る |
-| `height` / `weight` | 未入力時は `0` が返る |
-| `display_name` | 空のことがある。その場合は top-level の `name`（Slack の表示名）を使う |
-| 写真 | `https://storage.googleapis.com/triax-football/hp/photos/{slack_id}/{formal|casual|additional}-{ms}.{ext}`。公開バケット・リサイズなし・最大10MB・`.jpg` と `.png` が混在 |
+| 項目                                      | 内容                                                                                                                                                  |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `updated_at`                              | 一度も保存されていないプロフィールでは**キーごと省略される**（hub 側 omitzero）。欠落を許容すること                                                   |
+| `position`                                | hub 側で正規化済み。`QB RB WR TE OL DL LB DB K P Staff Coach` または**空文字**。空文字は入力済みメンバーにも残るため、homepage 側の除外条件として使う |
+| 未入力メンバー                            | hub 側で除外済み。homepage 側でも防御的にフィルタする                                                                                                 |
+| `hide_from_hp` / `hidden_fields`          | hub 側の `PublicView()` が非掲載メンバーを除外し、非掲載フィールドを空値化する。homepage 側は「空なら表示しない」で足りる                             |
+| `custom_fields` / `additional_photo_urls` | 未設定時は `[]` ではなく `null` が返る                                                                                                                |
+| `height` / `weight`                       | 未入力時は `0` が返る                                                                                                                                 |
+| `display_name`                            | 空のことがある。その場合は top-level の `name`（Slack の表示名）を使う                                                                                |
+| 写真                                      | `https://storage.googleapis.com/triax-football/hp/photos/{slack_id}/{formal                                                                           | casual | additional}-{ms}.{ext}`。公開バケット・リサイズなし・最大10MB・`.jpg`と`.png` が混在 |
 
 ---
 
@@ -122,25 +122,25 @@ X-API-Key: <HUB_API_KEY>
 
 ### フィールド定義
 
-| フィールド | 型 | 説明 |
-|---|---|---|
-| `version` | string | スキーマバージョン。現行 `"2.0"` |
-| `generated_at` | string | hub のレスポンスの `generated_at`（RFC3339） |
-| `source` | string | 取得元URL |
-| `members[].id` | string | Slack ID（写真ファイル名の接頭辞にも使う） |
-| `members[].updated_at` | string \| null | hub 側のプロフィール更新日時。未保存なら `null` |
-| `members[].name.default` | string | 表示名。hub の `display_name`、空なら Slack の `name` |
-| `members[].name.kana` | string | ふりがな |
-| `members[].name.alphabet` | string | `first_name` + `family_name` |
-| `members[].number` | number \| null | 背番号 |
-| `members[].position` | string | ポジション（`QB`…`P` / `Staff` / `Coach`） |
-| `members[].role` | string | 役職 |
-| `members[].photos.formal` | string | 正面写真の相対パス。未登録なら空文字 |
-| `members[].photos.casual` | string[] | カジュアル写真 + 追加写真の相対パス |
-| `members[].height` / `weight` | number \| null | 身長(cm) / 体重(kg)。未入力は `null` |
-| `members[].hometown` / `school` / `bio` | string | 出身地 / 出身校 / ひとこと |
-| `members[].enthusiasm` / `watchme` / `hobbies` / `favorite` / `what_i_like_about_triax` | string | 意気込み / 注目ポイント / 趣味 / 最近の推し / TRIAXの好きなところ |
-| `members[].custom_fields` | `{key, value}[]` | 自由項目。未設定なら `[]` |
+| フィールド                                                                              | 型               | 説明                                                              |
+| --------------------------------------------------------------------------------------- | ---------------- | ----------------------------------------------------------------- |
+| `version`                                                                               | string           | スキーマバージョン。現行 `"2.0"`                                  |
+| `generated_at`                                                                          | string           | hub のレスポンスの `generated_at`（RFC3339）                      |
+| `source`                                                                                | string           | 取得元URL                                                         |
+| `members[].id`                                                                          | string           | Slack ID（写真ファイル名の接頭辞にも使う）                        |
+| `members[].updated_at`                                                                  | string \| null   | hub 側のプロフィール更新日時。未保存なら `null`                   |
+| `members[].name.default`                                                                | string           | 表示名。hub の `display_name`、空なら Slack の `name`             |
+| `members[].name.kana`                                                                   | string           | ふりがな                                                          |
+| `members[].name.alphabet`                                                               | string           | `first_name` + `family_name`                                      |
+| `members[].number`                                                                      | number \| null   | 背番号                                                            |
+| `members[].position`                                                                    | string           | ポジション（`QB`…`P` / `Staff` / `Coach`）                        |
+| `members[].role`                                                                        | string           | 役職                                                              |
+| `members[].photos.formal`                                                               | string           | 正面写真の相対パス。未登録なら空文字                              |
+| `members[].photos.casual`                                                               | string[]         | カジュアル写真 + 追加写真の相対パス                               |
+| `members[].height` / `weight`                                                           | number \| null   | 身長(cm) / 体重(kg)。未入力は `null`                              |
+| `members[].hometown` / `school` / `bio`                                                 | string           | 出身地 / 出身校 / ひとこと                                        |
+| `members[].enthusiasm` / `watchme` / `hobbies` / `favorite` / `what_i_like_about_triax` | string           | 意気込み / 注目ポイント / 趣味 / 最近の推し / TRIAXの好きなところ |
+| `members[].custom_fields`                                                               | `{key, value}[]` | 自由項目。未設定なら `[]`                                         |
 
 ### 掲載条件
 
@@ -150,11 +150,11 @@ X-API-Key: <HUB_API_KEY>
 
 ## 3. 生成物: `docs/assets/members/`
 
-| 種別 | ファイル名 |
-|---|---|
-| 正面写真 | `{slack_id}-formal.jpg` |
-| カジュアル写真 | `{slack_id}-casual.jpg` |
-| 追加写真 | `{slack_id}-additional-{n}.jpg`（n は 1 始まり） |
+| 種別           | ファイル名                                       |
+| -------------- | ------------------------------------------------ |
+| 正面写真       | `{slack_id}-formal.jpg`                          |
+| カジュアル写真 | `{slack_id}-casual.jpg`                          |
+| 追加写真       | `{slack_id}-additional-{n}.jpg`（n は 1 始まり） |
 
 - すべて **長辺 800px 以下・品質 85 の JPEG** に正規化（PNG の透過は白背景に落とす）
 - 退団者の写真が残らないよう、ビルドのたびにディレクトリごと作り直す
@@ -163,15 +163,15 @@ X-API-Key: <HUB_API_KEY>
 
 ## 4. 表示側（`docs/index.js`）
 
-| 関数 | 役割 |
-|---|---|
-| `fetchRoster()` | `assets/roster.json` を取得する |
-| `collectMemberPhotos(member)` | `formal` → `casual[]` の順に写真を並べる。正面写真が無ければカジュアル写真が先頭＝カードの表面になる |
-| `createMemberCard(member)` | 一覧のカード。2枚目以降の写真があれば flip 対応にする |
-| `showMemberDetail(member)` | 詳細モーダル。写真カルーセルと定義リストを描画する |
-| `memberDetailRow(label, value)` | 定義リスト1行。**値が空の項目は行ごと出さない** |
-| `displayMembers()` | ポジションフィルタ適用（比較は `toUpperCase()` で大文字小文字非依存） |
-| `displayRandomMemberPickup(members)` | ヒーロー下のランダムピックアップ |
+| 関数                                 | 役割                                                                                                 |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `fetchRoster()`                      | `assets/roster.json` を取得する                                                                      |
+| `collectMemberPhotos(member)`        | `formal` → `casual[]` の順に写真を並べる。正面写真が無ければカジュアル写真が先頭＝カードの表面になる |
+| `createMemberCard(member)`           | 一覧のカード。2枚目以降の写真があれば flip 対応にする                                                |
+| `showMemberDetail(member)`           | 詳細モーダル。写真カルーセルと定義リストを描画する                                                   |
+| `memberDetailRow(label, value)`      | 定義リスト1行。**値が空の項目は行ごと出さない**                                                      |
+| `displayMembers()`                   | ポジションフィルタ適用（比較は `toUpperCase()` で大文字小文字非依存）                                |
+| `displayRandomMemberPickup(members)` | ヒーロー下のランダムピックアップ                                                                     |
 
 ポジションフィルタのボタンは `QB RB WR TE OL DL LB DB K P`。`Staff` / `Coach` は `ALL` のときのみ表示される。
 

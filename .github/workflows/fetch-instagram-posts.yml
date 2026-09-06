@@ -4,7 +4,7 @@ on:
   schedule:
     # 12時間ごとに実行（0:00と12:00 UTC）
     # 日本時間では9:00と21:00
-    - cron: '0 0,12 * * *'
+    - cron: "0 0,12 * * *"
   workflow_dispatch: # 手動実行も可能にする
 
 jobs:
@@ -28,8 +28,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          cache: 'pnpm'
+          node-version: "24"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -52,7 +52,7 @@ jobs:
           # レガシー環境変数（フォールバック用）
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
           FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
-          INSTAGRAM_MEDIA_LIMIT: '6' # 最新6件を取得
+          INSTAGRAM_MEDIA_LIMIT: "6" # 最新6件を取得
         run: |
           pnpm instagram:fetch
 
@@ -61,7 +61,7 @@ jobs:
         continue-on-error: true
         env:
           SLACK_BOT_OAUTH_TOKEN: ${{ secrets.SLACK_BOT_OAUTH_TOKEN }}
-          SLACK_INSTAGRAM_CHANNEL: '#instagram'
+          SLACK_INSTAGRAM_CHANNEL: "#instagram"
         run: pnpm instagram:notify-slack /tmp/prev_posts.json
 
       - name: Post new posts to X

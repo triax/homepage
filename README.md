@@ -58,10 +58,12 @@ node scripts/generate-gallery-html.js
 最新のInstagram投稿を自動取得・表示します。
 
 ### 自動更新
+
 - **投稿取得**: 12時間ごと（media_url有効期限対策）
 - **トークン更新**: 不要（Page Access Tokenは無期限）
 
 ### 手動実行コマンド
+
 ```bash
 # Instagram投稿を取得
 pnpm instagram:fetch

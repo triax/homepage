@@ -17,6 +17,7 @@ GitHub Pagesで `www.triax.football` カスタムドメインを設定するた�
 #### 必須設定
 
 **www サブドメイン用（CNAME レコード）:**
+
 ```
 Host: www
 Type: CNAME
@@ -28,6 +29,7 @@ TTL: 4 hrs
 
 **Apex domain用（A レコード）:**
 以下4つすべてを設定：
+
 ```
 Host: @
 Type: A
@@ -59,6 +61,7 @@ www.triax.football
 ```
 
 **重要な注意点:**
+
 - ファイル名は大文字で `CNAME`（拡張子なし）
 - 内容は1行のみ（改行文字も含めない）
 - ドメイン名のみを記載（プロトコルやパスは含めない）
@@ -101,11 +104,13 @@ dig @1.1.1.1 www.triax.football  # Cloudflare DNS
 ### 期待される出力
 
 **CNAMEレコード:**
+
 ```
 www.triax.football. → triax.github.io.
 ```
 
 **Aレコード（apex domain設定時）:**
+
 ```
 triax.football. → 185.199.108.153
 triax.football. → 185.199.109.153
@@ -139,6 +144,7 @@ curl -I http://www.triax.football
 ## 他のサブドメインへの影響
 
 Apex domainのAレコード変更は、他のサブドメインには影響しません：
+
 - `hub.triax.football` (Google App Engine) - 影響なし
 - `mvp.triax.football` (Cloudflare Pages) - 影響なし
 - `console.triax.football` (Cloudflare Pages) - 影響なし

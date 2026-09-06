@@ -6,6 +6,7 @@
 > [ADR-009](/knowledge/06-decisions/009-members-from-hub.md) を参照してください。
 
 ## 問題
+
 - Google Driveの画像URLが403エラーを返す
 - CORS制限により、ブラウザから直接アクセスできない
 - シークレットブラウザでは表示可能（リファラー制限の可能性）
@@ -13,6 +14,7 @@
 ## 解決策
 
 ### 1. 即時対応（推奨）
+
 画像をGitHubリポジトリに直接保存する方法：
 
 ```bash
@@ -24,50 +26,53 @@ curl -L "https://drive.google.com/uc?export=download&id=1RkyEPOq0CELzOCIICoanFWr
 ```
 
 ### 2. 画像プロキシサービスの利用
+
 無料の画像プロキシサービスを使用：
 
 ```javascript
 // 例：wsrv.nl（無料の画像プロキシ）
 function convertToProxyUrl(originalUrl) {
-    return `https://wsrv.nl/?url=${encodeURIComponent(originalUrl)}`;
+  return `https://wsrv.nl/?url=${encodeURIComponent(originalUrl)}`;
 }
 ```
 
 ### 3. Cloudflare Workers（無料枠あり）
+
 カスタムプロキシを作成：
 
 ```javascript
 // Cloudflare Worker スクリプト例
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
+addEventListener("fetch", (event) => {
+  event.respondWith(handleRequest(event.request));
+});
 
 async function handleRequest(request) {
-  const url = new URL(request.url)
-  const imageUrl = url.searchParams.get('url')
+  const url = new URL(request.url);
+  const imageUrl = url.searchParams.get("url");
 
   if (!imageUrl) {
-    return new Response('URL parameter required', { status: 400 })
+    return new Response("URL parameter required", { status: 400 });
   }
 
   const response = await fetch(imageUrl, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; ImageProxy/1.0)'
-    }
-  })
+      "User-Agent": "Mozilla/5.0 (compatible; ImageProxy/1.0)",
+    },
+  });
 
-  const headers = new Headers(response.headers)
-  headers.set('Access-Control-Allow-Origin', '*')
-  headers.delete('x-frame-options')
+  const headers = new Headers(response.headers);
+  headers.set("Access-Control-Allow-Origin", "*");
+  headers.delete("x-frame-options");
 
   return new Response(response.body, {
     status: response.status,
-    headers
-  })
+    headers,
+  });
 }
 ```
 
 ### 4. GitHub Actions による自動化
+
 定期的に画像を取得してリポジトリに保存：
 
 ```yaml
@@ -75,7 +80,7 @@ name: Sync Member Images
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 毎日実行
+    - cron: "0 0 * * *" # 毎日実行
   workflow_dispatch:
 
 jobs:

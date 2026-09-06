@@ -8,11 +8,11 @@ on:
   # Instagram 取得ワークフローの push は GITHUB_TOKEN 由来のため push イベントを発火しない。
   # 取得後のデータを確実に公開するため、完了を受けてデプロイする。
   workflow_run:
-    workflows: ['Update Instagram Feed']
+    workflows: ["Update Instagram Feed"]
     types: [completed]
   # 上記が動かなかった場合の保険。毎日 03:00 JST に hub の最新データを取り込む。
   schedule:
-    - cron: '0 18 * * *'
+    - cron: "0 18 * * *"
   workflow_dispatch:
 
 permissions:
@@ -48,8 +48,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          cache: 'pnpm'
+          node-version: "24"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

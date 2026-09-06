@@ -24,12 +24,12 @@ hub の公開 API から取得する。運営による年次のデータ収集�
 
 `deploy-pages.yml` は次の 4 つで走る。いずれもビルド時に hub を取り直す。
 
-| トリガー | 内容 |
-|---|---|
-| `push`（main） | 通常のコード変更 |
+| トリガー                                       | 内容                                                                                                             |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `push`（main）                                 | 通常のコード変更                                                                                                 |
 | `workflow_run`（Update Instagram Feed 完了時） | Instagram 取得ワークフローの push は `GITHUB_TOKEN` 由来のため `push` イベントを発火しない。その取りこぼしを拾う |
-| `schedule`（毎日 03:00 JST） | 上記が動かなかった場合の保険 |
-| `workflow_dispatch` | 手動での即時反映 |
+| `schedule`（毎日 03:00 JST）                   | 上記が動かなかった場合の保険                                                                                     |
+| `workflow_dispatch`                            | 手動での即時反映                                                                                                 |
 
 メンバーが hub でプロフィールを直したあと、すぐ反映したいときは Actions から
 「Deploy to GitHub Pages」を手動実行する。
@@ -39,10 +39,10 @@ hub の公開 API から取得する。運営による年次のデータ収集�
 hub の公開 API は `X-API-Key` ヘッダが必須。`Cache-Control: private` かつ CORS ヘッダを返さない
 ため、ブラウザから直接叩く運用はできない（**ビルド時取得のみ**）。
 
-| 置き場所 | 用途 |
-|---|---|
-| GitHub Actions secret `HUB_API_KEY` | 本番ビルド。`deploy-pages.yml` の build ステップに env で注入 |
-| 手元の安全な場所（例: `~/.secrets/`） | ローカル検証用 |
+| 置き場所                              | 用途                                                          |
+| ------------------------------------- | ------------------------------------------------------------- |
+| GitHub Actions secret `HUB_API_KEY`   | 本番ビルド。`deploy-pages.yml` の build ステップに env で注入 |
+| 手元の安全な場所（例: `~/.secrets/`） | ローカル検証用                                                |
 
 キー値はリポジトリ・生成物・ログ・PR 本文に出さない。
 
@@ -80,10 +80,19 @@ npm run dev   # http://127.0.0.1:3000/docs/index.html
       "number": 0,
       "position": "QB",
       "role": "",
-      "photos": { "formal": "assets/members/...jpg", "casual": ["assets/members/...jpg"] },
-      "height": 0, "weight": 0,
-      "hometown": "", "school": "", "bio": "",
-      "enthusiasm": "", "watchme": "", "hobbies": "", "favorite": "",
+      "photos": {
+        "formal": "assets/members/...jpg",
+        "casual": ["assets/members/...jpg"]
+      },
+      "height": 0,
+      "weight": 0,
+      "hometown": "",
+      "school": "",
+      "bio": "",
+      "enthusiasm": "",
+      "watchme": "",
+      "hobbies": "",
+      "favorite": "",
       "what_i_like_about_triax": "",
       "custom_fields": [{ "key": "", "value": "" }]
     }
@@ -116,12 +125,12 @@ npm run dev   # http://127.0.0.1:3000/docs/index.html
 
 ビルドは fail-fast で、失敗時は生成物を一切書き換えない（空のメンバー一覧で公開を上書きしないため）。
 
-| ログ | 原因 | 対処 |
-|---|---|---|
-| `環境変数 HUB_API_KEY が設定されていません` | secret 未登録、env 注入漏れ | Actions secret と workflow の `env:` を確認 |
-| `hub API が 401 を返しました` | キーが不正・失効、hub 側で削除された | ローテーション手順でキーを再設定 |
-| `hub API に到達できませんでした` | hub がダウン、ネットワーク断 | hub の稼働を確認して再実行 |
-| `掲載対象のメンバーが 0 名でした` | hub 側の公開制御・データ不整合 | hub のデータを確認。復旧までサイトは前回のデプロイ内容のまま |
-| `ImageMagick が見つかりません` | 実行環境に `magick` / `convert` が無い | ローカルなら ImageMagick を入れる。CI は「Ensure ImageMagick」ステップが入れる |
+| ログ                                        | 原因                                   | 対処                                                                           |
+| ------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------ |
+| `環境変数 HUB_API_KEY が設定されていません` | secret 未登録、env 注入漏れ            | Actions secret と workflow の `env:` を確認                                    |
+| `hub API が 401 を返しました`               | キーが不正・失効、hub 側で削除された   | ローテーション手順でキーを再設定                                               |
+| `hub API に到達できませんでした`            | hub がダウン、ネットワーク断           | hub の稼働を確認して再実行                                                     |
+| `掲載対象のメンバーが 0 名でした`           | hub 側の公開制御・データ不整合         | hub のデータを確認。復旧までサイトは前回のデプロイ内容のまま                   |
+| `ImageMagick が見つかりません`              | 実行環境に `magick` / `convert` が無い | ローカルなら ImageMagick を入れる。CI は「Ensure ImageMagick」ステップが入れる |
 
 いずれの場合もデプロイは失敗し、**公開中のサイトは直前の状態のまま**残る。

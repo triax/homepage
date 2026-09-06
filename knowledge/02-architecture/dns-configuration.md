@@ -19,17 +19,17 @@ triax.football
 
 ### 詳細なDNSレコード
 
-| ホスト | タイプ | TTL | データ | サービス | 用途 |
-|--------|--------|-----|--------|----------|------|
-| @ | A | 4時間 | 185.199.108.153 | GitHub Pages | メインサイト |
-| @ | A | 4時間 | 185.199.109.153 | GitHub Pages | メインサイト |
-| @ | A | 4時間 | 185.199.110.153 | GitHub Pages | メインサイト |
-| @ | A | 4時間 | 185.199.111.153 | GitHub Pages | メインサイト |
-| @ | TXT | 4時間 | google-site-verification=... | - | Google検証用 |
-| www | CNAME | 4時間 | triax.github.io | GitHub Pages | メインサイト |
-| hub | CNAME | 4時間 | ghs.googlehosted.com | Google App Engine | アプリケーション |
-| mvp | CNAME | 4時間 | triax-mvp.pages.dev | Cloudflare Pages | MVP版サイト |
-| console | CNAME | 4時間 | triax-console.pages.dev | Cloudflare Pages | 管理コンソール |
+| ホスト  | タイプ | TTL   | データ                       | サービス          | 用途             |
+| ------- | ------ | ----- | ---------------------------- | ----------------- | ---------------- |
+| @       | A      | 4時間 | 185.199.108.153              | GitHub Pages      | メインサイト     |
+| @       | A      | 4時間 | 185.199.109.153              | GitHub Pages      | メインサイト     |
+| @       | A      | 4時間 | 185.199.110.153              | GitHub Pages      | メインサイト     |
+| @       | A      | 4時間 | 185.199.111.153              | GitHub Pages      | メインサイト     |
+| @       | TXT    | 4時間 | google-site-verification=... | -                 | Google検証用     |
+| www     | CNAME  | 4時間 | triax.github.io              | GitHub Pages      | メインサイト     |
+| hub     | CNAME  | 4時間 | ghs.googlehosted.com         | Google App Engine | アプリケーション |
+| mvp     | CNAME  | 4時間 | triax-mvp.pages.dev          | Cloudflare Pages  | MVP版サイト      |
+| console | CNAME  | 4時間 | triax-console.pages.dev      | Cloudflare Pages  | 管理コンソール   |
 
 ## サービス別詳細
 
@@ -114,6 +114,7 @@ triax.football
 ## 移行履歴
 
 ### 2025年8月26日
+
 - Apex domain を Squarespace Domain Forwarding から GitHub Pages へ移行
 - 理由: www.triax.football の HTTPS 証明書発行のため
 - 変更内容:
@@ -130,6 +131,7 @@ triax.football
    - Cloudflare Pages: Cloudflare管理
 
 2. **DNS解決の正常性**
+
    ```bash
    # 月次確認スクリプト例
    for domain in www hub mvp console; do
