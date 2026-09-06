@@ -5,6 +5,7 @@
 ### 1. InvalidCNAMEError
 
 #### エラーメッセージ
+
 ```
 Both www.triax.football and its alternate name are improperly configured
 Your site's DNS settings are using a custom subdomain, www.triax.football,
@@ -13,6 +14,7 @@ to a CNAME record pointing to triax.github.io.
 ```
 
 #### 原因
+
 - Apex domain（triax.football）が GitHub Pages 以外のサービスを指している
 - GitHubは www サブドメインとapex domain の両方をチェックする
 - 片方でも正しく設定されていないとエラーになる
@@ -22,12 +24,14 @@ to a CNAME record pointing to triax.github.io.
 **ケース1: Squarespaceドメインフォワーディングとの競合**
 
 問題の確認:
+
 ```bash
 dig triax.football A
 # 出力例: 198.49.23.145 (Squarespace)
 ```
 
 解決策:
+
 1. SquarespaceのAレコードを削除
 2. GitHub Pages用のAレコードを4つ追加:
    - 185.199.108.153
@@ -38,11 +42,13 @@ dig triax.football A
 **ケース2: CNAMEファイルが存在しない**
 
 確認:
+
 ```bash
 ls docs/CNAME
 ```
 
 解決策:
+
 ```bash
 echo "www.triax.football" > docs/CNAME
 git add docs/CNAME
@@ -53,6 +59,7 @@ git push
 ### 2. HTTPS が利用できない
 
 #### エラーメッセージ
+
 ```
 Enforce HTTPS — Unavailable for your site because your domain is not properly
 configured to support HTTPS (www.triax.football)
@@ -61,10 +68,12 @@ configured to support HTTPS (www.triax.football)
 #### 原因と解決方法
 
 **原因1: DNS設定が不完全**
+
 - Apex domainのAレコードが正しくない
 - DNS伝播が完了していない
 
 確認方法:
+
 ```bash
 # 複数のDNSサーバーで確認
 dig @8.8.8.8 www.triax.football
@@ -72,12 +81,14 @@ dig @1.1.1.1 triax.football A
 ```
 
 **原因2: GitHub側の処理待ち**
+
 - DNS設定は正しいが、証明書発行プロセスが未完了
 - 解決策: 最大24時間待つ
 
 **原因3: キャッシュの問題**
 
 解決策:
+
 1. GitHub Pages設定でCustom domainを削除
 2. Saveをクリック
 3. 1-2分待つ
@@ -89,12 +100,14 @@ dig @1.1.1.1 triax.football A
 #### ローカルDNSキャッシュのクリア
 
 **macOS:**
+
 ```bash
 sudo dscacheutil -flushcache
 sudo killall -HUP mDNSResponder
 ```
 
 **Linux:**
+
 ```bash
 sudo systemctl restart systemd-resolved
 # または
@@ -117,6 +130,7 @@ TTLの値が減っていけば、キャッシュされている証拠です。
 ### 4. デバッグ用コマンド集
 
 #### DNS設定の総合確認
+
 ```bash
 # 基本情報
 dig www.triax.football
@@ -135,6 +149,7 @@ dig www.triax.football ANY
 ```
 
 #### 接続テスト
+
 ```bash
 # HTTP接続
 curl -I http://www.triax.football
@@ -147,6 +162,7 @@ curl -IL http://triax.football
 ```
 
 #### SSL証明書の確認
+
 ```bash
 # 証明書の詳細確認
 openssl s_client -connect www.triax.football:443 -servername www.triax.football
@@ -157,12 +173,12 @@ echo | openssl s_client -connect www.triax.football:443 2>/dev/null | openssl x5
 
 ### 5. タイムアウト目安
 
-| プロセス | 通常 | 最大 |
-|---------|------|------|
-| DNS伝播 | 5-30分 | 4時間（TTL依存） |
-| GitHub DNS検証 | 5-10分 | 1時間 |
-| HTTPS証明書発行 | 15分-1時間 | 24時間 |
-| エラー後の再試行 | 5分 | - |
+| プロセス         | 通常       | 最大             |
+| ---------------- | ---------- | ---------------- |
+| DNS伝播          | 5-30分     | 4時間（TTL依存） |
+| GitHub DNS検証   | 5-10分     | 1時間            |
+| HTTPS証明書発行  | 15分-1時間 | 24時間           |
+| エラー後の再試行 | 5分        | -                |
 
 ### 6. チェックリスト
 

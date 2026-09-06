@@ -8,7 +8,7 @@
 // 注意:
 // - この変換に24時間制限はありません（即座に実行可能）
 // - Long-Lived Token同士のリフレッシュには24時間制限があります
-//   → その場合は `npm run instagram:refresh-token` を使用
+//   → その場合は `pnpm instagram:refresh-token` を使用
 
 import { promises as fs } from 'fs';
 import * as dotenv from 'dotenv';

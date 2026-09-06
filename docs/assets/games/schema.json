@@ -21,9 +21,7 @@
       "description": "ポストシーズン"
     }
   },
-  "required": [
-    "year"
-  ],
+  "required": ["year"],
   "definitions": {
     "seasonBlock": {
       "type": "object",
@@ -34,18 +32,11 @@
         },
         "status": {
           "type": "string",
-          "enum": [
-            "closed",
-            "open",
-            "finished"
-          ],
+          "enum": ["closed", "open", "finished"],
           "description": "closed=未公開, open=公開中, finished=終了"
         },
         "ticket": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "description": "チケット購入URL"
         },
         "game": {
@@ -60,16 +51,10 @@
           "description": "複数試合"
         }
       },
-      "required": [
-        "title",
-        "status"
-      ]
+      "required": ["title", "status"]
     },
     "game": {
-      "type": [
-        "object",
-        "null"
-      ],
+      "type": ["object", "null"],
       "properties": {
         "round": {
           "type": "string",
@@ -110,10 +95,7 @@
           "description": "true=ホーム, false=アウェイ"
         },
         "ticket": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "description": "試合個別のチケットURL。未指定ならシーズンのticketを使用"
         },
         "result": {
@@ -141,16 +123,10 @@
           "description": "Google Maps検索クエリ"
         }
       },
-      "required": [
-        "name",
-        "mapsQuery"
-      ]
+      "required": ["name", "mapsQuery"]
     },
     "result": {
-      "type": [
-        "object",
-        "null"
-      ],
+      "type": ["object", "null"],
       "description": "null=未決着",
       "properties": {
         "score": {
@@ -165,10 +141,7 @@
               "description": "相手チーム最終得点"
             }
           },
-          "required": [
-            "team",
-            "opponent"
-          ]
+          "required": ["team", "opponent"]
         },
         "quarters": {
           "type": "object",
@@ -190,18 +163,10 @@
               "description": "延長戦（なければnull）"
             }
           },
-          "required": [
-            "Q1",
-            "Q2",
-            "Q3",
-            "Q4"
-          ]
+          "required": ["Q1", "Q2", "Q3", "Q4"]
         },
         "win": {
-          "type": [
-            "boolean",
-            "null"
-          ],
+          "type": ["boolean", "null"],
           "description": "true=勝ち, false=負け, null=引き分け"
         },
         "stats": {
@@ -214,21 +179,13 @@
               "description": "スタッツページURL"
             }
           },
-          "required": [
-            "url"
-          ]
+          "required": ["url"]
         }
       },
-      "required": [
-        "score",
-        "win"
-      ]
+      "required": ["score", "win"]
     },
     "quarterScore": {
-      "type": [
-        "object",
-        "null"
-      ],
+      "type": ["object", "null"],
       "properties": {
         "team": {
           "type": "integer"
@@ -237,10 +194,7 @@
           "type": "integer"
         }
       },
-      "required": [
-        "team",
-        "opponent"
-      ]
+      "required": ["team", "opponent"]
     }
   }
 }

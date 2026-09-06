@@ -3,29 +3,36 @@
   "version": "1.0.0",
   "description": "[![pages-build-deployment](https://github.com/triax/homepage/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/triax/homepage/actions/workflows/pages/pages-build-deployment)",
   "main": "index.js",
+  "packageManager": "pnpm@11.12.0",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "dev": "npx http-server -p 3000 -c-1",
-    "build:members": "npx tsx scripts/build-members.ts",
-    "instagram:fetch": "npx tsx scripts/fetch-instagram.ts",
-    "instagram:refresh-token": "npx tsx scripts/refresh-instagram-token.ts",
-    "instagram:exchange-slt2llt": "npx tsx scripts/exchange-short-to-long-token.ts",
-    "instagram:get-page-token": "npx tsx scripts/get-page-access-token.ts",
-    "instagram:notify-slack": "npx tsx scripts/notify-slack-instagram.ts",
-    "instagram:post-x": "npx tsx scripts/post-instagram-to-x.ts",
+    "preinstall": "npx only-allow pnpm",
+    "dev": "http-server -p 3000 -c-1",
+    "build:members": "tsx scripts/build-members.ts",
+    "instagram:fetch": "tsx scripts/fetch-instagram.ts",
+    "instagram:refresh-token": "tsx scripts/refresh-instagram-token.ts",
+    "instagram:exchange-slt2llt": "tsx scripts/exchange-short-to-long-token.ts",
+    "instagram:get-page-token": "tsx scripts/get-page-access-token.ts",
+    "instagram:notify-slack": "tsx scripts/notify-slack-instagram.ts",
+    "instagram:post-x": "tsx scripts/post-instagram-to-x.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "npm run lint:eslint && npm run format:check",
+    "lint": "pnpm run lint:eslint && pnpm run format:check && pnpm run lint:editorconfig",
     "lint:eslint": "eslint scripts/**/*.ts",
-    "lint:fix": "npm run lint:eslint -- --fix && npm run format:fix",
-    "format": "sed -i '' 's/[[:space:]]*$//' docs/index.html docs/index.css",
-    "format:check": "npx tsx scripts/format-check.ts",
-    "format:fix": "npx tsx scripts/format-check.ts --fix"
+    "lint:editorconfig": "EC_VERSION=v4.0.1 editorconfig-checker",
+    "lint:fix": "pnpm run lint:eslint --fix && pnpm run format:fix",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "author": "otiai10",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.14",
+    "pnpm": ">=11"
+  },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@playwright/test": "^1.54.2",
     "@types/dotenv": "^8.2.3",
     "@types/libsodium-wrappers": "^0.7.14",
@@ -33,9 +40,12 @@
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
     "dotenv": "^17.2.1",
+    "editorconfig-checker": "^7.0.0",
     "eslint": "^9.33.0",
+    "http-server": "^14.1.1",
     "libsodium-wrappers": "^0.7.15",
     "playwright": "^1.54.2",
+    "prettier": "^3.9.6",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2"
   }

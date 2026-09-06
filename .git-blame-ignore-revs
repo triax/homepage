@@ -1,0 +1,8 @@
+# git blame から除外するコミット。
+# 整形のみで内容を変えないコミットを列挙する。
+#
+# 有効化（初回のみ）:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# style: prettier --write . による初回一括整形
+8632671e91d809534b6089d73c675defb5a18032

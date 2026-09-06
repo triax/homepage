@@ -18,20 +18,24 @@
 5. 以下の2つのSecretsを追加：
 
 #### INSTAGRAM_USER_ID
+
 - **Name**: `INSTAGRAM_USER_ID`
 - **Value**: `17841443759135863` (Club TRIAXのInstagram ID)
 
 #### FACEBOOK_ACCESS_TOKEN
+
 - **Name**: `FACEBOOK_ACCESS_TOKEN`
 - **Value**: Instagram Graph APIの長期アクセストークン（後述の手順で取得）
 
 ### 2. Instagram Graph APIアクセストークンの取得
 
 #### 前提条件
+
 - FacebookビジネスアカウントとInstagramビジネスアカウントが連携済み
 - Facebook開発者アカウントを持っている
 
 #### 手順
+
 1. [Facebook Developers](https://developers.facebook.com/)にログイン
 2. アプリを作成または既存のアプリを選択
 3. **Instagram Basic Display API**または**Instagram Graph API**を追加
@@ -43,16 +47,18 @@
 設定完了後、以下の方法で動作確認できます：
 
 #### 手動実行
+
 1. GitHubリポジトリの**Actions**タブを開く
 2. **Update Instagram Feed**ワークフローを選択
 3. **Run workflow**ボタンをクリック
 4. mainブランチを選択して実行
 
 #### ローカル実行（テスト用）
+
 ```bash
 export INSTAGRAM_USER_ID="17841443759135863"
 export FACEBOOK_ACCESS_TOKEN="your_access_token_here"
-npx tsx scripts/fetch-instagram.ts
+pnpm tsx scripts/fetch-instagram.ts
 ```
 
 ## スケジュール
@@ -63,14 +69,17 @@ npx tsx scripts/fetch-instagram.ts
 ## トラブルシューティング
 
 ### エラー: "Invalid access token"
+
 - アクセストークンの有効期限を確認
 - トークンが正しくコピーされているか確認
 
 ### エラー: "User ID not found"
+
 - INSTAGRAM_USER_IDが正しいか確認
 - Instagramアカウントがビジネスアカウントになっているか確認
 
 ### 更新されない
+
 - GitHub Actionsのログを確認
 - posts.jsonに変更がない場合はコミットされません
 

@@ -1,5 +1,5 @@
 // scripts/post-instagram-to-x.ts
-// Node 20 + npx tsx で実行想定（fetch / FormData / Blob 標準搭載）
+// Node 24 + tsx で実行想定（fetch / FormData / Blob 標準搭載）
 // 必要なSecrets: X_API_KEY, X_API_KEY_SECRET, X_BOT_ACCESS_TOKEN, X_BOT_ACCESS_TOKEN_SECRET
 //
 // posts.json の各投稿に持たせた `twitter` フィールドを状態として扱い、

@@ -7,6 +7,7 @@ Open Graph Protocol用の画像ファイル管理と運用手順。
 ## ファイル構成
 
 ### ディレクトリ構造
+
 ```
 docs/
 └── assets/
@@ -17,6 +18,7 @@ docs/
 ### 画像仕様
 
 #### 技術仕様
+
 - **推奨サイズ**: 1200 x 630px
 - **アスペクト比**: 1.91:1
 - **ファイル形式**: JPEG または PNG
@@ -24,6 +26,7 @@ docs/
 - **最小サイズ**: 600 x 315px
 
 #### 現在の画像
+
 - **ファイル名**: `default.jpg`
 - **実サイズ**: 1920 x 978px
 - **ファイルサイズ**: 約670KB
@@ -51,6 +54,7 @@ docs/
 ### 作成手順
 
 1. **素材準備**
+
    ```bash
    # 既存のヘッダー画像やチーム写真から選定
    ls docs/assets/headers/
@@ -63,6 +67,7 @@ docs/
    - 必要に応じて色調補正
 
 3. **最適化**
+
    ```bash
    # ImageMagickを使用した最適化例
    convert input.jpg -resize 1200x630 -quality 85 output.jpg
@@ -77,9 +82,11 @@ docs/
 ## 画像更新手順
 
 ### 1. 新規画像の作成
+
 上記のガイドラインに従って新しいOGP画像を作成
 
 ### 2. ファイルの配置
+
 ```bash
 # 既存画像のバックアップ（オプション）
 cp docs/assets/ogp/default.jpg docs/assets/ogp/default_backup.jpg
@@ -89,13 +96,21 @@ cp new_ogp_image.jpg docs/assets/ogp/default.jpg
 ```
 
 ### 3. HTMLメタタグの確認
+
 ```html
 <!-- docs/index.html -->
-<meta property="og:image" content="https://www.triax.football/assets/ogp/default.jpg">
-<meta name="twitter:image" content="https://www.triax.football/assets/ogp/default.jpg">
+<meta
+  property="og:image"
+  content="https://www.triax.football/assets/ogp/default.jpg"
+/>
+<meta
+  name="twitter:image"
+  content="https://www.triax.football/assets/ogp/default.jpg"
+/>
 ```
 
 ### 4. デプロイとテスト
+
 ```bash
 # コミットとプッシュ
 git add docs/assets/ogp/
@@ -104,13 +119,16 @@ git push origin main
 ```
 
 ### 5. SNSキャッシュのクリア
+
 各プラットフォームのデバッグツールでキャッシュをクリア：
+
 - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
 - [Twitter Card Validator](https://cards-dev.twitter.com/validator)
 
 ## 複数画像の管理（将来的な拡張）
 
 ### ページ別OGP画像
+
 将来的に個別ページが作成される場合の構成例：
 
 ```
@@ -122,6 +140,7 @@ docs/assets/ogp/
 ```
 
 ### 季節・イベント別画像
+
 特別なイベントやシーズンに応じた画像：
 
 ```
@@ -141,6 +160,7 @@ docs/assets/ogp/
    - HTTPSでアクセス可能か
 
 2. **ファイルの存在確認**
+
    ```bash
    ls -la docs/assets/ogp/default.jpg
    ```
@@ -154,8 +174,12 @@ docs/assets/ogp/
 ### キャッシュの問題
 
 1. **URLにパラメータを追加**
+
    ```html
-   <meta property="og:image" content="https://www.triax.football/assets/ogp/default.jpg?v=2">
+   <meta
+     property="og:image"
+     content="https://www.triax.football/assets/ogp/default.jpg?v=2"
+   />
    ```
 
 2. **ファイル名を変更**
@@ -167,6 +191,7 @@ docs/assets/ogp/
 ### サイズの問題
 
 1. **現在のサイズを確認**
+
    ```bash
    identify docs/assets/ogp/default.jpg
    ```

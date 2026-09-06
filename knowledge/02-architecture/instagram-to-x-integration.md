@@ -36,18 +36,21 @@ posts.json の各投稿に「Xに投稿済みか」を状態として正規化�
   残りは投稿済み（`tweet_id: null` で抑制）としてマークした。
 
 ### prev-diff 方式からの改訂理由
+
 当初は Slack 通知と同じ prev-diff 方式だったが、X投稿が失敗しても posts.json はコミットされるため、
 失敗した投稿が二度と再投稿されない取りこぼしが起きうる弱点があった。状態を posts.json に正規化することで解消した。
 
 ## watermark（高水位点）ガード
 
 ### 背景の事故
+
 posts.json は毎fetchで最新6件だけに作り直され、`twitter` 状態はウィンドウ内6件しか引き継がれない。
 Instagram Graph API が一時的に古い投稿を混ぜて返すと、状態を失った既投稿が `twitter: null`（未投稿扱い）で
 再登場し、post-x がそれを新規として **X へ誤クロスポスト（二重投稿）** する事故が起きた。
 これを構造的に防ぐため、**watermark 時刻より古い投稿はクロスポストしない**仕組みを導入した。
 
 ### データ
+
 posts.json のトップレベルに `metadata.x_crosspost_watermark`（ISO8601）を持つ。
 **この時刻以下（≦）の投稿はクロスポスト対象外**。
 
@@ -56,18 +59,21 @@ posts.json のトップレベルに `metadata.x_crosspost_watermark`（ISO8601�
 ```
 
 ### 判定ルール（post-x）
+
 `new Date(...).getTime()` 比較で行う。
 
-| 区分 | 条件 | 挙動 |
-|------|------|------|
-| **eligible（対象）** | `twitter == null` かつ `timestamp > watermark`（厳密に新しい） | timestamp昇順で X 投稿 |
-| **stale-null（再登場した既投稿）** | `twitter == null` かつ `timestamp ≦ watermark` | **投稿せず** `twitter={tweet_id:null, posted_at:now}` で抑制。`console.warn` で警告 |
-| 投稿済み/抑制済み | `twitter != null` | 無視 |
+| 区分                               | 条件                                                           | 挙動                                                                                |
+| ---------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **eligible（対象）**               | `twitter == null` かつ `timestamp > watermark`（厳密に新しい） | timestamp昇順で X 投稿                                                              |
+| **stale-null（再登場した既投稿）** | `twitter == null` かつ `timestamp ≦ watermark`                 | **投稿せず** `twitter={tweet_id:null, posted_at:now}` で抑制。`console.warn` で警告 |
+| 投稿済み/抑制済み                  | `twitter != null`                                              | 無視                                                                                |
 
 ### watermark 前進ルール（単調非減少＝絶対に後退させない）
+
 ```
 newWatermark = max( 旧watermark, twitter!=null の全投稿の timestamp の最大 )   ※getTime()比較
 ```
+
 最大値を与える投稿の **timestamp文字列をそのまま**格納する（旧watermarkが新しければ旧値を維持）。
 
 - **失敗リトライの含意**: クロスポストに失敗した eligible は `twitter==null` のまま残るので watermark を
@@ -77,17 +83,20 @@ newWatermark = max( 旧watermark, twitter!=null の全投稿の timestamp の最
 - 実装上は成功するたびに metadata の watermark も再計算して書き戻し、途中失敗でも既成功分の前進が永続化される。
 
 ### ベースライン挙動（watermark 欠損時の安全網）
+
 watermark が読めない場合（初回・欠損）は**今回1件もクロスポストしない**。代わりに
 `watermark = 現ウィンドウの timestamp 最大` を確立し、`twitter==null` の全投稿に抑制マークを書く
 （ベースライン確立run = no-op投稿）。これで初回や欠損時にバックログを一斉投稿する事故を防ぐ。
 次回run以降、watermarkより新しい投稿だけが対象になる。通常はseed済みのため発火しない。
 
 ### fetch 側の引き継ぎ
+
 fetch は posts.json を作り直す際 `loadWatermark()` で既存の `metadata.x_crosspost_watermark` を読み、
 出力に保持する（**計算はせず保持のみ**）。既存値が無ければ `metadata` は `{}`。
 出力キー順は `fetched_at, user_id, count, metadata, posts`。
 
 ### dry-run
+
 `--dry-run` は**ファイルへ一切書き込まない**。eligible / stale-null / 予測 newWatermark をログ出力する。
 
 ## ツイート本文（buildTweetText）
@@ -103,11 +112,11 @@ fetch は posts.json を作り直す際 `loadWatermark()` で既存の `metadata
 
 ## メディア添付（x-media-upload.ts）
 
-| Instagram media_type | X への添付 | アップロード方式 |
-|----------------------|-----------|----------------|
-| IMAGE | `media_url` を画像1枚 | シンプルアップロード ✅ |
-| CAROUSEL_ALBUM | `children[]` の画像を最大4枚（X の画像上限） | シンプルアップロード ✅ |
-| VIDEO | `media_url` を動画1本 | chunked ⚠️未検証 |
+| Instagram media_type | X への添付                                   | アップロード方式        |
+| -------------------- | -------------------------------------------- | ----------------------- |
+| IMAGE                | `media_url` を画像1枚                        | シンプルアップロード ✅ |
+| CAROUSEL_ALBUM       | `children[]` の画像を最大4枚（X の画像上限） | シンプルアップロード ✅ |
+| VIDEO                | `media_url` を動画1本                        | chunked ⚠️未検証        |
 
 - **画像（シンプルアップロード）**: `POST /2/media/upload` に `{ media: <base64>, media_category }` の
   **JSONボディ**を1リクエスト送信して `media_id` を得る。
@@ -128,21 +137,21 @@ fetch は posts.json を作り直す際 `loadWatermark()` で既存の `metadata
 
 ## ファイル構成
 
-| ファイル | 役割 |
-|----------|------|
-| `scripts/post-instagram-to-x.ts` | メイン。`twitter==null` を古い順に X 投稿 |
-| `scripts/lib/twitter-text-weight.ts` | 文字数 weight 計算 |
-| `scripts/lib/x-oauth.ts` | OAuth 1.0a 署名ヘッダ生成 |
-| `scripts/lib/x-media-upload.ts` | 画像=シンプルアップロード / 動画=chunked upload |
+| ファイル                             | 役割                                            |
+| ------------------------------------ | ----------------------------------------------- |
+| `scripts/post-instagram-to-x.ts`     | メイン。`twitter==null` を古い順に X 投稿       |
+| `scripts/lib/twitter-text-weight.ts` | 文字数 weight 計算                              |
+| `scripts/lib/x-oauth.ts`             | OAuth 1.0a 署名ヘッダ生成                       |
+| `scripts/lib/x-media-upload.ts`      | 画像=シンプルアップロード / 動画=chunked upload |
 
 ## 運用
 
 ```bash
 # dry-run（認証情報不要。twitter==null の投稿の本文・メディア判定を確認、書き戻さない）
-npm run instagram:post-x -- --dry-run
+pnpm instagram:post-x --dry-run
 
 # 実投稿（twitter==null を投稿し、成功した分を posts.json に書き戻す）
-npm run instagram:post-x
+pnpm instagram:post-x
 ```
 
 ## ハマりどころ（実投稿で判明した運用上の学び）
@@ -150,21 +159,23 @@ npm run instagram:post-x
 X API は 2026年2月に無料枠廃止 → 従量課金（pay-per-use）化されており、初回稼働まで段階的に複数の壁がある。
 エラーコードで原因を切り分けられる:
 
-| エラー | 意味 | 対処 |
-|--------|------|------|
-| `403 oauth1-permissions` | Access Token が read-only | App権限をRead/Writeにした**後**にトークンを**再発行**（[[x-secrets-setup]] 手順3→4） |
-| `403 client-not-enrolled` | アプリが Pay-Per-Use 未登録 | console.x.com で Pay-Per-Use を有効化、アプリをProjectに紐付け |
-| `402 CreditsDepleted` | クレジット未チャージ | console.x.com の Billing でクレジットを前払いチャージ（投稿$0.01/件） |
-| `400 $.media is missing` | メディアが command方式multipartで送られている | 画像はJSON+base64のシンプルアップロードで送る（実装済み） |
-| `403 You are not permitted` | 文字数が実際には超過（weight計算のズレ） | 安全マージンで実効上限を下げる（実装済み: 260） |
+| エラー                      | 意味                                          | 対処                                                                                 |
+| --------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `403 oauth1-permissions`    | Access Token が read-only                     | App権限をRead/Writeにした**後**にトークンを**再発行**（[[x-secrets-setup]] 手順3→4） |
+| `403 client-not-enrolled`   | アプリが Pay-Per-Use 未登録                   | console.x.com で Pay-Per-Use を有効化、アプリをProjectに紐付け                       |
+| `402 CreditsDepleted`       | クレジット未チャージ                          | console.x.com の Billing でクレジットを前払いチャージ（投稿$0.01/件）                |
+| `400 $.media is missing`    | メディアが command方式multipartで送られている | 画像はJSON+base64のシンプルアップロードで送る（実装済み）                            |
+| `403 You are not permitted` | 文字数が実際には超過（weight計算のズレ）      | 安全マージンで実効上限を下げる（実装済み: 260）                                      |
 
 その他:
+
 - **commit/push 競合**: post-x が posts.json を書き戻す → 同時実行や手動pushで remote が進むと
   `! [rejected] (fetch first)` で push が失敗し、投稿済み状態を取りこぼす。
   ワークフローの commit ステップで push 前に `git pull --rebase` するよう対応済み。
   手動で連続トリガーする際は**同時実行を避ける**こと。
 
 ## 関連
+
 - 認証情報の取得手順: `knowledge/04-operations/x-secrets-setup.md`
 - 実装プラン: `knowledge/plans/instagram-to-x-crosspost.md`
 - 参考実装（OAuth署名）: `~/proj/chrome/kanColleWidget/scripts/post-tweet.ts`

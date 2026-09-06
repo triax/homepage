@@ -1,0 +1,6 @@
+{
+  "Exclude": ["knowledge/01-requirements/functional/pages/TOP\\.md"],
+  "Disable": {
+    "IndentSize": true
+  }
+}

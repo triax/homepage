@@ -1,5 +1,5 @@
 // scripts/notify-slack-instagram.ts
-// Node 20 + npx tsx で実行想定（fetch標準搭載）
+// Node 24 + tsx で実行想定（fetch標準搭載）
 // 必要なSecrets: SLACK_BOT_OAUTH_TOKEN
 // オプション: SLACK_INSTAGRAM_CHANNEL (デフォルト: #instagram)
 
@@ -182,7 +182,7 @@ async function main() {
   const { previousPostsPath, dryRun } = parseArgs();
 
   if (!previousPostsPath) {
-    console.error('Usage: npx tsx scripts/notify-slack-instagram.ts <previous-posts.json> [--dry-run]');
+    console.error('Usage: pnpm exec tsx scripts/notify-slack-instagram.ts <previous-posts.json> [--dry-run]');
     process.exit(1);
   }
 

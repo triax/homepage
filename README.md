@@ -17,19 +17,19 @@ Club TRIAXの公式ウェブサイトのソースコードです。
 ### 前提条件
 
 - Node.js (v14以上推奨)
-- npm
+- pnpm
 
 ### インストール
 
 ```bash
 # 依存関係のインストール
-npm install
+pnpm install
 
 # ローカルサーバーの起動
-npx http-server
+pnpm dev
 ```
 
-ブラウザで http://localhost:8080 にアクセスしてください。
+ブラウザで http://localhost:3000 にアクセスしてください。
 
 ## 📸 メンバー情報・画像
 
@@ -58,10 +58,12 @@ node scripts/generate-gallery-html.js
 最新のInstagram投稿を自動取得・表示します。
 
 ### 自動更新
+
 - **投稿取得**: 12時間ごと（media_url有効期限対策）
 - **トークン更新**: 不要（Page Access Tokenは無期限）
 
 ### 手動実行コマンド
+
 ```bash
 # Instagram投稿を取得
 pnpm instagram:fetch
@@ -73,7 +75,7 @@ pnpm instagram:fetch
 
 ```bash
 # hub からメンバー情報・写真を取得して生成物を作る
-HUB_API_KEY=<key> npm run build:members
+HUB_API_KEY=<key> pnpm build:members
 ```
 
 `HUB_API_KEY` は hub の公開 API キー。GitHub Actions では `secrets.HUB_API_KEY` から注入されます。取得できなかった場合はビルドを失敗させ、空のメンバー一覧で公開を上書きしません。

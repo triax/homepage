@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 画像最適化統合スクリプト
-# 使用法: 
+# 使用法:
 #   ./scripts/optimize-images.sh --target=docs/assets/members [--dry-run]
 #   ./scripts/optimize-images.sh --target=docs/assets/gallery [--dry-run]
 
@@ -115,14 +115,14 @@ echo ""
 if [ "$DRY_RUN" = true ]; then
     echo "📋 Preview of changes:"
     echo ""
-    
+
     total_original=0
     total_estimated=0
     will_process=0
-    
+
     for file in "${images[@]}"; do
         file_size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null)
-        
+
         # 500KB以下はスキップ
         if [ $file_size -lt 512000 ]; then
             echo "  ⏭️  Skip: $file ($(ls -lh "$file" | awk '{print $5}'))"
@@ -135,7 +135,7 @@ if [ "$DRY_RUN" = true ]; then
             total_estimated=$((total_estimated + estimated_size))
         fi
     done
-    
+
     echo ""
     echo "📈 Estimated Results:"
     echo "  Images to process: $will_process"
@@ -163,9 +163,9 @@ if [ "$RENAME_SEQUENTIAL" = true ]; then
     # ギャラリーモード：連番でリネーム
     for file in "${images[@]}"; do
         new_name=$(printf "%02d.jpg" $counter)
-        
+
         echo "📸 Processing: $file → $new_name"
-        
+
         # ImageMagickで最適化
         if command -v magick &> /dev/null; then
             # ImageMagick 7.x
@@ -190,23 +190,23 @@ if [ "$RENAME_SEQUENTIAL" = true ]; then
             echo "     brew install imagemagick"
             exit 1
         fi
-        
+
         # 結果確認
         if [ -f "$new_name.tmp" ]; then
             mv "$new_name.tmp" "$new_name"
-            
+
             # 元のファイルが新しい名前と異なる場合は削除
             if [ "$file" != "$new_name" ] && [ -f "$file" ]; then
                 rm "$file"
             fi
-            
+
             echo "  ✅ Optimized and renamed"
             processed=$((processed + 1))
         else
             echo "  ❌ Failed"
             failed=$((failed + 1))
         fi
-        
+
         counter=$((counter + 1))
         echo ""
     done
@@ -220,12 +220,12 @@ else
             skipped=$((skipped + 1))
             continue
         fi
-        
+
         echo "📸 Processing: $file"
-        
+
         # 一時ファイル名
         temp_file="${file}.tmp"
-        
+
         # ImageMagickで最適化
         if command -v magick &> /dev/null; then
             # ImageMagick 7.x
@@ -252,20 +252,20 @@ else
             echo "     brew install imagemagick"
             exit 1
         fi
-        
+
         # 最適化結果を確認
         if [ -f "$temp_file" ]; then
             new_size=$(stat -f%z "$temp_file" 2>/dev/null || stat -c%s "$temp_file" 2>/dev/null)
-            
+
             # 新しいファイルが元より小さい場合のみ置き換え
             if [ $new_size -lt $file_size ]; then
                 mv "$temp_file" "$file"
-                
+
                 # サイズ比較を表示
                 original_size_h=$(echo "scale=1; $file_size/1048576" | bc)M
                 new_size_h=$(ls -lh "$file" | awk '{print $5}')
                 reduction=$((100 - (new_size * 100 / file_size)))
-                
+
                 echo "  ✅ Optimized: $original_size_h → $new_size_h (${reduction}% reduction)"
                 processed=$((processed + 1))
             else
@@ -277,7 +277,7 @@ else
             echo "  ❌ Optimization failed"
             failed=$((failed + 1))
         fi
-        
+
         echo ""
     done
 fi

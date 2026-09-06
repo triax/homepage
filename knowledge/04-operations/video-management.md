@@ -7,24 +7,24 @@
 
 ## 元動画（ソース）
 
-| ファイル | 内容 | 備考 |
-|----------|------|------|
-| `nohin0814.mp4` | 横 1920x1080 / 24fps / 48.06秒 / h264+aac | リポジトリ直下に配置（`SRC_LANDSCAPE` で変更可） |
-| `nohin0814_tate+.mp4` | 縦 1080x1920 / 同尺・同内容 | リポジトリ直下に配置（`SRC_PORTRAIT` で変更可） |
+| ファイル              | 内容                                      | 備考                                             |
+| --------------------- | ----------------------------------------- | ------------------------------------------------ |
+| `nohin0814.mp4`       | 横 1920x1080 / 24fps / 48.06秒 / h264+aac | リポジトリ直下に配置（`SRC_LANDSCAPE` で変更可） |
+| `nohin0814_tate+.mp4` | 縦 1080x1920 / 同尺・同内容               | リポジトリ直下に配置（`SRC_PORTRAIT` で変更可）  |
 
 - 元動画（約68MB×2）は **Gitにコミットしない**。リポジトリ直下の `*.mp4` / `*.mov` は `.gitignore` で除外済み
 - 元動画は編集せず、常にスクリプトから再生成する
 
 ## 生成物（`docs/assets/videos/`）
 
-| ファイル | 用途 | サイズ | エンコード設定 |
-|----------|------|--------|----------------|
-| `hero-landscape.mp4` | ヒーロー背景（PC/横） | 1280x720, 約21秒, 無音 | libx264 slow / CRF 28 / high / yuv420p |
-| `hero-portrait.mp4` | ヒーロー背景（スマホ/縦） | 720x1280, 約21秒, 無音 | 同上 |
-| `promo-full.mp4` | フル尺プロモ（横画面のモーダル再生用） | 1280x720, 48秒, AAC 96k | libx264 slow / CRF 26 / high / yuv420p |
-| `promo-full-portrait.mp4` | フル尺プロモ（縦画面のモーダル再生用） | 720x1280, 48秒, AAC 96k | 同上 |
-| `promo-full-poster.jpg` | `promo-full.mp4` のポスター画像 | 1280x720 | JPEG q:v 3 |
-| `promo-full-portrait-poster.jpg` | `promo-full-portrait.mp4` のポスター画像 | 720x1280 | 同上（同じ `POSTER_TIME`） |
+| ファイル                         | 用途                                     | サイズ                  | エンコード設定                         |
+| -------------------------------- | ---------------------------------------- | ----------------------- | -------------------------------------- |
+| `hero-landscape.mp4`             | ヒーロー背景（PC/横）                    | 1280x720, 約21秒, 無音  | libx264 slow / CRF 28 / high / yuv420p |
+| `hero-portrait.mp4`              | ヒーロー背景（スマホ/縦）                | 720x1280, 約21秒, 無音  | 同上                                   |
+| `promo-full.mp4`                 | フル尺プロモ（横画面のモーダル再生用）   | 1280x720, 48秒, AAC 96k | libx264 slow / CRF 26 / high / yuv420p |
+| `promo-full-portrait.mp4`        | フル尺プロモ（縦画面のモーダル再生用）   | 720x1280, 48秒, AAC 96k | 同上                                   |
+| `promo-full-poster.jpg`          | `promo-full.mp4` のポスター画像          | 1280x720                | JPEG q:v 3                             |
+| `promo-full-portrait-poster.jpg` | `promo-full-portrait.mp4` のポスター画像 | 720x1280                | 同上（同じ `POSTER_TIME`）             |
 
 すべてのMP4は `-movflags +faststart` で moov atom をファイル先頭に配置しています。
 
@@ -67,20 +67,20 @@ SRC_LANDSCAPE=~/Downloads/yoko.mp4 SRC_PORTRAIT=~/Downloads/tate.mp4 ./scripts/e
 
 スクリプト冒頭の変数を編集して調整します。
 
-| 変数 | 既定値 | 説明 |
-|------|--------|------|
-| `SRC_LANDSCAPE` / `SRC_PORTRAIT` | `nohin0814.mp4` / `nohin0814_tate+.mp4` | 元動画のパス。**環境変数で上書き可** |
-| `OUTPUT_DIR` | `docs/assets/videos` | 出力先 |
-| `TARGETS` | `(hero-landscape hero-portrait promo-full promo-full-portrait promo-full-poster promo-full-portrait-poster)` | 生成ターゲット。`--only` の候補・生成順・サマリー表示順を兼ねる。名前に `portrait` を含むものは縦元動画・縦サイズ、末尾 `-poster` は JPEG |
-| `LANDSCAPE_SIZE` / `PORTRAIT_SIZE` | 1280:720 / 720:1280 | 出力サイズ（横版・縦版の動画とポスターに共通） |
-| `HERO_START` | 27.0 | ヒーロー動画の切り出し開始（秒）。終了は末尾まで |
-| `HERO_CRF` | 28 | ヒーロー動画の品質（大きいほど小容量） |
-| `PROMO_CRF` | 26 | フル尺プロモ（横・縦）の品質 |
-| `PROMO_AUDIO_BITRATE` | 96k | フル尺プロモ（横・縦）の音声ビットレート |
-| `POSTER_TIME` | 43.0 | ポスター画像を切り出す位置（秒）。横・縦共通 |
-| `POSTER_QUALITY` | 3 | JPEG品質（`-q:v`、小さいほど高画質） |
-| `X264_PRESET` / `X264_PROFILE` / `PIX_FMT` | slow / high / yuv420p | 共通の libx264 設定 |
-| `X264_ARGS` | 配列 | 上記から組み立てる共通引数（`-c:v libx264 … -movflags +faststart`）。全MP4に適用 |
+| 変数                                       | 既定値                                                                                                       | 説明                                                                                                                                      |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `SRC_LANDSCAPE` / `SRC_PORTRAIT`           | `nohin0814.mp4` / `nohin0814_tate+.mp4`                                                                      | 元動画のパス。**環境変数で上書き可**                                                                                                      |
+| `OUTPUT_DIR`                               | `docs/assets/videos`                                                                                         | 出力先                                                                                                                                    |
+| `TARGETS`                                  | `(hero-landscape hero-portrait promo-full promo-full-portrait promo-full-poster promo-full-portrait-poster)` | 生成ターゲット。`--only` の候補・生成順・サマリー表示順を兼ねる。名前に `portrait` を含むものは縦元動画・縦サイズ、末尾 `-poster` は JPEG |
+| `LANDSCAPE_SIZE` / `PORTRAIT_SIZE`         | 1280:720 / 720:1280                                                                                          | 出力サイズ（横版・縦版の動画とポスターに共通）                                                                                            |
+| `HERO_START`                               | 27.0                                                                                                         | ヒーロー動画の切り出し開始（秒）。終了は末尾まで                                                                                          |
+| `HERO_CRF`                                 | 28                                                                                                           | ヒーロー動画の品質（大きいほど小容量）                                                                                                    |
+| `PROMO_CRF`                                | 26                                                                                                           | フル尺プロモ（横・縦）の品質                                                                                                              |
+| `PROMO_AUDIO_BITRATE`                      | 96k                                                                                                          | フル尺プロモ（横・縦）の音声ビットレート                                                                                                  |
+| `POSTER_TIME`                              | 43.0                                                                                                         | ポスター画像を切り出す位置（秒）。横・縦共通                                                                                              |
+| `POSTER_QUALITY`                           | 3                                                                                                            | JPEG品質（`-q:v`、小さいほど高画質）                                                                                                      |
+| `X264_PRESET` / `X264_PROFILE` / `PIX_FMT` | slow / high / yuv420p                                                                                        | 共通の libx264 設定                                                                                                                       |
+| `X264_ARGS`                                | 配列                                                                                                         | 上記から組み立てる共通引数（`-c:v libx264 … -movflags +faststart`）。全MP4に適用                                                          |
 
 ヒーロー2本は `encode_hero`、フル尺2本は `encode_promo_full`、ポスター2枚は `encode_poster` の各関数が担当します。
 いずれも「元動画・出力サイズ・出力先」を引数に取り、横版と縦版で同じ関数を共用します
@@ -97,13 +97,13 @@ SRC_LANDSCAPE=~/Downloads/yoko.mp4 SRC_PORTRAIT=~/Downloads/tate.mp4 ./scripts/e
 
 ## サイズの目安
 
-| ファイル | 目安 | 備考 |
-|----------|------|------|
-| `hero-landscape.mp4` | 約4MB | 5MBを超える場合は `HERO_CRF=30` を試す |
-| `hero-portrait.mp4` | 約4MB | 同上 |
-| `promo-full.mp4` | 約13MB | ユーザー操作で再生するため許容 |
-| `promo-full-portrait.mp4` | 約12.5MB | 同上 |
-| `promo-full-poster.jpg` / `promo-full-portrait-poster.jpg` | 200KB以下 | |
+| ファイル                                                   | 目安      | 備考                                   |
+| ---------------------------------------------------------- | --------- | -------------------------------------- |
+| `hero-landscape.mp4`                                       | 約4MB     | 5MBを超える場合は `HERO_CRF=30` を試す |
+| `hero-portrait.mp4`                                        | 約4MB     | 同上                                   |
+| `promo-full.mp4`                                           | 約13MB    | ユーザー操作で再生するため許容         |
+| `promo-full-portrait.mp4`                                  | 約12.5MB  | 同上                                   |
+| `promo-full-poster.jpg` / `promo-full-portrait-poster.jpg` | 200KB以下 |                                        |
 
 ## 配信方式の考え方
 

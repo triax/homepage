@@ -55,12 +55,12 @@ graph LR
 
 ### 環境変数
 
-| 変数名 | 説明 | 必須 |
-|--------|------|------|
-| `FACEBOOK_PAGE_ACCESS_TOKEN` | Page Access Token（無期限）| ✅ 推奨 |
-| `INSTAGRAM_BUSINESS_ACCOUNT_ID` | Instagram Business Account ID | ✅ 推奨 |
-| `FACEBOOK_ACCESS_TOKEN` | User Access Token（レガシー）| フォールバック |
-| `INSTAGRAM_USER_ID` | Instagram User ID（レガシー）| フォールバック |
+| 変数名                          | 説明                          | 必須           |
+| ------------------------------- | ----------------------------- | -------------- |
+| `FACEBOOK_PAGE_ACCESS_TOKEN`    | Page Access Token（無期限）   | ✅ 推奨        |
+| `INSTAGRAM_BUSINESS_ACCOUNT_ID` | Instagram Business Account ID | ✅ 推奨        |
+| `FACEBOOK_ACCESS_TOKEN`         | User Access Token（レガシー） | フォールバック |
+| `INSTAGRAM_USER_ID`             | Instagram User ID（レガシー） | フォールバック |
 
 スクリプトは新しい変数を優先し、なければレガシー変数にフォールバックします。
 
@@ -88,11 +88,11 @@ graph LR
 ### 証拠（GitHub Actions実行ログより）
 
 | 実行日 | 更新前の残り日数 | 更新後の残り日数 |
-|--------|------------------|------------------|
-| 10/15 | 51日 | 51日（変化なし）|
-| 11/1 | 34日 | 34日（変化なし）|
-| 11/15 | 20日 | 20日（変化なし）|
-| 12/1 | 4日 | 4日（変化なし）|
+| ------ | ---------------- | ---------------- |
+| 10/15  | 51日             | 51日（変化なし） |
+| 11/1   | 34日             | 34日（変化なし） |
+| 11/15  | 20日             | 20日（変化なし） |
+| 12/1   | 4日              | 4日（変化なし）  |
 
 ### 原因
 
@@ -128,18 +128,19 @@ pnpm instagram:fetch
 
 ### スクリプト一覧
 
-| スクリプト | 用途 | 使用頻度 |
-|-----------|------|----------|
-| `instagram:get-page-token` | Page Access Token（無期限）を取得 | 初回のみ |
-| `instagram:exchange-slt2llt` | 短期→Long-lived変換 | 必要時のみ |
-| `instagram:fetch` | Instagram投稿を取得 | 12時間ごと（自動）|
-| `instagram:refresh-token` | ~~Token更新~~ | **非推奨（機能しない）** |
+| スクリプト                   | 用途                              | 使用頻度                 |
+| ---------------------------- | --------------------------------- | ------------------------ |
+| `instagram:get-page-token`   | Page Access Token（無期限）を取得 | 初回のみ                 |
+| `instagram:exchange-slt2llt` | 短期→Long-lived変換               | 必要時のみ               |
+| `instagram:fetch`            | Instagram投稿を取得               | 12時間ごと（自動）       |
+| `instagram:refresh-token`    | ~~Token更新~~                     | **非推奨（機能しない）** |
 
 ## データフロー
 
 ### 投稿取得フロー
 
 1. **定期実行**（12時間ごと）
+
    ```
    GitHub Actions → Instagram API → posts.json → Website
    ```
@@ -176,13 +177,13 @@ User Access Token のように60日で期限切れになることはありませ
 
 以下のケースでのみ無効化されます（いずれも稀）：
 
-| ケース | 発生頻度 | 対処法 |
-|--------|----------|--------|
-| Facebookアプリが削除された | 非常に稀 | アプリを再作成し、トークンを再取得 |
-| ページ管理者の権限が剥奪された | 稀 | 権限を持つ管理者で再取得 |
-| ユーザーがアプリ連携を解除した | 稀 | 再度連携してトークンを再取得 |
-| Facebookのポリシー変更 | 非常に稀 | 新しい要件に従って再取得 |
-| アプリのセキュリティ違反検出 | 非常に稀 | Facebookの指示に従う |
+| ケース                         | 発生頻度 | 対処法                             |
+| ------------------------------ | -------- | ---------------------------------- |
+| Facebookアプリが削除された     | 非常に稀 | アプリを再作成し、トークンを再取得 |
+| ページ管理者の権限が剥奪された | 稀       | 権限を持つ管理者で再取得           |
+| ユーザーがアプリ連携を解除した | 稀       | 再度連携してトークンを再取得       |
+| Facebookのポリシー変更         | 非常に稀 | 新しい要件に従って再取得           |
+| アプリのセキュリティ違反検出   | 非常に稀 | Facebookの指示に従う               |
 
 ### トークン無効化の検知
 
