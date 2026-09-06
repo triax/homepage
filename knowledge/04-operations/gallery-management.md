@@ -10,22 +10,28 @@
 
 1. 新しい画像を`docs/assets/gallery/`にコピー
 2. ファイル名は任意でOK（後で自動リネーム）
+3. iPhoneのHEIC形式の場合は事前にJPEGへ変換しておく（例:
+   `sips -s format jpeg IMG_XXXX.heic --out docs/assets/gallery/IMG_XXXX.jpg`。
+   `optimize-images.sh`はJPEG/PNGのみを対象とするため）
 
 ### 2. 画像の最適化とリネーム
 
 ```bash
-# スクリプトを実行
-./scripts/optimize-gallery.sh
+# スクリプトを実行（--dry-runで先に確認すると安全）
+./scripts/optimize-images.sh --target=docs/assets/gallery --dry-run
+./scripts/optimize-images.sh --target=docs/assets/gallery
 ```
 
 このスクリプトが自動的に：
 
 - 画像を連番（01.jpg, 02.jpg...）にリネーム
-- 最大幅1920pxにリサイズ
+- 長辺1920px以下にリサイズ（縦位置の写真も長辺基準。EXIF方向は`-auto-orient`で補正）
 - 品質85%で圧縮
 - プログレッシブJPEG化
 - メタデータ削除
-- オリジナルを`original/`にバックアップ
+
+既存の画像も含め全ファイルが再エンコードされる（連番の並びを揃えるため）。バックアップは取らない
+（Gitでバージョン管理しているため。元に戻す場合は`git checkout -- docs/assets/gallery`）。
 
 ### 3. HTMLの更新
 
@@ -83,7 +89,7 @@ npx http-server docs
 
 ### 画像が重い
 
-- `optimize-gallery.sh`を実行したか確認
+- `optimize-images.sh --target=docs/assets/gallery`を実行したか確認
 - 元画像が極端に大きくないか確認（推奨: 5MB以下）
 
 ## 📊 推奨事項
@@ -113,16 +119,15 @@ npx http-server docs
 
 ## 🛠️ スクリプト一覧
 
-### optimize-gallery.sh
+### optimize-images.sh --target=docs/assets/gallery
 
 ```bash
 # 画像の最適化とリネーム
-./scripts/optimize-gallery.sh
+./scripts/optimize-images.sh --target=docs/assets/gallery
 
 # 機能:
 # - 連番リネーム（01.jpg, 02.jpg...）
-# - 画像最適化（リサイズ、圧縮）
-# - オリジナルバックアップ
+# - 画像最適化（長辺1920px以下へリサイズ、品質85%で圧縮、EXIF自動回転）
 ```
 
 ### generate-gallery-html.js
@@ -141,8 +146,8 @@ node scripts/generate-gallery-html.js
 
 画像追加時のチェックリスト：
 
-- [ ] 画像を`docs/assets/gallery/`に配置
-- [ ] `optimize-gallery.sh`を実行
+- [ ] 画像を`docs/assets/gallery/`に配置（HEICはJPEGへ変換してから）
+- [ ] `optimize-images.sh --target=docs/assets/gallery`を実行
 - [ ] HTMLを更新（自動生成or手動）
 - [ ] ローカルで表示確認
 - [ ] モバイル表示確認
@@ -165,8 +170,8 @@ node scripts/generate-gallery-html.js
 
 ### バックアップ
 
-- オリジナル画像は`gallery/original/`に自動保存
-- 定期的に別の場所にもバックアップ推奨
+- 別途バックアップは作成しない（Gitでバージョン管理しているため）
+- 元に戻す場合は`git checkout -- docs/assets/gallery`
 
 ## 関連ドキュメント
 
