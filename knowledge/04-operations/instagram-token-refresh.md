@@ -16,7 +16,7 @@ Instagram Graph APIのLong-lived Access Tokenは60日で有効期限が切れる
 ### ローカル環境での実行
 
 ```bash
-npm run instagram:refresh-token
+pnpm instagram:refresh-token
 ```
 
 ### GitHub Actionsでの実行
@@ -44,7 +44,7 @@ npm run instagram:refresh-token
 ### 前提条件
 
 - `.env`ファイルに`FACEBOOK_ACCESS_TOKEN`が設定されていること
-- `libsodium-wrappers`がインストール済み（`npm install`で自動）
+- `libsodium-wrappers`がインストール済み（`pnpm install`で自動）
 
 ### 更新プロセス
 

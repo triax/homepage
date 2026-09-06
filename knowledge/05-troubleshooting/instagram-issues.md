@@ -21,7 +21,7 @@
    ```
 2. ローカルで強制更新
    ```bash
-   npm run instagram:fetch
+   pnpm instagram:fetch
    git add docs/assets/instagram/posts.json
    git commit -m "Instagram投稿データを手動更新"
    git push
@@ -69,7 +69,7 @@ Failed to refresh token: {
 
 ```bash
 # リフレッシュではなく交換を使用
-npm run instagram:exchange-token
+pnpm instagram:exchange-token
 ```
 
 **既に長期トークンの場合**
@@ -103,7 +103,7 @@ Instagram Access Tokenの有効期限切れ：
    FACEBOOK_APP_SECRET=your_app_secret
 
    # トークンを交換
-   npm run instagram:exchange-token
+   pnpm instagram:exchange-token
    ```
 
 **長期トークンの場合（期限切れ）**
@@ -199,7 +199,7 @@ Instagram Access Tokenの有効期限切れ：
 
 ```bash
 # ローカルでトークン有効期限を確認
-npm run instagram:refresh-token
+pnpm instagram:refresh-token
 # "Current token status" を確認
 ```
 
@@ -207,7 +207,7 @@ npm run instagram:refresh-token
 
 ```bash
 # 最新投稿を取得
-npm run instagram:fetch
+pnpm instagram:fetch
 
 # JSONファイルを確認
 cat docs/assets/instagram/posts.json | jq '.posts[0]'

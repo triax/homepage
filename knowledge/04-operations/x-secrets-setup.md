@@ -71,10 +71,10 @@ GitHub Secrets（https://github.com/triax/homepage/settings/secrets/actions）�
 
 ```bash
 # dry-run（投稿せず本文・添付メディアのみ確認）
-npm run instagram:post-x -- /tmp/prev_posts.json --dry-run
+pnpm instagram:post-x /tmp/prev_posts.json --dry-run
 
 # 実投稿テスト（最新Instagram投稿1件をXへ）
-npm run instagram:post-x -- /tmp/prev_posts.json
+pnpm instagram:post-x /tmp/prev_posts.json
 ```
 
 ## トラブルシューティング

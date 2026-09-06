@@ -12,7 +12,7 @@ hub の公開 API から取得する。運営による年次のデータ収集�
   └─ https://hub.triax.football/members/{slack_id} でプロフィール・写真を編集
        └─ hub: GET /api/1/public/members（X-API-Key 必須）
             └─ homepage: .github/workflows/deploy-pages.yml
-                 └─ npm run build:members（scripts/build-members.ts）
+                 └─ pnpm build:members（scripts/build-members.ts）
                       ├─ docs/assets/roster.json          … 正規化済みメンバーデータ（v2）
                       └─ docs/assets/members/*.jpg        … 長辺800pxのJPEG
                  └─ actions/upload-pages-artifact（path: docs）→ actions/deploy-pages
@@ -52,8 +52,8 @@ hub の公開 API は `X-API-Key` ヘッダが必須。`Cache-Control: private` 
 `brew install imagemagick`（macOS）／`apt-get install imagemagick`（Debian系）を先に実行する。
 
 ```bash
-HUB_API_KEY=$(cat ~/.secrets/triax-hub/hub-api-key.prod.txt) npm run build:members
-npm run dev   # http://127.0.0.1:3000/docs/index.html
+HUB_API_KEY=$(cat ~/.secrets/triax-hub/hub-api-key.prod.txt) pnpm build:members
+pnpm dev   # http://127.0.0.1:3000/docs/index.html
 ```
 
 ### ローテーション手順（無停止）

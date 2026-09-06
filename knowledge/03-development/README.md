@@ -27,7 +27,7 @@ git clone https://github.com/triax/homepage.git
 cd homepage
 
 # 依存関係のインストール
-npm install
+pnpm install
 
 # ローカルサーバー起動
 npx http-server docs -p 3000
@@ -37,11 +37,11 @@ npx http-server docs -p 3000
 
 ```bash
 # メンバー情報・写真を hub から取得（生成物は git 管理外）
-HUB_API_KEY=<key> npm run build:members
+HUB_API_KEY=<key> pnpm build:members
 
 # コード品質
-npm run lint         # ESLint実行
-npm run format:check # フォーマット確認
+pnpm lint         # ESLint実行
+pnpm format:check # フォーマット確認
 ```
 
 ## 🔍 使い方

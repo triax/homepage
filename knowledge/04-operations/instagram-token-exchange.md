@@ -37,7 +37,7 @@ curl -X GET "https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_e
 
 ```bash
 # 長期トークンへの変換（App Secretが必要）
-npm run instagram:exchange-token
+pnpm instagram:exchange-token
 ```
 
 **注意**: このコマンドを実行するには、`.env`ファイルに以下が必要です：
@@ -74,7 +74,7 @@ FACEBOOK_ACCESS_TOKEN=short_lived_token
 2. 動作確認：
 
    ```bash
-   npm run instagram:fetch
+   pnpm instagram:fetch
    ```
 
 3. GitHub Secretsも更新（本番環境用）：
@@ -96,7 +96,7 @@ FACEBOOK_ACCESS_TOKEN=short_lived_token
 ### エラー: "Token already long-lived"
 
 - 既に長期トークンに変換済み
-- 更新は24時間経過後に`npm run instagram:refresh-token`で実行
+- 更新は24時間経過後に`pnpm instagram:refresh-token`で実行
 
 ## セキュリティ注意事項
 

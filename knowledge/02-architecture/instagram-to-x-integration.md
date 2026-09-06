@@ -148,10 +148,10 @@ fetch は posts.json を作り直す際 `loadWatermark()` で既存の `metadata
 
 ```bash
 # dry-run（認証情報不要。twitter==null の投稿の本文・メディア判定を確認、書き戻さない）
-npm run instagram:post-x -- --dry-run
+pnpm instagram:post-x --dry-run
 
 # 実投稿（twitter==null を投稿し、成功した分を posts.json に書き戻す）
-npm run instagram:post-x
+pnpm instagram:post-x
 ```
 
 ## ハマりどころ（実投稿で判明した運用上の学び）

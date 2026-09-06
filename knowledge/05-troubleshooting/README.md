@@ -19,14 +19,14 @@
 
 **原因**:
 
-- `npm run build:members` を実行していない（生成物は git 管理外のため、clone 直後は存在しない）
+- `pnpm build:members` を実行していない（生成物は git 管理外のため、clone 直後は存在しない）
 - hub 側で写真が未登録（この場合は "No Image" プレースホルダが出るのが正常）
 
 **解決方法**:
 
 ```bash
 # hub からメンバー情報・写真を取得し直す
-HUB_API_KEY=<key> npm run build:members
+HUB_API_KEY=<key> pnpm build:members
 ```
 
 詳細は [hub-members-sync.md](/knowledge/04-operations/hub-members-sync.md) の「障害時の見方」を参照。
@@ -48,7 +48,7 @@ HUB_API_KEY=<key> npm run build:members
 
 ### スクリプトエラー
 
-**症状**: npm runコマンドが失敗
+**症状**: pnpmコマンドが失敗
 
 **原因**:
 
@@ -62,8 +62,8 @@ HUB_API_KEY=<key> npm run build:members
 node --version  # v18以上推奨
 
 # 依存関係の再インストール
-rm -rf node_modules package-lock.json
-npm install
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
 ```
 
 ## 🔍 使い方

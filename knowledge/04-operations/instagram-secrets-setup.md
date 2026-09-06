@@ -58,7 +58,7 @@
 ```bash
 export INSTAGRAM_USER_ID="17841443759135863"
 export FACEBOOK_ACCESS_TOKEN="your_access_token_here"
-npx tsx scripts/fetch-instagram.ts
+pnpm tsx scripts/fetch-instagram.ts
 ```
 
 ## スケジュール
