@@ -1,4 +1,4 @@
-#!/usr/bin/env npx tsx
+#!/usr/bin/env -S pnpm exec tsx
 // scripts/format-check.ts
 // プロジェクト全体のフォーマットをチェック・修正するスクリプト
 
@@ -54,13 +54,13 @@ class FormatChecker {
 
     try {
       if (this.isFixMode) {
-        const { stdout } = await execAsync('npm run lint:eslint -- --fix 2>&1');
+        const { stdout } = await execAsync('pnpm run lint:eslint -- --fix 2>&1');
         if (stdout.includes('problems')) {
           console.log('  ✅ Fixed TypeScript/JavaScript formatting issues');
           this.fixed.push('TypeScript/JavaScript files');
         }
       } else {
-        const { stdout } = await execAsync('npm run lint:eslint 2>&1');
+        const { stdout } = await execAsync('pnpm run lint:eslint 2>&1');
         if (stdout.includes('problems')) {
           const matches = stdout.match(/(\d+) problems?/);
           if (matches) {
@@ -220,7 +220,7 @@ class FormatChecker {
           console.log(`  • ${issue.file}: ${issue.issue}`);
         });
         console.log('\n💡 Run with --fix flag to automatically fix these issues:');
-        console.log('   npm run format:check -- --fix');
+        console.log('   pnpm run format:fix');
       }
     }
 
