@@ -40,14 +40,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # packageManager フィールドのバージョンで pnpm を用意する。
+      # setup-node の cache: 'pnpm' より先に実行する必要がある。
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '24'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       # 写真のリサイズに使う。ubuntu-latest には通常同梱されているが、無い場合に備える
       - name: Ensure ImageMagick
@@ -58,7 +63,7 @@ jobs:
       - name: Build members data from hub
         env:
           HUB_API_KEY: ${{ secrets.HUB_API_KEY }}
-        run: npm run build:members
+        run: pnpm build:members
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
