@@ -15,3 +15,7 @@ docs/assets/instagram/posts.json
 # Prettier 既定（ダブルクォート・printWidth 80）と規則が衝突するため除外する。
 scripts/**/*.ts
 eslint.config.mjs
+
+# 既存の文字化けファイル。UTF-8 として壊れているため整形対象から外す。
+# 内容の復旧は別 Issue で扱う。
+knowledge/01-requirements/functional/pages/TOP.md

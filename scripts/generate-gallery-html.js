@@ -40,8 +40,8 @@ function generateImageItem(filename, index, isLast, totalCount) {
 
   return `                <!-- Image ${index + 1} -->
                 <div class="gallery-item group relative overflow-hidden shadow-lg${spanClass}">
-                    <img src="./assets/gallery/${filename}" 
-                         alt="${altText}" 
+                    <img src="./assets/gallery/${filename}"
+                         alt="${altText}"
                          class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110">
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300"></div>
                 </div>`;
@@ -64,7 +64,7 @@ function generateGalleryHTML(images) {
 ${imageItems}
             </div>
         </div>
-        
+
         <!-- Lightbox Modal (PC only) -->
         <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4">
             <button id="close-lightbox" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300">&times;</button>

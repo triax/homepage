@@ -19,7 +19,7 @@ export default [
     },
     rules: {
       ...typescript.configs.recommended.rules,
-      
+
       // TypeScript specific
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -27,7 +27,7 @@ export default [
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_'
       }],
-      
+
       // スタイルルール
       'indent': ['error', 2, { 'SwitchCase': 1 }],
       'linebreak-style': ['error', 'unix'],
@@ -50,7 +50,7 @@ export default [
       'brace-style': ['error', '1tbs', { 'allowSingleLine': true }],
       'arrow-spacing': ['error', { 'before': true, 'after': true }],
       'max-len': ['error', { 'code': 100, 'ignoreComments': true, 'ignoreStrings': true }],
-      
+
       // その他
       'no-console': 'off',
       'no-undef': 'off'
