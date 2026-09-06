@@ -20,13 +20,17 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "pnpm run lint:eslint && pnpm run format:check && pnpm run lint:editorconfig",
     "lint:eslint": "eslint scripts/**/*.ts",
-    "lint:editorconfig": "editorconfig-checker --disable-indent-size --exclude 'knowledge/01-requirements/functional/pages/TOP\\.md'",
-    "lint:fix": "pnpm run lint:eslint -- --fix && pnpm run format:fix",
+    "lint:editorconfig": "EC_VERSION=v4.0.1 editorconfig-checker",
+    "lint:fix": "pnpm run lint:eslint --fix && pnpm run format:fix",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write ."
   },
   "author": "otiai10",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.14",
+    "pnpm": ">=11"
+  },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@playwright/test": "^1.54.2",

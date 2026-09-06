@@ -13,9 +13,12 @@ docs/assets/instagram/posts.json
 
 # TypeScript と ESLint 設定は ESLint がスタイルの所有者。
 # Prettier 既定（ダブルクォート・printWidth 80）と規則が衝突するため除外する。
+# stellar:debt(scope) eslint-config-prettier による所有権の一本化を見送り中（ADR-011 代替案）。
+# upgrade: eslint-config-prettier を入れ、この 2 行と eslint.config.mjs のスタイルルール群を削除する。
 scripts/**/*.ts
 eslint.config.mjs
 
 # 既存の文字化けファイル。UTF-8 として壊れているため整形対象から外す。
-# 内容の復旧は別 Issue で扱う。
+# stellar:debt(scope) 同じ除外を .editorconfig-checker.json にも書いており 2 箇所に散っている。
+# upgrade: TOP.md の文字化けを復旧（別 Issue）したら、両方の除外を削除する。
 knowledge/01-requirements/functional/pages/TOP.md

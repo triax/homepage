@@ -38,8 +38,3 @@ trim_trailing_whitespace = false
 # YAML files
 [*.{yml,yaml}]
 indent_size = 2
-
-# Shell scripts
-# 継続行の桁揃えを許すため、インデント幅の検査は行わない。
-[*.sh]
-indent_size = unset

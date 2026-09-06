@@ -7,5 +7,7 @@ minimumReleaseAge: 10080
 # インストール時にビルドスクリプト（postinstall 等）の実行を許可する依存。
 # pnpm 10 以降は既定でブロックされるため、明示しないと install が警告付きで失敗する。
 # pnpm 11 のキーは allowBuilds（旧 onlyBuiltDependencies は解釈されない）。
+# stellar:debt(dep) 古い pnpm ではこのキーが黙って無視される。
+# upgrade: package.json の engines.pnpm でバージョン下限を強制している前提に依存する。
 allowBuilds:
   esbuild: true

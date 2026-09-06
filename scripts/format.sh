@@ -20,7 +20,7 @@ target="${1:-}"
 if [ -z "$target" ] && [ ! -t 0 ] && command -v node >/dev/null 2>&1; then
   target=$(
     node -e 'let d="";process.stdin.on("data",c=>{d+=c}).on("end",()=>{try{const j=JSON.parse(d);const t=j.tool_input||{};process.stdout.write(String(t.file_path||t.notebook_path||""))}catch(e){}})' 2>/dev/null
-  ) || target=""
+  )
 fi
 
 [ -n "$target" ] || exit 0
