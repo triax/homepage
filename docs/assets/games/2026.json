@@ -24,7 +24,20 @@
         },
         "home": false,
         "ticket": "https://r10.to/h5g9fr",
-        "result": null
+        "result": {
+          "score": { "team": 37, "opponent": 16 },
+          "quarters": {
+            "Q1": { "team": 10, "opponent": 0 },
+            "Q2": { "team": 8, "opponent": 3 },
+            "Q3": { "team": 7, "opponent": 7 },
+            "Q4": { "team": 10, "opponent": 6 },
+            "OT": null
+          },
+          "win": true,
+          "stats": {
+            "url": "https://www.xleague.info/monitor.html?GameNo=2026-X1-135-082"
+          }
+        }
       },
       {
         "round": "第2節",
