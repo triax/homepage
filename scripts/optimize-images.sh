@@ -171,7 +171,7 @@ if [ "$RENAME_SEQUENTIAL" = true ]; then
             # ImageMagick 7.x
             magick "$file" \
                 -auto-orient \
-                -resize "${MAX_WIDTH}>" \
+                -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \
                 -quality $QUALITY \
                 -interlace Plane \
                 -strip \
@@ -180,7 +180,7 @@ if [ "$RENAME_SEQUENTIAL" = true ]; then
             # ImageMagick 6.x
             convert "$file" \
                 -auto-orient \
-                -resize "${MAX_WIDTH}>" \
+                -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \
                 -quality $QUALITY \
                 -interlace Plane \
                 -strip \
@@ -231,7 +231,7 @@ else
             # ImageMagick 7.x
             magick "$file" \
                 -auto-orient \
-                -resize "${MAX_WIDTH}>" \
+                -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \
                 -quality $QUALITY \
                 -interlace Plane \
                 -strip \
@@ -241,7 +241,7 @@ else
             # ImageMagick 6.x
             convert "$file" \
                 -auto-orient \
-                -resize "${MAX_WIDTH}>" \
+                -resize "${MAX_WIDTH}x${MAX_WIDTH}>" \
                 -quality $QUALITY \
                 -interlace Plane \
                 -strip \
