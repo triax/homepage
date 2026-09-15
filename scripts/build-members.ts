@@ -27,9 +27,10 @@ import * as path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 
+import { DEFAULT_HUB_API_URL, fetchHubJson } from './lib/hub-api';
+
 const execFileAsync = promisify(execFile);
 
-const DEFAULT_HUB_API_URL = 'https://hub.triax.football/api/1/public/members';
 const HUB_API_URL = process.env.HUB_API_URL || DEFAULT_HUB_API_URL;
 
 // npm script 経由でリポジトリルートから実行する前提
@@ -130,32 +131,6 @@ function text(value: string | undefined): string {
 /** hub は未入力の数値を 0 で返すため、0 は「未設定」として null に寄せる */
 function positiveOrNull(value: number | undefined): number | null {
   return value ? value : null;
-}
-
-/**
- * hub 公開 API からメンバー一覧を取得する。
- * キー値はログに出さない（エラー時もステータスコードのみを表示する）。
- */
-async function fetchHubMembers(apiKey: string): Promise<HubResponse> {
-  let response: Response;
-  try {
-    response = await fetch(HUB_API_URL, { headers: { 'X-API-Key': apiKey } });
-  } catch (error) {
-    const reason = error instanceof Error ? error.message : String(error);
-    return fail(`hub API に到達できませんでした: ${reason}`);
-  }
-
-  if (!response.ok) {
-    const hint = response.status === 401 ? '（HUB_API_KEY が不正か失効しています）' : '';
-    const status = [response.status, response.statusText].filter(Boolean).join(' ');
-    return fail(`hub API が ${status} を返しました${hint}`);
-  }
-
-  try {
-    return await response.json() as HubResponse;
-  } catch {
-    return fail('hub API のレスポンスを JSON として解釈できませんでした');
-  }
 }
 
 /**
@@ -328,7 +303,8 @@ async function buildMembers() {
   console.log('📥 hub 公開 API からメンバー情報を取得中...');
   console.log(`   URL: ${HUB_API_URL}`);
 
-  const response = await fetchHubMembers(apiKey);
+  const response = await fetchHubJson<HubResponse>(HUB_API_URL, apiKey)
+    .catch((error: Error) => fail(error.message));
   if (!Array.isArray(response.members)) {
     fail('hub API のレスポンスに members 配列がありません');
   }
