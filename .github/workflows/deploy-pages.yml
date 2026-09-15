@@ -2,18 +2,28 @@ name: Deploy to GitHub Pages
 
 # docs/ をそのまま公開する legacy 配信をやめ、ビルドを挟める Actions 配信に切り替えている。
 # ビルド時に hub の公開 API からメンバー情報を取得するため、生成物はリポジトリに含めない。
+#
+# push と手動実行（force=true）は無条件にデプロイする。それ以外は check ジョブが
+# 「公開中のサイトがビルドされたコミット・hub digest」と今の状態を比べ、変化があったときだけ
+# deploy ジョブを走らせる（判定ルールは scripts/lib/deploy-decision.ts、決定経緯は ADR-012）。
 on:
   push:
     branches: [main]
   # Instagram 取得ワークフローの push は GITHUB_TOKEN 由来のため push イベントを発火しない。
-  # 取得後のデータを確実に公開するため、完了を受けてデプロイする。
+  # 完了を受けて判定し、posts.json がコミットされて main が進んだときだけデプロイする。
   workflow_run:
     workflows: ["Update Instagram Feed"]
     types: [completed]
-  # 上記が動かなかった場合の保険。毎日 03:00 JST に hub の最新データを取り込む。
+  # 1 時間ごとに hub の digest を確認し、hub での編集があったときだけデプロイする。
+  # 変化が無ければ check ジョブの数秒で終わる。
   schedule:
-    - cron: "0 18 * * *"
+    - cron: "0 * * * *"
   workflow_dispatch:
+    inputs:
+      force:
+        description: "変化が無くてもデプロイする（false にすると定期実行と同じ変更判定を通す）"
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -26,11 +36,49 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  check:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
-    # workflow_run は失敗時にも発火するため、成功したときだけデプロイする
+    # workflow_run は失敗時にも発火するため、成功したときだけ判定・デプロイする
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+
+    outputs:
+      should_deploy: ${{ steps.check.outputs.should_deploy }}
+
+    steps:
+      # 判定したコミットと deploy ジョブがビルドするコミットを揃えるため、github.sha を明示する
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # hub の digest が取れないときはここで失敗し、deploy ジョブは走らない
+      - name: Check whether deploy is needed
+        id: check
+        env:
+          # workflow_dispatch 以外では inputs.force が空になるため、明示的に false に寄せる
+          DEPLOY_FORCE: ${{ github.event_name == 'workflow_dispatch' && inputs.force || false }}
+          HUB_API_KEY: ${{ secrets.HUB_API_KEY }}
+        run: pnpm deploy:check
+
+  deploy:
+    needs: check
+    if: needs.check.outputs.should_deploy == 'true'
+
+    runs-on: ubuntu-latest
 
     environment:
       name: github-pages
@@ -39,6 +87,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
 
       # packageManager フィールドのバージョンで pnpm を用意する。
       # setup-node の cache: 'pnpm' より先に実行する必要がある。
@@ -64,6 +114,14 @@ jobs:
         env:
           HUB_API_KEY: ${{ secrets.HUB_API_KEY }}
         run: pnpm build:members
+
+      # 公開中のサイトがどのコミットからビルドされたかを残す（次回の check ジョブが読む）。
+      # hub の digest は build:members が roster.json の hub_digest に書いている
+      - name: Write build info
+        run: |
+          jq -n --arg commit "$GITHUB_SHA" --arg built_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{commit: $commit, built_at: $built_at}' > docs/assets/build-info.json
+          cat docs/assets/build-info.json
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

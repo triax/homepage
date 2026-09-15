@@ -19,6 +19,7 @@
 - `009-members-from-hub.md` - メンバーデータを hub 公開 API からビルド時取得へ移行（roster-api 廃止）
 - `010-member-photo-placeholder.md` - 写真未登録メンバーのプレースホルダーを TRIAX ロゴ透かし画像にする
 - `011-pnpm-and-prettier.md` - パッケージマネージャを pnpm に一本化し、整形を Prettier + editorconfig-checker に委ねる
+- `012-deploy-only-on-change.md` - 変化があったときだけデプロイし、hub の変化は 1 時間ごとに確認する
 - `instagram-integration-decisions.md` - Instagram連携に関する決定事項
 
 ## 📝 ADRとは

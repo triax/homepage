@@ -10,9 +10,12 @@ knowledge/plans
 # git worktree（/tackle などが Issue ごとに作る作業ディレクトリ）
 .worktrees
 
-# メンバー情報のビルド生成物（scripts/build-members.ts が hub 公開 API から生成する）
+# デプロイ時のビルド生成物
+# roster.json・members/ は scripts/build-members.ts が hub 公開 API から生成し、
+# build-info.json は deploy-pages.yml がビルドしたコミットを書き出す
 docs/assets/roster.json
 docs/assets/members/
+docs/assets/build-info.json
 
 # プロモ動画の元素材（リポジトリ直下）
 /*.mp4

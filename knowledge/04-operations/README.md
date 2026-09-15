@@ -29,14 +29,14 @@
 
 GitHub Pagesへの自動デプロイ（`.github/workflows/deploy-pages.yml`）：
 
-1. mainブランチへプッシュ（ほかに Instagram 取得完了時・毎日03:00 JST・手動実行でも走る）
+1. mainブランチへプッシュ（ほかに手動実行でも無条件に走る。1時間ごとの定期実行と Instagram 取得完了時は、コミットか hub のデータに変化があったときだけデプロイする）
 2. ビルド時に hub の公開APIからメンバー情報を取得して `docs/` に生成物を作る
 3. https://www.triax.football/ で確認
 
 ### メンバー情報更新
 
 メンバー本人が `https://hub.triax.football/members/{slack_id}` で編集すれば、
-次のデプロイで自動的に反映される。運営側の作業は不要。
+1時間ごとの定期確認で変化が検知され、自動的に反映される。運営側の作業は不要。
 
 即時反映したい場合は Actions から「Deploy to GitHub Pages」を手動実行する。
 手順の詳細は [hub-members-sync.md](hub-members-sync.md) を参照。

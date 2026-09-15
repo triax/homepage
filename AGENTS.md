@@ -12,6 +12,8 @@
 - `pnpm install` で tsx・ESLint・Playwright など開発依存を取得します。パッケージマネージャは pnpm に固定されており、他のツールでのインストールは `preinstall` で弾かれます。
 - `pnpm dev` でローカルプレビュー環境（http://localhost:3000）を起動できます。別ポートが必要な場合は `pnpm exec http-server -p <port> -c-1` を使ってください。
 - `HUB_API_KEY=<key> pnpm build:members` は hub の公開 API からメンバーデータと写真を取得し、`docs/assets/roster.json` と `docs/assets/members/` を生成します。どちらもビルド生成物で git 管理外です。取得に失敗した場合は生成物を書き換えずに終了コード 1 で失敗します。
+- `pnpm test` はデプロイ要否の判定ロジック（`scripts/lib/deploy-decision.ts`）などのユニットテストを `node:test` で実行します。テストは `scripts/**/*.test.ts` に置きます。
+- `GITHUB_EVENT_NAME=schedule GITHUB_SHA=<sha> HUB_API_KEY=<key> pnpm deploy:check` は、公開中のサイトと hub の digest を比べてデプロイが必要かを判定します（読み取りのみ。CI の `check` ジョブが使います）。
 - `pnpm instagram:fetch` と `pnpm instagram:refresh-token` は Instagram フィードを管理します。トークン更新は 24 時間以内に繰り返さないよう注意します。
 - `pnpm lint` は ESLint と整形確認を一括実行します。修正は `pnpm lint:fix` や `pnpm format:fix` で適用してください。
 
@@ -25,7 +27,7 @@
 ## テスト方針 / Testing Guidelines
 
 - UI オートメーションは Playwright を想定しています。初回は `pnpm exec playwright install` でブラウザバイナリを導入してください。
-- PR 前には最低限 `pnpm lint` と該当する画像・ロスターコマンドを実行し、動的セクション（Instagram フィードやロスターカード）を変更した場合は簡易 Playwright チェックを追加するのが理想です。
+- PR 前には最低限 `pnpm lint`・`pnpm test` と該当する画像・ロスターコマンドを実行し、動的セクション（Instagram フィードやロスターカード）を変更した場合は簡易 Playwright チェックを追加するのが理想です。
 
 ## コミットと PR / Commit & Pull Request Guidelines
 

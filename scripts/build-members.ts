@@ -4,7 +4,8 @@
  * hub 公開 API からメンバー情報を取得し、ホームページ用の生成物を組み立てるビルドスクリプト
  *
  * 生成物（いずれも .gitignore 済み。リポジトリにはコミットしない）:
- *   - docs/assets/roster.json    正規化済みメンバーデータ（v2 スキーマ）
+ *   - docs/assets/roster.json    正規化済みメンバーデータ（v2 スキーマ）。hub の digest を
+ *                                hub_digest として持ち、デプロイ要否の判定に使う（ADR-012）
  *   - docs/assets/members/*.jpg  長辺 800px に縮小した JPEG 写真
  *
  * 使用方法:
@@ -17,7 +18,7 @@
  * 必要な外部コマンド:
  *   ImageMagick（`magick` または `convert`）。写真のリサイズに使う
  *
- * hub が落ちている・キーが無い・公開対象が 0 件などの異常時は、生成物を一切書き換えずに
+ * hub が落ちている・キーが無い・digest が無い・公開対象が 0 件などの異常時は、生成物を一切書き換えずに
  * 終了コード 1 で失敗する（空のメンバー一覧で本番を上書きしないため）。
  */
 
@@ -27,9 +28,10 @@ import * as path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 
+import { DEFAULT_HUB_API_URL, fetchHubJson } from './lib/hub-api';
+
 const execFileAsync = promisify(execFile);
 
-const DEFAULT_HUB_API_URL = 'https://hub.triax.football/api/1/public/members';
 const HUB_API_URL = process.env.HUB_API_URL || DEFAULT_HUB_API_URL;
 
 // npm script 経由でリポジトリルートから実行する前提
@@ -82,6 +84,8 @@ interface HubMember {
 interface HubResponse {
   members?: HubMember[];
   generated_at?: string;
+  /** 公開ペイロード（members）のダイジェスト。/digest エンドポイントと同じ値 */
+  digest?: string;
 }
 
 interface RosterMember {
@@ -130,32 +134,6 @@ function text(value: string | undefined): string {
 /** hub は未入力の数値を 0 で返すため、0 は「未設定」として null に寄せる */
 function positiveOrNull(value: number | undefined): number | null {
   return value ? value : null;
-}
-
-/**
- * hub 公開 API からメンバー一覧を取得する。
- * キー値はログに出さない（エラー時もステータスコードのみを表示する）。
- */
-async function fetchHubMembers(apiKey: string): Promise<HubResponse> {
-  let response: Response;
-  try {
-    response = await fetch(HUB_API_URL, { headers: { 'X-API-Key': apiKey } });
-  } catch (error) {
-    const reason = error instanceof Error ? error.message : String(error);
-    return fail(`hub API に到達できませんでした: ${reason}`);
-  }
-
-  if (!response.ok) {
-    const hint = response.status === 401 ? '（HUB_API_KEY が不正か失効しています）' : '';
-    const status = [response.status, response.statusText].filter(Boolean).join(' ');
-    return fail(`hub API が ${status} を返しました${hint}`);
-  }
-
-  try {
-    return await response.json() as HubResponse;
-  } catch {
-    return fail('hub API のレスポンスを JSON として解釈できませんでした');
-  }
 }
 
 /**
@@ -328,9 +306,14 @@ async function buildMembers() {
   console.log('📥 hub 公開 API からメンバー情報を取得中...');
   console.log(`   URL: ${HUB_API_URL}`);
 
-  const response = await fetchHubMembers(apiKey);
+  const response = await fetchHubJson<HubResponse>(HUB_API_URL, apiKey)
+    .catch((error: Error) => fail(error.message));
   if (!Array.isArray(response.members)) {
     fail('hub API のレスポンスに members 配列がありません');
+  }
+  // 公開中のサイトがどの hub の状態からビルドされたかを残すため、無ければ何も書かずに止める
+  if (typeof response.digest !== 'string' || response.digest === '') {
+    fail('hub API のレスポンスに digest がありません（hub 側が triax/hub#704 より古い可能性があります）');
   }
 
   const publishable = response.members.filter(isPublishable);
@@ -353,6 +336,7 @@ async function buildMembers() {
   const roster = {
     version: '2.0',
     generated_at: response.generated_at || new Date().toISOString(),
+    hub_digest: response.digest,
     source: HUB_API_URL,
     members,
   };

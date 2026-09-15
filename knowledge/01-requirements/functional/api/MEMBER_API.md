@@ -9,6 +9,7 @@
 
 - 運用手順: [hub-members-sync.md](/knowledge/04-operations/hub-members-sync.md)
 - 決定経緯: [009-members-from-hub.md](/knowledge/06-decisions/009-members-from-hub.md)
+- デプロイ要否の判定（digest）: [012-deploy-only-on-change.md](/knowledge/06-decisions/012-deploy-only-on-change.md)
 
 ---
 
@@ -29,6 +30,7 @@ X-API-Key: <HUB_API_KEY>
 {
   "generated_at": "2026-09-01T11:47:11.839607653Z",
   "path": "/api/1/public/members",
+  "digest": "sha256:387068e42720c5b64fdcb2957a508c06036fde874019764628ba19ae60168374",
   "members": [
     {
       "slack_id": "U06T6DDL0F6",
@@ -64,6 +66,30 @@ X-API-Key: <HUB_API_KEY>
 }
 ```
 
+- `digest` は `members` 配列の中身だけから計算した公開ペイロードのダイジェスト（triax/hub#704）。
+  `path` / `generated_at` は含まない。公開内容が同じなら何度取得しても同じ値になる
+
+### digest エンドポイント
+
+```
+GET https://hub.triax.football/api/1/public/members/digest
+X-API-Key: <HUB_API_KEY>
+```
+
+```json
+{
+  "digest": "sha256:387068e42720c5b64fdcb2957a508c06036fde874019764628ba19ae60168374",
+  "count": 60,
+  "generated_at": "2026-09-15T00:00:00Z"
+}
+```
+
+- 認証・キャッシュは `/members` と同じ（`X-API-Key` 必須・未指定や不正キーは `401`、`Cache-Control: private`、CORSヘッダなし）
+- `digest` は同じ時点の `/members` 直下の `digest` と一致する。homepage はこれを公開中の `roster.json` の `hub_digest` と文字列比較し、違うときだけデプロイする（`scripts/check-deploy.ts`）
+- `count` は掲載メンバー数（ログ・目視用）。`generated_at` はリクエストのたびに変わるので判定には使わない
+- 変わる: 名前（Slack 同期）・背番号・退団・非掲載化・掲載項目の編集・写真の差し替え・`custom_fields` / 追加写真の並べ替え
+- 非公開項目だけの編集や、何も変えずに保存し直した場合も変わる（`updated_at` が計算対象に含まれるため）
+
 ### 実装上の注意（実測ベース）
 
 | 項目                                      | 内容                                                                                                                                                  |
@@ -87,6 +113,7 @@ X-API-Key: <HUB_API_KEY>
 {
   "version": "2.0",
   "generated_at": "2026-09-01T11:47:11.839607653Z",
+  "hub_digest": "sha256:387068e42720c5b64fdcb2957a508c06036fde874019764628ba19ae60168374",
   "source": "https://hub.triax.football/api/1/public/members",
   "members": [
     {
@@ -126,6 +153,7 @@ X-API-Key: <HUB_API_KEY>
 | --------------------------------------------------------------------------------------- | ---------------- | ----------------------------------------------------------------- |
 | `version`                                                                               | string           | スキーマバージョン。現行 `"2.0"`                                  |
 | `generated_at`                                                                          | string           | hub のレスポンスの `generated_at`（RFC3339）                      |
+| `hub_digest`                                                                            | string           | hub のレスポンス直下の `digest`。デプロイ要否の判定に使う         |
 | `source`                                                                                | string           | 取得元URL                                                         |
 | `members[].id`                                                                          | string           | Slack ID（写真ファイル名の接頭辞にも使う）                        |
 | `members[].updated_at`                                                                  | string \| null   | hub 側のプロフィール更新日時。未保存なら `null`                   |
@@ -161,7 +189,28 @@ X-API-Key: <HUB_API_KEY>
 
 ---
 
-## 4. 表示側（`docs/index.js`）
+## 4. 生成物: `docs/assets/build-info.json`
+
+`.github/workflows/deploy-pages.yml` の「Write build info」ステップが、`build:members` の後に書き出す（git 管理外）。
+ブラウザの表示には使わず、次回の `check` ジョブが公開中のサイトから読む。
+
+```json
+{
+  "commit": "37fcee41a085ff1db821053db0aa164ae72968c4",
+  "built_at": "2026-09-15T00:01:54Z"
+}
+```
+
+| フィールド | 型     | 説明                                     |
+| ---------- | ------ | ---------------------------------------- |
+| `commit`   | string | ビルドしたコミットの SHA（`github.sha`） |
+| `built_at` | string | ビルドした日時（UTC、RFC3339）           |
+
+公開中の値の読み方と判定ルールは [hub-members-sync.md](/knowledge/04-operations/hub-members-sync.md) の「反映タイミング」を参照。
+
+---
+
+## 5. 表示側（`docs/index.js`）
 
 | 関数                                 | 役割                                                                                                 |
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
