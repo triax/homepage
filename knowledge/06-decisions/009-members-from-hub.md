@@ -34,6 +34,7 @@
 
 - `.github/workflows/deploy-pages.yml`（`upload-pages-artifact` + `deploy-pages`）を追加し、Settings > Pages > Source を **GitHub Actions** に変更する（管理者操作）
 - **`GITHUB_TOKEN` による push は他のワークフローを起動しない**ため、12 時間ごとに `docs/assets/instagram/posts.json` をコミットする `fetch-instagram-posts.yml` の push では `push` トリガーが発火しない。legacy 配信では Pages 側の自動ビルド（`event: dynamic`）がこれを拾っていたので、切替にあたり `workflow_run`（Update Instagram Feed 完了時）トリガーを足して同じ効果を得る。加えて毎日 03:00 JST の `schedule` を保険に置く
+- ※ 2026-09-15 の ADR-012 で、`workflow_run` / `schedule` は変化があったときだけデプロイし、`schedule` は 1 時間ごとに変更した
 
 ### 4. 取得失敗時は fail-fast にする
 

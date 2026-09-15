@@ -50,8 +50,14 @@ playwright mcp などを利用して、上記のHTTPサーバに訪問し、デ�
 ### デプロイメント
 
 `.github/workflows/deploy-pages.yml` が GitHub Pages へデプロイします（Pages の Source は **GitHub Actions**）。
-mainブランチへのプッシュのほか、Instagram取得ワークフローの完了時・毎日03:00 JST・手動実行でも走ります。
+mainブランチへのプッシュと手動実行（`force=true`、既定）は無条件にデプロイします。
+1時間ごとの定期実行とInstagram取得ワークフローの完了時は、`check` ジョブが「公開中のサイトのコミット・hub の digest」と比べ、変化があったときだけデプロイします（ADR-012）。
 デプロイ時に hub の公開APIからメンバー情報を取得して `docs/` に生成物を作るため、生成物はコミットしません。
+
+```bash
+pnpm test          # デプロイ要否の判定ロジックのテスト
+GITHUB_EVENT_NAME=schedule GITHUB_SHA=$(git rev-parse origin/main) HUB_API_KEY=<key> pnpm deploy:check  # 判定だけ試す（読み取りのみ）
+```
 
 ## プロジェクト構造
 
@@ -66,11 +72,13 @@ mainブランチへのプッシュのほか、Instagram取得ワークフロー�
 │   ├── assets/
 │   │   ├── roster.json   # メンバーデータ（ビルド生成物・git管理外）
 │   │   ├── members/      # メンバー画像（ビルド生成物・git管理外）
+│   │   ├── build-info.json # ビルドしたコミット（デプロイ時の生成物・git管理外）
 │   │   ├── videos/       # プロモ動画（ヒーロー背景・フル尺）とポスター画像
 │   │   └── crowdfunding/ # クラウドファンディングバナー（index.json・JS・サムネイル）
 │   └── index.html   # GitHub Pages用HTMLファイル
 ├── scripts/         # 管理用TypeScriptスクリプト
 │   ├── build-members.ts          # hub公開APIからメンバーデータ・写真を生成
+│   ├── check-deploy.ts           # デプロイ要否の判定（公開中のサイトと hub の digest を比較）
 │   ├── fetch-instagram.ts        # Instagram投稿取得
 │   ├── refresh-instagram-token.ts # Instagram Access Token更新
 │   ├── optimize-images.sh        # 画像最適化（ギャラリー・ヘッダー等）
@@ -109,10 +117,10 @@ mainブランチへのプッシュのほか、Instagram取得ワークフロー�
 HUB_API_KEY=<key> pnpm build:members
 ```
 
-- 生成物: `docs/assets/roster.json`（v2スキーマ）と `docs/assets/members/{slack_id}-{formal|casual|additional-N}.jpg`
+- 生成物: `docs/assets/roster.json`（v2スキーマ。hub の digest を `hub_digest` に持つ）と `docs/assets/members/{slack_id}-{formal|casual|additional-N}.jpg`
 - 写真は長辺800px・品質85のJPEGに正規化（PNGは白背景でflatten）
 - **どちらもgit管理外**（`.gitignore` 済み）。GitHub Actions のデプロイ時に毎回生成する
-- 取得失敗（キー未設定・401・到達不能・掲載対象0名）時は生成物を書き換えず終了コード1で失敗する
+- 取得失敗（キー未設定・401・到達不能・digest なし・掲載対象0名）時は生成物を書き換えず終了コード1で失敗する
 - 写真未登録メンバーは `docs/assets/member-placeholder.jpg`（ロゴ透かし・git管理）を表示。再生成は `./scripts/generate-member-placeholder.sh --production`（ADR-010）
 
 ### API キー
