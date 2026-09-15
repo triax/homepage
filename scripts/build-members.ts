@@ -4,7 +4,8 @@
  * hub 公開 API からメンバー情報を取得し、ホームページ用の生成物を組み立てるビルドスクリプト
  *
  * 生成物（いずれも .gitignore 済み。リポジトリにはコミットしない）:
- *   - docs/assets/roster.json    正規化済みメンバーデータ（v2 スキーマ）
+ *   - docs/assets/roster.json    正規化済みメンバーデータ（v2 スキーマ）。hub の digest を
+ *                                hub_digest として持ち、デプロイ要否の判定に使う（ADR-012）
  *   - docs/assets/members/*.jpg  長辺 800px に縮小した JPEG 写真
  *
  * 使用方法:
@@ -17,7 +18,7 @@
  * 必要な外部コマンド:
  *   ImageMagick（`magick` または `convert`）。写真のリサイズに使う
  *
- * hub が落ちている・キーが無い・公開対象が 0 件などの異常時は、生成物を一切書き換えずに
+ * hub が落ちている・キーが無い・digest が無い・公開対象が 0 件などの異常時は、生成物を一切書き換えずに
  * 終了コード 1 で失敗する（空のメンバー一覧で本番を上書きしないため）。
  */
 
@@ -83,6 +84,8 @@ interface HubMember {
 interface HubResponse {
   members?: HubMember[];
   generated_at?: string;
+  /** 公開ペイロード（members）のダイジェスト。/digest エンドポイントと同じ値 */
+  digest?: string;
 }
 
 interface RosterMember {
@@ -308,6 +311,10 @@ async function buildMembers() {
   if (!Array.isArray(response.members)) {
     fail('hub API のレスポンスに members 配列がありません');
   }
+  // 公開中のサイトがどの hub の状態からビルドされたかを残すため、無ければ何も書かずに止める
+  if (typeof response.digest !== 'string' || response.digest === '') {
+    fail('hub API のレスポンスに digest がありません（hub 側が triax/hub#704 より古い可能性があります）');
+  }
 
   const publishable = response.members.filter(isPublishable);
   console.log(`   取得: ${response.members.length}名 / 掲載対象: ${publishable.length}名`);
@@ -329,6 +336,7 @@ async function buildMembers() {
   const roster = {
     version: '2.0',
     generated_at: response.generated_at || new Date().toISOString(),
+    hub_digest: response.digest,
     source: HUB_API_URL,
     members,
   };
